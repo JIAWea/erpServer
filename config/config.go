@@ -31,7 +31,7 @@ func init() {
 	// NOTE: Flags have priority over Env vars.
 	flag.BoolVar(&DefaultConfig.Debug, "debug", false, "enable APIs for pprof")
 	flag.BoolVar(&DefaultConfig.EnableHTTP, "enable_http", true, "enable APIs for http")
-	flag.BoolVar(&DefaultConfig.EnableGRPC, "enable_grpc", false, "enable APIs for grpc")
+	flag.BoolVar(&DefaultConfig.EnableGRPC, "enable_grpc", true, "enable APIs for grpc")
 	flag.StringVar(&DefaultConfig.PprofAddr, "pprof_addr", ":5060", "Debug and metrics listen address")
 	flag.StringVar(&DefaultConfig.HTTPAddr, "http_addr", ":5050", "HTTP listen address")
 	flag.StringVar(&DefaultConfig.GRPCAddr, "grpc_addr", ":5040", "gRPC (HTTP) listen address")
@@ -71,12 +71,11 @@ func init() {
 		DefaultConfig.GRPCAddr = addr
 	}
 	if DefaultConfig.DbDSN == "" {
-        DefaultConfig.DbDSN = os.Getenv("DbDSN")
+        DefaultConfig.DbDSN = os.Getenv(EnvKeyServiceDbDSN)
         if DefaultConfig.Debug {
             log.Info("DB:", DefaultConfig.DbDSN)
         }
     }
-	DefaultConfig.DbDSN = "root:123456@tcp(127.0.0.1:3306)/erp?charset=utf8mb4&parseTime=True&loc=Local"
 }
 
 func GetConfig() *Config {

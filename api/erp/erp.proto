@@ -8,97 +8,276 @@ import "validate/validate.proto";
 import "listoption/listoption.proto";
 
 service erp {
-	rpc CreateErp (CreateErpReq) returns (CreateErpRsp);
-	rpc UpdateErp (UpdateErpReq) returns (UpdateErpRsp);
-	rpc DeleteErp (DeleteErpReq) returns (DeleteErpRsp);
-	rpc GetErp (GetErpReq) returns (GetErpRsp);
-	rpc ListErp (ListErpReq) returns (ListErpRsp);
-	rpc DDListErp (ListErpReq) returns (ListErpRsp);
+  rpc CreateUser (CreateUserReq) returns (CreateUserRsp);
+  rpc UpdateUser (UpdateUserReq) returns (UpdateUserRsp);
+  rpc UpdatePassword (UpdatePasswordReq) returns (UpdatePasswordRsp);
+  rpc DeleteUser (DeleteUserReq) returns (DeleteUserRsp);
+  rpc GetUser (GetUserReq) returns (GetUserRsp);
+  rpc ListUser (ListUserReq) returns (ListUserRsp);
+
+  rpc CreateRole (CreateRoleReq) returns (CreateRoleRsp);
+  rpc UpdateRole (UpdateRoleReq) returns (UpdateRoleRsp);
+  rpc DeleteRole (DeleteRoleReq) returns (DeleteRoleRsp);
+  rpc GetRole (GetRoleReq) returns (GetRoleRsp);
+  rpc ListRole (ListRoleReq) returns (ListRoleRsp);
+
+  rpc ListMenu (ListMenuReq) returns (ListMenuRsp);
 }
 
 // range of error codes: [1, 2147483648]
 enum ErrCode {
-    Success = 0;
-    //@status_code: 400
-    ErrInvalidParam = 1;   // 非法参数
-    //@status_code: 400
-    ErrParamRequired = 2;      // 缺失参数
-    //@status_code: 404
-    ErrNotFoundErp = 3;       // 未找到相关记录
-    //@status_code: 404
-    ErrNotFoundRole = 4;       // 未找到相关记录
+  Success = 0;
+  //@status_code: 400
+  ErrInvalidParam = 1;   // 非法参数
+  //@status_code: 400
+  ErrParamRequired = 2;      // 缺失参数
+  //@status_code: 404
+  ErrNotFoundUser = 10000;       // 未找到相关记录
+  //@status_code: 404
+  ErrNotFoundRole = 10001;       // 未找到相关记录
+  //@status_code: 404
+  ErrNotFoundMenu = 10002;       // 未找到相关记录
+  //@status_code: 404
+  ErrNotFoundUserRole = 10003;       // 未找到相关记录
+  //@status_code: 404
+  ErrNotFoundRoleMenu = 10004;       // 未找到相关记录
 }
 
 // GORM USAGE: 
 // @gorm: type:json;index:idx_ct_xx,priority:1;comment:'xxxx'
 // @gorm: type:varchar(255);uniqueIndex:uidx_phone,sort:desc;comment:'phone number'
 
-message ModelErp {
-    // @gorm: primarykey
-    uint64 id = 1;
-    // @gorm: comment:'企业ID'
-    uint64 corp_id = 102;
-    // @gorm: comment:'创建时间'
-    uint32 created_at = 103;
-    // @gorm: comment:'更新时间'
-    uint32 updated_at = 104;
-    // @gorm: comment:'删除时间'
-    uint32 deleted_at = 105;
+message ModelUser {
+  enum Status {
+    StatusNil = 0;
+    // 正常
+    StatusEnable = 1;
+    // 禁用
+    StatusDisable = 2;
+  }
+
+  // @gorm: primarykey
+  uint64 id = 1;
+  // @gorm: comment:'创建时间'
+  uint32 created_at = 2;
+  // @gorm: comment:'更新时间'
+  uint32 updated_at = 3;
+  // @gorm: comment:'删除时间'
+  uint32 deleted_at = 4;
+  // @gorm: type:varchar(32);comment:'用户名'
+  string name = 5;
+  string nick_name = 6;
+  string password = 7;
+  // @gorm: type:tinyint(1);default:1;comment:'1正常, 2禁用'
+  uint32 status = 8;
+  // @gorm: many2many:erp_user_role
+  repeated ModelRole role_list = 9;
 }
 
 message ModelRole {
+  enum Status {
+    StatusNil = 0;
+    // 正常
+    StatusEnable = 1;
+    // 禁用
+    StatusDisable = 2;
+  }
+
   // @gorm: primarykey
   uint64 id = 1;
-  // @gorm: comment:'企业ID'
-  uint64 corp_id = 102;
   // @gorm: comment:'创建时间'
-  uint32 created_at = 103;
+  uint32 created_at = 2;
   // @gorm: comment:'更新时间'
-  uint32 updated_at = 104;
+  uint32 updated_at = 3;
   // @gorm: comment:'删除时间'
-  uint32 deleted_at = 105;
+  uint32 deleted_at = 4;
+  // @gorm: type:varchar(32);comment:'名称'
+  string name = 5;
+  // @gorm: type:tinyint(1);default:1;comment:'1正常, 2禁用'
+  uint32 status = 6;
+  // @gorm: many2many:erp_role_menu
+  repeated ModelMenu menu_list = 7;
 }
 
-message CreateErpReq {
-    ModelErp data = 1 [(validate.rules).message.required = true];
-}
-message CreateErpRsp {
-    ModelErp data = 1;
+message ModelMenu {
+  enum Status {
+    StatusNil = 0;
+    // 正常
+    StatusEnable = 1;
+    // 禁用
+    StatusDisable = 2;
+  }
+
+  enum Type {
+    TypeNil = 0;
+    // 菜单
+    TypeMenu = 1;
+    // api
+    TypeApi = 2;
+  }
+
+  // @gorm: primarykey
+  uint64 id = 1;
+  // @gorm: comment:'创建时间'
+  uint32 created_at = 2;
+  // @gorm: comment:'更新时间'
+  uint32 updated_at = 3;
+  // @gorm: comment:'删除时间'
+  uint32 deleted_at = 4;
+  // @gorm: type:varchar(32);comment:'名称'
+  string name = 5;
+  // @gorm: type:tinyint(1);default:1;comment:'1正常, 2禁用'
+  uint32 status = 6;
+  // @gorm: type:varchar(50);comment:'菜单图标'
+  string icon = 7;
+  // @gorm: type:varchar(100);comment:'菜单访问路径'
+  string path = 8;
+  // @gorm: type:varchar(100);comment:'重定向路径'
+  string redirect = 9;
+  // @gorm: type:varchar(100);comment:'前端组件'
+  string component = 10;
+  // @gorm: type:int(3) unsigned;default:999;comment:'菜单顺序(1-999)'
+  uint32 sort = 11;
+  // @gorm: type:tinyint(1);default:0;comment:'是否隐藏'
+  bool is_hidden = 12;
+  // @gorm: type:tinyint(1);default:1;comment:'1菜单, 2api'
+  uint32 type = 13;
 }
 
-message UpdateErpReq {
-    ModelErp data = 1 [(validate.rules).message.required = true];
-}
-message UpdateErpRsp {
-    ModelErp data = 1;
-}
-
-message DeleteErpReq {
-    uint64 id = 1 [(validate.rules).uint64.gt = 0];
-}
-message DeleteErpRsp {}
-
-message GetErpReq {
-    uint64 id = 1 [(validate.rules).uint64.gt = 0];
-}
-message GetErpRsp {
-    ModelErp data = 1;
+message ModelUserRole {
+  // @gorm: primarykey
+  uint64 id = 1;
+  // @gorm: comment:'创建时间'
+  uint32 created_at = 2;
+  // @gorm: comment:'更新时间'
+  uint32 updated_at = 3;
+  // @gorm: uniqueIndex:uniq_user_role;comment:'删除时间'
+  uint32 deleted_at = 4;
+  // @gorm: type:bigint;uniqueIndex:uniq_user_role
+  uint64 user_id = 5;
+  // @gorm: type:bigint;uniqueIndex:uniq_user_role
+  uint64 role_id = 6;
 }
 
-message ListErpReq {
-    enum ListOpt {
-		ListOptNil = 0;
-        // @valueType: uint64List
-        ListOptIdList = 1;
-        // @valueType: string
-        ListOptName = 2;
-	}
-	listoption.ListOption list_option = 1;
+message ModelRoleMenu {
+  // @gorm: primarykey
+  uint64 id = 1;
+  // @gorm: comment:'创建时间'
+  uint32 created_at = 2;
+  // @gorm: comment:'更新时间'
+  uint32 updated_at = 3;
+  // @gorm: uniqueIndex:uniq_role_menu;comment:'删除时间'
+  uint32 deleted_at = 4;
+  // @gorm: type:bigint;uniqueIndex:uniq_role_menu
+  uint64 role_id = 5;
+  // @gorm: type:bigint;uniqueIndex:uniq_role_menu
+  uint64 menu_id = 6;
 }
-message ListErpRsp {
-    listoption.Paginate paginate = 1;
-    repeated ModelErp list = 2;
+
+message CreateUserReq {
+  ModelUser data = 1 [(validate.rules).message.required = true];
+}
+message CreateUserRsp {
+  ModelUser data = 1;
 }
 
+message UpdateUserReq {
+  ModelUser data = 1 [(validate.rules).message.required = true];
+}
+message UpdateUserRsp {
+  ModelUser data = 1;
+}
 
+message UpdatePasswordReq {
+  message Data {
+    uint64 id = 1;
+    string old_password = 2;
+    string new_password = 3;
+    string new_password_again = 4;
+  }
+  Data data = 1;
+}
+message UpdatePasswordRsp {}
 
+message DeleteUserReq {
+  uint64 id = 1 [(validate.rules).uint64.gt = 0];
+}
+message DeleteUserRsp {}
+
+message GetUserReq {
+  uint64 id = 1 [(validate.rules).uint64.gt = 0];
+}
+message GetUserRsp {
+  ModelUser data = 1;
+}
+
+message ListUserReq {
+  enum ListOpt {
+    ListOptNil = 0;
+    // @valueType: uint64List
+    ListOptIdList = 1;
+    // @valueType: string
+    ListOptName = 2;
+  }
+  listoption.ListOption list_option = 1;
+}
+message ListUserRsp {
+  listoption.Paginate paginate = 1;
+  repeated ModelUser list = 2;
+}
+
+message CreateRoleReq {
+  ModelRole data = 1 [(validate.rules).message.required = true];
+}
+message CreateRoleRsp {
+  ModelRole data = 1;
+}
+
+message UpdateRoleReq {
+  ModelRole data = 1 [(validate.rules).message.required = true];
+}
+message UpdateRoleRsp {
+  ModelRole data = 1;
+}
+
+message DeleteRoleReq {
+  uint64 id = 1 [(validate.rules).uint64.gt = 0];
+}
+message DeleteRoleRsp {}
+
+message GetRoleReq {
+  uint64 id = 1 [(validate.rules).uint64.gt = 0];
+}
+message GetRoleRsp {
+  ModelRole data = 1;
+}
+
+message ListRoleReq {
+  enum ListOpt {
+    ListOptNil = 0;
+    // @valueType: uint64List
+    ListOptIdList = 1;
+    // @valueType: string
+    ListOptName = 2;
+  }
+  listoption.ListOption list_option = 1;
+}
+message ListRoleRsp {
+  listoption.Paginate paginate = 1;
+  repeated ModelRole list = 2;
+}
+
+message ListMenuReq {
+  enum ListOpt {
+    ListOptNil = 0;
+    // @valueType: uint64List
+    ListOptIdList = 1;
+    // @valueType: string
+    ListOptName = 2;
+  }
+  listoption.ListOption list_option = 1;
+}
+message ListMenuRsp {
+  listoption.Paginate paginate = 1;
+  repeated ModelMenu list = 2;
+}

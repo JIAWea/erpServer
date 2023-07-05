@@ -4,49 +4,92 @@ import (
 	"context"
 )
 
+const ClientName = "erp"
 
 
 
-func CreateErp(ctx context.Context, req *CreateErpReq) (*CreateErpRsp, error) {
+func CreateUser(ctx context.Context, req *CreateUserReq) (*CreateUserRsp, error) {
 	if cliMgr.conn == nil {
 		return nil, cliMgr.initErr
 	}
-    return cliMgr.cli.CreateErp(ctx, req)
+    return cliMgr.cli.CreateUser(ctx, req)
 }
 
-func UpdateErp(ctx context.Context, req *UpdateErpReq) (*UpdateErpRsp, error) {
+func UpdateUser(ctx context.Context, req *UpdateUserReq) (*UpdateUserRsp, error) {
 	if cliMgr.conn == nil {
 		return nil, cliMgr.initErr
 	}
-    return cliMgr.cli.UpdateErp(ctx, req)
+    return cliMgr.cli.UpdateUser(ctx, req)
 }
 
-func DeleteErp(ctx context.Context, req *DeleteErpReq) (*DeleteErpRsp, error) {
+func UpdatePassword(ctx context.Context, req *UpdatePasswordReq) (*UpdatePasswordRsp, error) {
 	if cliMgr.conn == nil {
 		return nil, cliMgr.initErr
 	}
-    return cliMgr.cli.DeleteErp(ctx, req)
+    return cliMgr.cli.UpdatePassword(ctx, req)
 }
 
-func GetErp(ctx context.Context, req *GetErpReq) (*GetErpRsp, error) {
+func DeleteUser(ctx context.Context, req *DeleteUserReq) (*DeleteUserRsp, error) {
 	if cliMgr.conn == nil {
 		return nil, cliMgr.initErr
 	}
-    return cliMgr.cli.GetErp(ctx, req)
+    return cliMgr.cli.DeleteUser(ctx, req)
 }
 
-func ListErp(ctx context.Context, req *ListErpReq) (*ListErpRsp, error) {
+func GetUser(ctx context.Context, req *GetUserReq) (*GetUserRsp, error) {
 	if cliMgr.conn == nil {
 		return nil, cliMgr.initErr
 	}
-    return cliMgr.cli.ListErp(ctx, req)
+    return cliMgr.cli.GetUser(ctx, req)
 }
 
-func DDListErp(ctx context.Context, req *ListErpReq) (*ListErpRsp, error) {
+func ListUser(ctx context.Context, req *ListUserReq) (*ListUserRsp, error) {
 	if cliMgr.conn == nil {
 		return nil, cliMgr.initErr
 	}
-    return cliMgr.cli.DDListErp(ctx, req)
+    return cliMgr.cli.ListUser(ctx, req)
+}
+
+func CreateRole(ctx context.Context, req *CreateRoleReq) (*CreateRoleRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.CreateRole(ctx, req)
+}
+
+func UpdateRole(ctx context.Context, req *UpdateRoleReq) (*UpdateRoleRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.UpdateRole(ctx, req)
+}
+
+func DeleteRole(ctx context.Context, req *DeleteRoleReq) (*DeleteRoleRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.DeleteRole(ctx, req)
+}
+
+func GetRole(ctx context.Context, req *GetRoleReq) (*GetRoleRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.GetRole(ctx, req)
+}
+
+func ListRole(ctx context.Context, req *ListRoleReq) (*ListRoleRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.ListRole(ctx, req)
+}
+
+func ListMenu(ctx context.Context, req *ListMenuReq) (*ListMenuRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.ListMenu(ctx, req)
 }
 
 

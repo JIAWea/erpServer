@@ -8,14 +8,14 @@ import (
 	"net/http/pprof"
 
 	"github.com/JIAWea/erpServer/api/erp"
+	"github.com/JIAWea/erpServer/service"
 	"github.com/JIAWea/erpServer/config"
 	"github.com/JIAWea/erpServer/internal"
 	"github.com/JIAWea/erpServer/internal/middleware"
-	"github.com/JIAWea/erpServer/service"
 	"github.com/ml444/gkit/errorx"
 	log "github.com/ml444/glog"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
+    "google.golang.org/grpc/credentials/insecure"
 	xdscreds "google.golang.org/grpc/credentials/xds"
 	"google.golang.org/grpc/health"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
@@ -61,7 +61,6 @@ func Run(cfg *config.Config) {
 	// gRPC transport.
 	if cfg.EnableGRPC {
 		go func() {
-			cfg.GRPCAddr = ":8888"
 			log.Info("transport gRPC addr", cfg.GRPCAddr)
 			ln, err := net.Listen("tcp", cfg.GRPCAddr)
 			if err != nil {

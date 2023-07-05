@@ -1,15 +1,13 @@
 package db
 
 import (
-	// "reflect"
-	// "strings"
 	"time"
 
-	log "github.com/ml444/glog"
 	"gorm.io/driver/mysql"
 	// "gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	log "github.com/ml444/glog"
 )
 
 var db *gorm.DB

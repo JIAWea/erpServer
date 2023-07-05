@@ -4,14 +4,13 @@ go 1.20
 
 require (
 	github.com/envoyproxy/protoc-gen-validate v1.0.2
-	github.com/golang/protobuf v1.5.3
 	github.com/gorilla/mux v1.8.0
-	github.com/ml444/gkit v0.0.0-20230628152409-c6340c1d955a
-	github.com/ml444/glog v0.2.11
+	github.com/ml444/gkit v0.0.0-20230701041704-a708fb00f53a
+	github.com/ml444/glog v0.2.12
 	google.golang.org/grpc v1.56.1
 	google.golang.org/protobuf v1.31.0
 	gorm.io/driver/mysql v1.5.1
-	gorm.io/gorm v1.25.1
+	gorm.io/gorm v1.25.2-0.20230530020048-26663ab9bf55
 )
 
 require (
@@ -25,10 +24,11 @@ require (
 	github.com/envoyproxy/go-control-plane v0.11.1-0.20230524094728-9239064ad72f // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/golang-jwt/jwt/v5 v5.0.0 // indirect
+	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/ml444/gutil v0.0.0-20230626092149-ac531df0e53f // indirect
-	github.com/petermattis/goid v0.0.0-20220302125637-5f11c28912df // indirect
+	github.com/petermattis/goid v0.0.0-20230518223814-80aa455d8761 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/redis/go-redis/v9 v9.0.5 // indirect
 	golang.org/x/net v0.11.0 // indirect

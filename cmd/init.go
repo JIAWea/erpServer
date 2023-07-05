@@ -1,12 +1,11 @@
 package main
 
 import (
-	// gkitlog "git.csautodriver.com/base/gkit/log"
 	gkitlog "github.com/ml444/gkit/log"
 	log "github.com/ml444/glog"
 	logconf "github.com/ml444/glog/config"
 	level "github.com/ml444/glog/level"
-	// "github.com/JIAWea/erpServer/api/erp"
+	"github.com/JIAWea/erpServer/api/erp"
 	"github.com/JIAWea/erpServer/config"
 	"github.com/JIAWea/erpServer/internal/db"
 )
@@ -15,8 +14,7 @@ func Init(cfg *config.Config) error {
 	var err error
 
 	// setting logger
-	// err = InitLogger(cfg.EnableDebug)
-	err = InitLogger(true)
+	err = InitLogger(cfg.Debug)
 	if err != nil {
 		log.Errorf("err: %v", err)
 		return err
@@ -34,7 +32,7 @@ func Init(cfg *config.Config) error {
 
 func InitLogger(debug bool) error {
 	err := log.InitLog(
-		logconf.SetLoggerName("erp.ClientName"),
+		logconf.SetLoggerName(erp.ClientName),
 		logconf.SetLevel2Logger(level.InfoLevel),
 	)
 	if err != nil {

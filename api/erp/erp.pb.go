@@ -32,26 +32,38 @@ const (
 	// @status_code: 400
 	ErrCode_ErrParamRequired ErrCode = 2 // 缺失参数
 	// @status_code: 404
-	ErrCode_ErrNotFoundErp ErrCode = 3 // 未找到相关记录
+	ErrCode_ErrNotFoundUser ErrCode = 10000 // 未找到相关记录
 	// @status_code: 404
-	ErrCode_ErrNotFoundRole ErrCode = 4 // 未找到相关记录
+	ErrCode_ErrNotFoundRole ErrCode = 10001 // 未找到相关记录
+	// @status_code: 404
+	ErrCode_ErrNotFoundMenu ErrCode = 10002 // 未找到相关记录
+	// @status_code: 404
+	ErrCode_ErrNotFoundUserRole ErrCode = 10003 // 未找到相关记录
+	// @status_code: 404
+	ErrCode_ErrNotFoundRoleMenu ErrCode = 10004 // 未找到相关记录
 )
 
 // Enum value maps for ErrCode.
 var (
 	ErrCode_name = map[int32]string{
-		0: "Success",
-		1: "ErrInvalidParam",
-		2: "ErrParamRequired",
-		3: "ErrNotFoundErp",
-		4: "ErrNotFoundRole",
+		0:     "Success",
+		1:     "ErrInvalidParam",
+		2:     "ErrParamRequired",
+		10000: "ErrNotFoundUser",
+		10001: "ErrNotFoundRole",
+		10002: "ErrNotFoundMenu",
+		10003: "ErrNotFoundUserRole",
+		10004: "ErrNotFoundRoleMenu",
 	}
 	ErrCode_value = map[string]int32{
-		"Success":          0,
-		"ErrInvalidParam":  1,
-		"ErrParamRequired": 2,
-		"ErrNotFoundErp":   3,
-		"ErrNotFoundRole":  4,
+		"Success":             0,
+		"ErrInvalidParam":     1,
+		"ErrParamRequired":    2,
+		"ErrNotFoundUser":     10000,
+		"ErrNotFoundRole":     10001,
+		"ErrNotFoundMenu":     10002,
+		"ErrNotFoundUserRole": 10003,
+		"ErrNotFoundRoleMenu": 10004,
 	}
 )
 
@@ -82,76 +94,388 @@ func (ErrCode) EnumDescriptor() ([]byte, []int) {
 	return file_erp_proto_rawDescGZIP(), []int{0}
 }
 
-type ListErpReq_ListOpt int32
+type ModelUser_Status int32
 
 const (
-	ListErpReq_ListOptNil ListErpReq_ListOpt = 0
-	// @valueType: uint64List
-	ListErpReq_ListOptIdList ListErpReq_ListOpt = 1
-	// @valueType: string
-	ListErpReq_ListOptName ListErpReq_ListOpt = 2
+	ModelUser_StatusNil ModelUser_Status = 0
+	// 正常
+	ModelUser_StatusEnable ModelUser_Status = 1
+	// 禁用
+	ModelUser_StatusDisable ModelUser_Status = 2
 )
 
-// Enum value maps for ListErpReq_ListOpt.
+// Enum value maps for ModelUser_Status.
 var (
-	ListErpReq_ListOpt_name = map[int32]string{
+	ModelUser_Status_name = map[int32]string{
+		0: "StatusNil",
+		1: "StatusEnable",
+		2: "StatusDisable",
+	}
+	ModelUser_Status_value = map[string]int32{
+		"StatusNil":     0,
+		"StatusEnable":  1,
+		"StatusDisable": 2,
+	}
+)
+
+func (x ModelUser_Status) Enum() *ModelUser_Status {
+	p := new(ModelUser_Status)
+	*p = x
+	return p
+}
+
+func (x ModelUser_Status) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ModelUser_Status) Descriptor() protoreflect.EnumDescriptor {
+	return file_erp_proto_enumTypes[1].Descriptor()
+}
+
+func (ModelUser_Status) Type() protoreflect.EnumType {
+	return &file_erp_proto_enumTypes[1]
+}
+
+func (x ModelUser_Status) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ModelUser_Status.Descriptor instead.
+func (ModelUser_Status) EnumDescriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{0, 0}
+}
+
+type ModelRole_Status int32
+
+const (
+	ModelRole_StatusNil ModelRole_Status = 0
+	// 正常
+	ModelRole_StatusEnable ModelRole_Status = 1
+	// 禁用
+	ModelRole_StatusDisable ModelRole_Status = 2
+)
+
+// Enum value maps for ModelRole_Status.
+var (
+	ModelRole_Status_name = map[int32]string{
+		0: "StatusNil",
+		1: "StatusEnable",
+		2: "StatusDisable",
+	}
+	ModelRole_Status_value = map[string]int32{
+		"StatusNil":     0,
+		"StatusEnable":  1,
+		"StatusDisable": 2,
+	}
+)
+
+func (x ModelRole_Status) Enum() *ModelRole_Status {
+	p := new(ModelRole_Status)
+	*p = x
+	return p
+}
+
+func (x ModelRole_Status) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ModelRole_Status) Descriptor() protoreflect.EnumDescriptor {
+	return file_erp_proto_enumTypes[2].Descriptor()
+}
+
+func (ModelRole_Status) Type() protoreflect.EnumType {
+	return &file_erp_proto_enumTypes[2]
+}
+
+func (x ModelRole_Status) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ModelRole_Status.Descriptor instead.
+func (ModelRole_Status) EnumDescriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{1, 0}
+}
+
+type ModelMenu_Status int32
+
+const (
+	ModelMenu_StatusNil ModelMenu_Status = 0
+	// 正常
+	ModelMenu_StatusEnable ModelMenu_Status = 1
+	// 禁用
+	ModelMenu_StatusDisable ModelMenu_Status = 2
+)
+
+// Enum value maps for ModelMenu_Status.
+var (
+	ModelMenu_Status_name = map[int32]string{
+		0: "StatusNil",
+		1: "StatusEnable",
+		2: "StatusDisable",
+	}
+	ModelMenu_Status_value = map[string]int32{
+		"StatusNil":     0,
+		"StatusEnable":  1,
+		"StatusDisable": 2,
+	}
+)
+
+func (x ModelMenu_Status) Enum() *ModelMenu_Status {
+	p := new(ModelMenu_Status)
+	*p = x
+	return p
+}
+
+func (x ModelMenu_Status) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ModelMenu_Status) Descriptor() protoreflect.EnumDescriptor {
+	return file_erp_proto_enumTypes[3].Descriptor()
+}
+
+func (ModelMenu_Status) Type() protoreflect.EnumType {
+	return &file_erp_proto_enumTypes[3]
+}
+
+func (x ModelMenu_Status) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ModelMenu_Status.Descriptor instead.
+func (ModelMenu_Status) EnumDescriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{2, 0}
+}
+
+type ModelMenu_Type int32
+
+const (
+	ModelMenu_TypeNil ModelMenu_Type = 0
+	// 菜单
+	ModelMenu_TypeMenu ModelMenu_Type = 1
+	// api
+	ModelMenu_TypeApi ModelMenu_Type = 2
+)
+
+// Enum value maps for ModelMenu_Type.
+var (
+	ModelMenu_Type_name = map[int32]string{
+		0: "TypeNil",
+		1: "TypeMenu",
+		2: "TypeApi",
+	}
+	ModelMenu_Type_value = map[string]int32{
+		"TypeNil":  0,
+		"TypeMenu": 1,
+		"TypeApi":  2,
+	}
+)
+
+func (x ModelMenu_Type) Enum() *ModelMenu_Type {
+	p := new(ModelMenu_Type)
+	*p = x
+	return p
+}
+
+func (x ModelMenu_Type) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ModelMenu_Type) Descriptor() protoreflect.EnumDescriptor {
+	return file_erp_proto_enumTypes[4].Descriptor()
+}
+
+func (ModelMenu_Type) Type() protoreflect.EnumType {
+	return &file_erp_proto_enumTypes[4]
+}
+
+func (x ModelMenu_Type) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ModelMenu_Type.Descriptor instead.
+func (ModelMenu_Type) EnumDescriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{2, 1}
+}
+
+type ListUserReq_ListOpt int32
+
+const (
+	ListUserReq_ListOptNil ListUserReq_ListOpt = 0
+	// @valueType: uint64List
+	ListUserReq_ListOptIdList ListUserReq_ListOpt = 1
+	// @valueType: string
+	ListUserReq_ListOptName ListUserReq_ListOpt = 2
+)
+
+// Enum value maps for ListUserReq_ListOpt.
+var (
+	ListUserReq_ListOpt_name = map[int32]string{
 		0: "ListOptNil",
 		1: "ListOptIdList",
 		2: "ListOptName",
 	}
-	ListErpReq_ListOpt_value = map[string]int32{
+	ListUserReq_ListOpt_value = map[string]int32{
 		"ListOptNil":    0,
 		"ListOptIdList": 1,
 		"ListOptName":   2,
 	}
 )
 
-func (x ListErpReq_ListOpt) Enum() *ListErpReq_ListOpt {
-	p := new(ListErpReq_ListOpt)
+func (x ListUserReq_ListOpt) Enum() *ListUserReq_ListOpt {
+	p := new(ListUserReq_ListOpt)
 	*p = x
 	return p
 }
 
-func (x ListErpReq_ListOpt) String() string {
+func (x ListUserReq_ListOpt) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (ListErpReq_ListOpt) Descriptor() protoreflect.EnumDescriptor {
-	return file_erp_proto_enumTypes[1].Descriptor()
+func (ListUserReq_ListOpt) Descriptor() protoreflect.EnumDescriptor {
+	return file_erp_proto_enumTypes[5].Descriptor()
 }
 
-func (ListErpReq_ListOpt) Type() protoreflect.EnumType {
-	return &file_erp_proto_enumTypes[1]
+func (ListUserReq_ListOpt) Type() protoreflect.EnumType {
+	return &file_erp_proto_enumTypes[5]
 }
 
-func (x ListErpReq_ListOpt) Number() protoreflect.EnumNumber {
+func (x ListUserReq_ListOpt) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use ListErpReq_ListOpt.Descriptor instead.
-func (ListErpReq_ListOpt) EnumDescriptor() ([]byte, []int) {
-	return file_erp_proto_rawDescGZIP(), []int{10, 0}
+// Deprecated: Use ListUserReq_ListOpt.Descriptor instead.
+func (ListUserReq_ListOpt) EnumDescriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{15, 0}
 }
 
-type ModelErp struct {
+type ListRoleReq_ListOpt int32
+
+const (
+	ListRoleReq_ListOptNil ListRoleReq_ListOpt = 0
+	// @valueType: uint64List
+	ListRoleReq_ListOptIdList ListRoleReq_ListOpt = 1
+	// @valueType: string
+	ListRoleReq_ListOptName ListRoleReq_ListOpt = 2
+)
+
+// Enum value maps for ListRoleReq_ListOpt.
+var (
+	ListRoleReq_ListOpt_name = map[int32]string{
+		0: "ListOptNil",
+		1: "ListOptIdList",
+		2: "ListOptName",
+	}
+	ListRoleReq_ListOpt_value = map[string]int32{
+		"ListOptNil":    0,
+		"ListOptIdList": 1,
+		"ListOptName":   2,
+	}
+)
+
+func (x ListRoleReq_ListOpt) Enum() *ListRoleReq_ListOpt {
+	p := new(ListRoleReq_ListOpt)
+	*p = x
+	return p
+}
+
+func (x ListRoleReq_ListOpt) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ListRoleReq_ListOpt) Descriptor() protoreflect.EnumDescriptor {
+	return file_erp_proto_enumTypes[6].Descriptor()
+}
+
+func (ListRoleReq_ListOpt) Type() protoreflect.EnumType {
+	return &file_erp_proto_enumTypes[6]
+}
+
+func (x ListRoleReq_ListOpt) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ListRoleReq_ListOpt.Descriptor instead.
+func (ListRoleReq_ListOpt) EnumDescriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{25, 0}
+}
+
+type ListMenuReq_ListOpt int32
+
+const (
+	ListMenuReq_ListOptNil ListMenuReq_ListOpt = 0
+	// @valueType: uint64List
+	ListMenuReq_ListOptIdList ListMenuReq_ListOpt = 1
+	// @valueType: string
+	ListMenuReq_ListOptName ListMenuReq_ListOpt = 2
+)
+
+// Enum value maps for ListMenuReq_ListOpt.
+var (
+	ListMenuReq_ListOpt_name = map[int32]string{
+		0: "ListOptNil",
+		1: "ListOptIdList",
+		2: "ListOptName",
+	}
+	ListMenuReq_ListOpt_value = map[string]int32{
+		"ListOptNil":    0,
+		"ListOptIdList": 1,
+		"ListOptName":   2,
+	}
+)
+
+func (x ListMenuReq_ListOpt) Enum() *ListMenuReq_ListOpt {
+	p := new(ListMenuReq_ListOpt)
+	*p = x
+	return p
+}
+
+func (x ListMenuReq_ListOpt) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ListMenuReq_ListOpt) Descriptor() protoreflect.EnumDescriptor {
+	return file_erp_proto_enumTypes[7].Descriptor()
+}
+
+func (ListMenuReq_ListOpt) Type() protoreflect.EnumType {
+	return &file_erp_proto_enumTypes[7]
+}
+
+func (x ListMenuReq_ListOpt) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ListMenuReq_ListOpt.Descriptor instead.
+func (ListMenuReq_ListOpt) EnumDescriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{27, 0}
+}
+
+type ModelUser struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
 	// @gorm: primarykey
 	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primarykey"`
-	// @gorm: comment:'企业ID'
-	CorpId uint64 `protobuf:"varint,102,opt,name=corp_id,json=corpId,proto3" json:"corp_id,omitempty" gorm:"comment:'企业ID'"`
 	// @gorm: comment:'创建时间'
-	CreatedAt uint32 `protobuf:"varint,103,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"comment:'创建时间'"`
+	CreatedAt uint32 `protobuf:"varint,2,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"comment:'创建时间'"`
 	// @gorm: comment:'更新时间'
-	UpdatedAt uint32 `protobuf:"varint,104,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"comment:'更新时间'"`
+	UpdatedAt uint32 `protobuf:"varint,3,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"comment:'更新时间'"`
 	// @gorm: comment:'删除时间'
-	DeletedAt uint32 `protobuf:"varint,105,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty" gorm:"comment:'删除时间'"`
+	DeletedAt uint32 `protobuf:"varint,4,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty" gorm:"comment:'删除时间'"`
+	// @gorm: type:varchar(32);comment:'用户名'
+	Name     string `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty" gorm:"type:varchar(32);comment:'用户名'"`
+	NickName string `protobuf:"bytes,6,opt,name=nick_name,json=nickName,proto3" json:"nick_name,omitempty"`
+	Password string `protobuf:"bytes,7,opt,name=password,proto3" json:"password,omitempty"`
+	// @gorm: type:tinyint(1);default:1;comment:'1正常, 2禁用'
+	Status uint32 `protobuf:"varint,8,opt,name=status,proto3" json:"status,omitempty" gorm:"type:tinyint(1);default:1;comment:'1正常, 2禁用'"`
+	// @gorm: many2many:erp_user_role
+	RoleList []*ModelRole `protobuf:"bytes,9,rep,name=role_list,json=roleList,proto3" json:"role_list,omitempty" gorm:"many2many:erp_user_role"`
 }
 
-func (x *ModelErp) Reset() {
-	*x = ModelErp{}
+func (x *ModelUser) Reset() {
+	*x = ModelUser{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_erp_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -159,13 +483,13 @@ func (x *ModelErp) Reset() {
 	}
 }
 
-func (x *ModelErp) String() string {
+func (x *ModelUser) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ModelErp) ProtoMessage() {}
+func (*ModelUser) ProtoMessage() {}
 
-func (x *ModelErp) ProtoReflect() protoreflect.Message {
+func (x *ModelUser) ProtoReflect() protoreflect.Message {
 	mi := &file_erp_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -177,44 +501,72 @@ func (x *ModelErp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ModelErp.ProtoReflect.Descriptor instead.
-func (*ModelErp) Descriptor() ([]byte, []int) {
+// Deprecated: Use ModelUser.ProtoReflect.Descriptor instead.
+func (*ModelUser) Descriptor() ([]byte, []int) {
 	return file_erp_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *ModelErp) GetId() uint64 {
+func (x *ModelUser) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
 	return 0
 }
 
-func (x *ModelErp) GetCorpId() uint64 {
-	if x != nil {
-		return x.CorpId
-	}
-	return 0
-}
-
-func (x *ModelErp) GetCreatedAt() uint32 {
+func (x *ModelUser) GetCreatedAt() uint32 {
 	if x != nil {
 		return x.CreatedAt
 	}
 	return 0
 }
 
-func (x *ModelErp) GetUpdatedAt() uint32 {
+func (x *ModelUser) GetUpdatedAt() uint32 {
 	if x != nil {
 		return x.UpdatedAt
 	}
 	return 0
 }
 
-func (x *ModelErp) GetDeletedAt() uint32 {
+func (x *ModelUser) GetDeletedAt() uint32 {
 	if x != nil {
 		return x.DeletedAt
 	}
 	return 0
+}
+
+func (x *ModelUser) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *ModelUser) GetNickName() string {
+	if x != nil {
+		return x.NickName
+	}
+	return ""
+}
+
+func (x *ModelUser) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+func (x *ModelUser) GetStatus() uint32 {
+	if x != nil {
+		return x.Status
+	}
+	return 0
+}
+
+func (x *ModelUser) GetRoleList() []*ModelRole {
+	if x != nil {
+		return x.RoleList
+	}
+	return nil
 }
 
 type ModelRole struct {
@@ -224,14 +576,18 @@ type ModelRole struct {
 
 	// @gorm: primarykey
 	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primarykey"`
-	// @gorm: comment:'企业ID'
-	CorpId uint64 `protobuf:"varint,102,opt,name=corp_id,json=corpId,proto3" json:"corp_id,omitempty" gorm:"comment:'企业ID'"`
 	// @gorm: comment:'创建时间'
-	CreatedAt uint32 `protobuf:"varint,103,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"comment:'创建时间'"`
+	CreatedAt uint32 `protobuf:"varint,2,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"comment:'创建时间'"`
 	// @gorm: comment:'更新时间'
-	UpdatedAt uint32 `protobuf:"varint,104,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"comment:'更新时间'"`
+	UpdatedAt uint32 `protobuf:"varint,3,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"comment:'更新时间'"`
 	// @gorm: comment:'删除时间'
-	DeletedAt uint32 `protobuf:"varint,105,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty" gorm:"comment:'删除时间'"`
+	DeletedAt uint32 `protobuf:"varint,4,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty" gorm:"comment:'删除时间'"`
+	// @gorm: type:varchar(32);comment:'名称'
+	Name string `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty" gorm:"type:varchar(32);comment:'名称'"`
+	// @gorm: type:tinyint(1);default:1;comment:'1正常, 2禁用'
+	Status uint32 `protobuf:"varint,6,opt,name=status,proto3" json:"status,omitempty" gorm:"type:tinyint(1);default:1;comment:'1正常, 2禁用'"`
+	// @gorm: many2many:erp_role_menu
+	MenuList []*ModelMenu `protobuf:"bytes,7,rep,name=menu_list,json=menuList,proto3" json:"menu_list,omitempty" gorm:"many2many:erp_role_menu"`
 }
 
 func (x *ModelRole) Reset() {
@@ -273,13 +629,6 @@ func (x *ModelRole) GetId() uint64 {
 	return 0
 }
 
-func (x *ModelRole) GetCorpId() uint64 {
-	if x != nil {
-		return x.CorpId
-	}
-	return 0
-}
-
 func (x *ModelRole) GetCreatedAt() uint32 {
 	if x != nil {
 		return x.CreatedAt
@@ -301,16 +650,62 @@ func (x *ModelRole) GetDeletedAt() uint32 {
 	return 0
 }
 
-type CreateErpReq struct {
+func (x *ModelRole) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *ModelRole) GetStatus() uint32 {
+	if x != nil {
+		return x.Status
+	}
+	return 0
+}
+
+func (x *ModelRole) GetMenuList() []*ModelMenu {
+	if x != nil {
+		return x.MenuList
+	}
+	return nil
+}
+
+type ModelMenu struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Data *ModelErp `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	// @gorm: primarykey
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primarykey"`
+	// @gorm: comment:'创建时间'
+	CreatedAt uint32 `protobuf:"varint,2,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"comment:'创建时间'"`
+	// @gorm: comment:'更新时间'
+	UpdatedAt uint32 `protobuf:"varint,3,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"comment:'更新时间'"`
+	// @gorm: comment:'删除时间'
+	DeletedAt uint32 `protobuf:"varint,4,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty" gorm:"comment:'删除时间'"`
+	// @gorm: type:varchar(32);comment:'名称'
+	Name string `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty" gorm:"type:varchar(32);comment:'名称'"`
+	// @gorm: type:tinyint(1);default:1;comment:'1正常, 2禁用'
+	Status uint32 `protobuf:"varint,6,opt,name=status,proto3" json:"status,omitempty" gorm:"type:tinyint(1);default:1;comment:'1正常, 2禁用'"`
+	// @gorm: type:varchar(50);comment:'菜单图标'
+	Icon string `protobuf:"bytes,7,opt,name=icon,proto3" json:"icon,omitempty" gorm:"type:varchar(50);comment:'菜单图标'"`
+	// @gorm: type:varchar(100);comment:'菜单访问路径'
+	Path string `protobuf:"bytes,8,opt,name=path,proto3" json:"path,omitempty" gorm:"type:varchar(100);comment:'菜单访问路径'"`
+	// @gorm: type:varchar(100);comment:'重定向路径'
+	Redirect string `protobuf:"bytes,9,opt,name=redirect,proto3" json:"redirect,omitempty" gorm:"type:varchar(100);comment:'重定向路径'"`
+	// @gorm: type:varchar(100);comment:'前端组件'
+	Component string `protobuf:"bytes,10,opt,name=component,proto3" json:"component,omitempty" gorm:"type:varchar(100);comment:'前端组件'"`
+	// @gorm: type:int(3) unsigned;default:999;comment:'菜单顺序(1-999)'
+	Sort uint32 `protobuf:"varint,11,opt,name=sort,proto3" json:"sort,omitempty" gorm:"type:int(3) unsigned;default:999;comment:'菜单顺序(1-999)'"`
+	// @gorm: type:tinyint(1);default:0;comment:'是否隐藏'
+	IsHidden bool `protobuf:"varint,12,opt,name=is_hidden,json=isHidden,proto3" json:"is_hidden,omitempty" gorm:"type:tinyint(1);default:0;comment:'是否隐藏'"`
+	// @gorm: type:tinyint(1);default:1;comment:'1菜单, 2api'
+	Type uint32 `protobuf:"varint,13,opt,name=type,proto3" json:"type,omitempty" gorm:"type:tinyint(1);default:1;comment:'1菜单, 2api'"`
 }
 
-func (x *CreateErpReq) Reset() {
-	*x = CreateErpReq{}
+func (x *ModelMenu) Reset() {
+	*x = ModelMenu{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_erp_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -318,13 +713,13 @@ func (x *CreateErpReq) Reset() {
 	}
 }
 
-func (x *CreateErpReq) String() string {
+func (x *ModelMenu) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateErpReq) ProtoMessage() {}
+func (*ModelMenu) ProtoMessage() {}
 
-func (x *CreateErpReq) ProtoReflect() protoreflect.Message {
+func (x *ModelMenu) ProtoReflect() protoreflect.Message {
 	mi := &file_erp_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -336,28 +731,123 @@ func (x *CreateErpReq) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateErpReq.ProtoReflect.Descriptor instead.
-func (*CreateErpReq) Descriptor() ([]byte, []int) {
+// Deprecated: Use ModelMenu.ProtoReflect.Descriptor instead.
+func (*ModelMenu) Descriptor() ([]byte, []int) {
 	return file_erp_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *CreateErpReq) GetData() *ModelErp {
+func (x *ModelMenu) GetId() uint64 {
 	if x != nil {
-		return x.Data
+		return x.Id
 	}
-	return nil
+	return 0
 }
 
-type CreateErpRsp struct {
+func (x *ModelMenu) GetCreatedAt() uint32 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+func (x *ModelMenu) GetUpdatedAt() uint32 {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return 0
+}
+
+func (x *ModelMenu) GetDeletedAt() uint32 {
+	if x != nil {
+		return x.DeletedAt
+	}
+	return 0
+}
+
+func (x *ModelMenu) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *ModelMenu) GetStatus() uint32 {
+	if x != nil {
+		return x.Status
+	}
+	return 0
+}
+
+func (x *ModelMenu) GetIcon() string {
+	if x != nil {
+		return x.Icon
+	}
+	return ""
+}
+
+func (x *ModelMenu) GetPath() string {
+	if x != nil {
+		return x.Path
+	}
+	return ""
+}
+
+func (x *ModelMenu) GetRedirect() string {
+	if x != nil {
+		return x.Redirect
+	}
+	return ""
+}
+
+func (x *ModelMenu) GetComponent() string {
+	if x != nil {
+		return x.Component
+	}
+	return ""
+}
+
+func (x *ModelMenu) GetSort() uint32 {
+	if x != nil {
+		return x.Sort
+	}
+	return 0
+}
+
+func (x *ModelMenu) GetIsHidden() bool {
+	if x != nil {
+		return x.IsHidden
+	}
+	return false
+}
+
+func (x *ModelMenu) GetType() uint32 {
+	if x != nil {
+		return x.Type
+	}
+	return 0
+}
+
+type ModelUserRole struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Data *ModelErp `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	// @gorm: primarykey
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primarykey"`
+	// @gorm: comment:'创建时间'
+	CreatedAt uint32 `protobuf:"varint,2,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"comment:'创建时间'"`
+	// @gorm: comment:'更新时间'
+	UpdatedAt uint32 `protobuf:"varint,3,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"comment:'更新时间'"`
+	// @gorm: uniqueIndex:uniq_user_role;comment:'删除时间'
+	DeletedAt uint32 `protobuf:"varint,4,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty" gorm:"uniqueIndex:uniq_user_role;comment:'删除时间'"`
+	// @gorm: type:bigint;uniqueIndex:uniq_user_role
+	UserId uint64 `protobuf:"varint,5,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" gorm:"type:bigint;uniqueIndex:uniq_user_role"`
+	// @gorm: type:bigint;uniqueIndex:uniq_user_role
+	RoleId uint64 `protobuf:"varint,6,opt,name=role_id,json=roleId,proto3" json:"role_id,omitempty" gorm:"type:bigint;uniqueIndex:uniq_user_role"`
 }
 
-func (x *CreateErpRsp) Reset() {
-	*x = CreateErpRsp{}
+func (x *ModelUserRole) Reset() {
+	*x = ModelUserRole{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_erp_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -365,13 +855,13 @@ func (x *CreateErpRsp) Reset() {
 	}
 }
 
-func (x *CreateErpRsp) String() string {
+func (x *ModelUserRole) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateErpRsp) ProtoMessage() {}
+func (*ModelUserRole) ProtoMessage() {}
 
-func (x *CreateErpRsp) ProtoReflect() protoreflect.Message {
+func (x *ModelUserRole) ProtoReflect() protoreflect.Message {
 	mi := &file_erp_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -383,28 +873,74 @@ func (x *CreateErpRsp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateErpRsp.ProtoReflect.Descriptor instead.
-func (*CreateErpRsp) Descriptor() ([]byte, []int) {
+// Deprecated: Use ModelUserRole.ProtoReflect.Descriptor instead.
+func (*ModelUserRole) Descriptor() ([]byte, []int) {
 	return file_erp_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *CreateErpRsp) GetData() *ModelErp {
+func (x *ModelUserRole) GetId() uint64 {
 	if x != nil {
-		return x.Data
+		return x.Id
 	}
-	return nil
+	return 0
 }
 
-type UpdateErpReq struct {
+func (x *ModelUserRole) GetCreatedAt() uint32 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+func (x *ModelUserRole) GetUpdatedAt() uint32 {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return 0
+}
+
+func (x *ModelUserRole) GetDeletedAt() uint32 {
+	if x != nil {
+		return x.DeletedAt
+	}
+	return 0
+}
+
+func (x *ModelUserRole) GetUserId() uint64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *ModelUserRole) GetRoleId() uint64 {
+	if x != nil {
+		return x.RoleId
+	}
+	return 0
+}
+
+type ModelRoleMenu struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Data *ModelErp `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	// @gorm: primarykey
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primarykey"`
+	// @gorm: comment:'创建时间'
+	CreatedAt uint32 `protobuf:"varint,2,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"comment:'创建时间'"`
+	// @gorm: comment:'更新时间'
+	UpdatedAt uint32 `protobuf:"varint,3,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"comment:'更新时间'"`
+	// @gorm: uniqueIndex:uniq_role_menu;comment:'删除时间'
+	DeletedAt uint32 `protobuf:"varint,4,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty" gorm:"uniqueIndex:uniq_role_menu;comment:'删除时间'"`
+	// @gorm: type:bigint;uniqueIndex:uniq_role_menu
+	RoleId uint64 `protobuf:"varint,5,opt,name=role_id,json=roleId,proto3" json:"role_id,omitempty" gorm:"type:bigint;uniqueIndex:uniq_role_menu"`
+	// @gorm: type:bigint;uniqueIndex:uniq_role_menu
+	MenuId uint64 `protobuf:"varint,6,opt,name=menu_id,json=menuId,proto3" json:"menu_id,omitempty" gorm:"type:bigint;uniqueIndex:uniq_role_menu"`
 }
 
-func (x *UpdateErpReq) Reset() {
-	*x = UpdateErpReq{}
+func (x *ModelRoleMenu) Reset() {
+	*x = ModelRoleMenu{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_erp_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -412,13 +948,13 @@ func (x *UpdateErpReq) Reset() {
 	}
 }
 
-func (x *UpdateErpReq) String() string {
+func (x *ModelRoleMenu) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UpdateErpReq) ProtoMessage() {}
+func (*ModelRoleMenu) ProtoMessage() {}
 
-func (x *UpdateErpReq) ProtoReflect() protoreflect.Message {
+func (x *ModelRoleMenu) ProtoReflect() protoreflect.Message {
 	mi := &file_erp_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -430,28 +966,63 @@ func (x *UpdateErpReq) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UpdateErpReq.ProtoReflect.Descriptor instead.
-func (*UpdateErpReq) Descriptor() ([]byte, []int) {
+// Deprecated: Use ModelRoleMenu.ProtoReflect.Descriptor instead.
+func (*ModelRoleMenu) Descriptor() ([]byte, []int) {
 	return file_erp_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *UpdateErpReq) GetData() *ModelErp {
+func (x *ModelRoleMenu) GetId() uint64 {
 	if x != nil {
-		return x.Data
+		return x.Id
 	}
-	return nil
+	return 0
 }
 
-type UpdateErpRsp struct {
+func (x *ModelRoleMenu) GetCreatedAt() uint32 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+func (x *ModelRoleMenu) GetUpdatedAt() uint32 {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return 0
+}
+
+func (x *ModelRoleMenu) GetDeletedAt() uint32 {
+	if x != nil {
+		return x.DeletedAt
+	}
+	return 0
+}
+
+func (x *ModelRoleMenu) GetRoleId() uint64 {
+	if x != nil {
+		return x.RoleId
+	}
+	return 0
+}
+
+func (x *ModelRoleMenu) GetMenuId() uint64 {
+	if x != nil {
+		return x.MenuId
+	}
+	return 0
+}
+
+type CreateUserReq struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Data *ModelErp `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	Data *ModelUser `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 }
 
-func (x *UpdateErpRsp) Reset() {
-	*x = UpdateErpRsp{}
+func (x *CreateUserReq) Reset() {
+	*x = CreateUserReq{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_erp_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -459,13 +1030,13 @@ func (x *UpdateErpRsp) Reset() {
 	}
 }
 
-func (x *UpdateErpRsp) String() string {
+func (x *CreateUserReq) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UpdateErpRsp) ProtoMessage() {}
+func (*CreateUserReq) ProtoMessage() {}
 
-func (x *UpdateErpRsp) ProtoReflect() protoreflect.Message {
+func (x *CreateUserReq) ProtoReflect() protoreflect.Message {
 	mi := &file_erp_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -477,28 +1048,28 @@ func (x *UpdateErpRsp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UpdateErpRsp.ProtoReflect.Descriptor instead.
-func (*UpdateErpRsp) Descriptor() ([]byte, []int) {
+// Deprecated: Use CreateUserReq.ProtoReflect.Descriptor instead.
+func (*CreateUserReq) Descriptor() ([]byte, []int) {
 	return file_erp_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *UpdateErpRsp) GetData() *ModelErp {
+func (x *CreateUserReq) GetData() *ModelUser {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-type DeleteErpReq struct {
+type CreateUserRsp struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Data *ModelUser `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 }
 
-func (x *DeleteErpReq) Reset() {
-	*x = DeleteErpReq{}
+func (x *CreateUserRsp) Reset() {
+	*x = CreateUserRsp{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_erp_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -506,13 +1077,13 @@ func (x *DeleteErpReq) Reset() {
 	}
 }
 
-func (x *DeleteErpReq) String() string {
+func (x *CreateUserRsp) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*DeleteErpReq) ProtoMessage() {}
+func (*CreateUserRsp) ProtoMessage() {}
 
-func (x *DeleteErpReq) ProtoReflect() protoreflect.Message {
+func (x *CreateUserRsp) ProtoReflect() protoreflect.Message {
 	mi := &file_erp_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -524,26 +1095,28 @@ func (x *DeleteErpReq) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use DeleteErpReq.ProtoReflect.Descriptor instead.
-func (*DeleteErpReq) Descriptor() ([]byte, []int) {
+// Deprecated: Use CreateUserRsp.ProtoReflect.Descriptor instead.
+func (*CreateUserRsp) Descriptor() ([]byte, []int) {
 	return file_erp_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *DeleteErpReq) GetId() uint64 {
+func (x *CreateUserRsp) GetData() *ModelUser {
 	if x != nil {
-		return x.Id
+		return x.Data
 	}
-	return 0
+	return nil
 }
 
-type DeleteErpRsp struct {
+type UpdateUserReq struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	Data *ModelUser `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 }
 
-func (x *DeleteErpRsp) Reset() {
-	*x = DeleteErpRsp{}
+func (x *UpdateUserReq) Reset() {
+	*x = UpdateUserReq{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_erp_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -551,13 +1124,13 @@ func (x *DeleteErpRsp) Reset() {
 	}
 }
 
-func (x *DeleteErpRsp) String() string {
+func (x *UpdateUserReq) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*DeleteErpRsp) ProtoMessage() {}
+func (*UpdateUserReq) ProtoMessage() {}
 
-func (x *DeleteErpRsp) ProtoReflect() protoreflect.Message {
+func (x *UpdateUserReq) ProtoReflect() protoreflect.Message {
 	mi := &file_erp_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -569,21 +1142,28 @@ func (x *DeleteErpRsp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use DeleteErpRsp.ProtoReflect.Descriptor instead.
-func (*DeleteErpRsp) Descriptor() ([]byte, []int) {
+// Deprecated: Use UpdateUserReq.ProtoReflect.Descriptor instead.
+func (*UpdateUserReq) Descriptor() ([]byte, []int) {
 	return file_erp_proto_rawDescGZIP(), []int{7}
 }
 
-type GetErpReq struct {
+func (x *UpdateUserReq) GetData() *ModelUser {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type UpdateUserRsp struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Data *ModelUser `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 }
 
-func (x *GetErpReq) Reset() {
-	*x = GetErpReq{}
+func (x *UpdateUserRsp) Reset() {
+	*x = UpdateUserRsp{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_erp_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -591,13 +1171,13 @@ func (x *GetErpReq) Reset() {
 	}
 }
 
-func (x *GetErpReq) String() string {
+func (x *UpdateUserRsp) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetErpReq) ProtoMessage() {}
+func (*UpdateUserRsp) ProtoMessage() {}
 
-func (x *GetErpReq) ProtoReflect() protoreflect.Message {
+func (x *UpdateUserRsp) ProtoReflect() protoreflect.Message {
 	mi := &file_erp_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -609,28 +1189,28 @@ func (x *GetErpReq) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetErpReq.ProtoReflect.Descriptor instead.
-func (*GetErpReq) Descriptor() ([]byte, []int) {
+// Deprecated: Use UpdateUserRsp.ProtoReflect.Descriptor instead.
+func (*UpdateUserRsp) Descriptor() ([]byte, []int) {
 	return file_erp_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *GetErpReq) GetId() uint64 {
+func (x *UpdateUserRsp) GetData() *ModelUser {
 	if x != nil {
-		return x.Id
+		return x.Data
 	}
-	return 0
+	return nil
 }
 
-type GetErpRsp struct {
+type UpdatePasswordReq struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Data *ModelErp `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	Data *UpdatePasswordReq_Data `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 }
 
-func (x *GetErpRsp) Reset() {
-	*x = GetErpRsp{}
+func (x *UpdatePasswordReq) Reset() {
+	*x = UpdatePasswordReq{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_erp_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -638,13 +1218,13 @@ func (x *GetErpRsp) Reset() {
 	}
 }
 
-func (x *GetErpRsp) String() string {
+func (x *UpdatePasswordReq) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetErpRsp) ProtoMessage() {}
+func (*UpdatePasswordReq) ProtoMessage() {}
 
-func (x *GetErpRsp) ProtoReflect() protoreflect.Message {
+func (x *UpdatePasswordReq) ProtoReflect() protoreflect.Message {
 	mi := &file_erp_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -656,28 +1236,26 @@ func (x *GetErpRsp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetErpRsp.ProtoReflect.Descriptor instead.
-func (*GetErpRsp) Descriptor() ([]byte, []int) {
+// Deprecated: Use UpdatePasswordReq.ProtoReflect.Descriptor instead.
+func (*UpdatePasswordReq) Descriptor() ([]byte, []int) {
 	return file_erp_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *GetErpRsp) GetData() *ModelErp {
+func (x *UpdatePasswordReq) GetData() *UpdatePasswordReq_Data {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-type ListErpReq struct {
+type UpdatePasswordRsp struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
-
-	ListOption *listoption.ListOption `protobuf:"bytes,1,opt,name=list_option,json=listOption,proto3" json:"list_option,omitempty"`
 }
 
-func (x *ListErpReq) Reset() {
-	*x = ListErpReq{}
+func (x *UpdatePasswordRsp) Reset() {
+	*x = UpdatePasswordRsp{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_erp_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -685,13 +1263,13 @@ func (x *ListErpReq) Reset() {
 	}
 }
 
-func (x *ListErpReq) String() string {
+func (x *UpdatePasswordRsp) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ListErpReq) ProtoMessage() {}
+func (*UpdatePasswordRsp) ProtoMessage() {}
 
-func (x *ListErpReq) ProtoReflect() protoreflect.Message {
+func (x *UpdatePasswordRsp) ProtoReflect() protoreflect.Message {
 	mi := &file_erp_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -703,29 +1281,21 @@ func (x *ListErpReq) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ListErpReq.ProtoReflect.Descriptor instead.
-func (*ListErpReq) Descriptor() ([]byte, []int) {
+// Deprecated: Use UpdatePasswordRsp.ProtoReflect.Descriptor instead.
+func (*UpdatePasswordRsp) Descriptor() ([]byte, []int) {
 	return file_erp_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *ListErpReq) GetListOption() *listoption.ListOption {
-	if x != nil {
-		return x.ListOption
-	}
-	return nil
-}
-
-type ListErpRsp struct {
+type DeleteUserReq struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Paginate *listoption.Paginate `protobuf:"bytes,1,opt,name=paginate,proto3" json:"paginate,omitempty"`
-	List     []*ModelErp          `protobuf:"bytes,2,rep,name=list,proto3" json:"list,omitempty"`
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 }
 
-func (x *ListErpRsp) Reset() {
-	*x = ListErpRsp{}
+func (x *DeleteUserReq) Reset() {
+	*x = DeleteUserReq{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_erp_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -733,13 +1303,13 @@ func (x *ListErpRsp) Reset() {
 	}
 }
 
-func (x *ListErpRsp) String() string {
+func (x *DeleteUserReq) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ListErpRsp) ProtoMessage() {}
+func (*DeleteUserReq) ProtoMessage() {}
 
-func (x *ListErpRsp) ProtoReflect() protoreflect.Message {
+func (x *DeleteUserReq) ProtoReflect() protoreflect.Message {
 	mi := &file_erp_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -751,23 +1321,892 @@ func (x *ListErpRsp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ListErpRsp.ProtoReflect.Descriptor instead.
-func (*ListErpRsp) Descriptor() ([]byte, []int) {
+// Deprecated: Use DeleteUserReq.ProtoReflect.Descriptor instead.
+func (*DeleteUserReq) Descriptor() ([]byte, []int) {
 	return file_erp_proto_rawDescGZIP(), []int{11}
 }
 
-func (x *ListErpRsp) GetPaginate() *listoption.Paginate {
+func (x *DeleteUserReq) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type DeleteUserRsp struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *DeleteUserRsp) Reset() {
+	*x = DeleteUserRsp{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_erp_proto_msgTypes[12]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DeleteUserRsp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteUserRsp) ProtoMessage() {}
+
+func (x *DeleteUserRsp) ProtoReflect() protoreflect.Message {
+	mi := &file_erp_proto_msgTypes[12]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteUserRsp.ProtoReflect.Descriptor instead.
+func (*DeleteUserRsp) Descriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{12}
+}
+
+type GetUserReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (x *GetUserReq) Reset() {
+	*x = GetUserReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_erp_proto_msgTypes[13]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetUserReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserReq) ProtoMessage() {}
+
+func (x *GetUserReq) ProtoReflect() protoreflect.Message {
+	mi := &file_erp_proto_msgTypes[13]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserReq.ProtoReflect.Descriptor instead.
+func (*GetUserReq) Descriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *GetUserReq) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type GetUserRsp struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Data *ModelUser `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (x *GetUserRsp) Reset() {
+	*x = GetUserRsp{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_erp_proto_msgTypes[14]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetUserRsp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserRsp) ProtoMessage() {}
+
+func (x *GetUserRsp) ProtoReflect() protoreflect.Message {
+	mi := &file_erp_proto_msgTypes[14]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserRsp.ProtoReflect.Descriptor instead.
+func (*GetUserRsp) Descriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *GetUserRsp) GetData() *ModelUser {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type ListUserReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ListOption *listoption.ListOption `protobuf:"bytes,1,opt,name=list_option,json=listOption,proto3" json:"list_option,omitempty"`
+}
+
+func (x *ListUserReq) Reset() {
+	*x = ListUserReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_erp_proto_msgTypes[15]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListUserReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListUserReq) ProtoMessage() {}
+
+func (x *ListUserReq) ProtoReflect() protoreflect.Message {
+	mi := &file_erp_proto_msgTypes[15]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListUserReq.ProtoReflect.Descriptor instead.
+func (*ListUserReq) Descriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *ListUserReq) GetListOption() *listoption.ListOption {
+	if x != nil {
+		return x.ListOption
+	}
+	return nil
+}
+
+type ListUserRsp struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Paginate *listoption.Paginate `protobuf:"bytes,1,opt,name=paginate,proto3" json:"paginate,omitempty"`
+	List     []*ModelUser         `protobuf:"bytes,2,rep,name=list,proto3" json:"list,omitempty"`
+}
+
+func (x *ListUserRsp) Reset() {
+	*x = ListUserRsp{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_erp_proto_msgTypes[16]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListUserRsp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListUserRsp) ProtoMessage() {}
+
+func (x *ListUserRsp) ProtoReflect() protoreflect.Message {
+	mi := &file_erp_proto_msgTypes[16]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListUserRsp.ProtoReflect.Descriptor instead.
+func (*ListUserRsp) Descriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *ListUserRsp) GetPaginate() *listoption.Paginate {
 	if x != nil {
 		return x.Paginate
 	}
 	return nil
 }
 
-func (x *ListErpRsp) GetList() []*ModelErp {
+func (x *ListUserRsp) GetList() []*ModelUser {
 	if x != nil {
 		return x.List
 	}
 	return nil
+}
+
+type CreateRoleReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Data *ModelRole `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (x *CreateRoleReq) Reset() {
+	*x = CreateRoleReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_erp_proto_msgTypes[17]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateRoleReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateRoleReq) ProtoMessage() {}
+
+func (x *CreateRoleReq) ProtoReflect() protoreflect.Message {
+	mi := &file_erp_proto_msgTypes[17]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateRoleReq.ProtoReflect.Descriptor instead.
+func (*CreateRoleReq) Descriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *CreateRoleReq) GetData() *ModelRole {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type CreateRoleRsp struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Data *ModelRole `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (x *CreateRoleRsp) Reset() {
+	*x = CreateRoleRsp{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_erp_proto_msgTypes[18]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateRoleRsp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateRoleRsp) ProtoMessage() {}
+
+func (x *CreateRoleRsp) ProtoReflect() protoreflect.Message {
+	mi := &file_erp_proto_msgTypes[18]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateRoleRsp.ProtoReflect.Descriptor instead.
+func (*CreateRoleRsp) Descriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *CreateRoleRsp) GetData() *ModelRole {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type UpdateRoleReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Data *ModelRole `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (x *UpdateRoleReq) Reset() {
+	*x = UpdateRoleReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_erp_proto_msgTypes[19]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UpdateRoleReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateRoleReq) ProtoMessage() {}
+
+func (x *UpdateRoleReq) ProtoReflect() protoreflect.Message {
+	mi := &file_erp_proto_msgTypes[19]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateRoleReq.ProtoReflect.Descriptor instead.
+func (*UpdateRoleReq) Descriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *UpdateRoleReq) GetData() *ModelRole {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type UpdateRoleRsp struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Data *ModelRole `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (x *UpdateRoleRsp) Reset() {
+	*x = UpdateRoleRsp{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_erp_proto_msgTypes[20]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UpdateRoleRsp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateRoleRsp) ProtoMessage() {}
+
+func (x *UpdateRoleRsp) ProtoReflect() protoreflect.Message {
+	mi := &file_erp_proto_msgTypes[20]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateRoleRsp.ProtoReflect.Descriptor instead.
+func (*UpdateRoleRsp) Descriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *UpdateRoleRsp) GetData() *ModelRole {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type DeleteRoleReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (x *DeleteRoleReq) Reset() {
+	*x = DeleteRoleReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_erp_proto_msgTypes[21]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DeleteRoleReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteRoleReq) ProtoMessage() {}
+
+func (x *DeleteRoleReq) ProtoReflect() protoreflect.Message {
+	mi := &file_erp_proto_msgTypes[21]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteRoleReq.ProtoReflect.Descriptor instead.
+func (*DeleteRoleReq) Descriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *DeleteRoleReq) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type DeleteRoleRsp struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *DeleteRoleRsp) Reset() {
+	*x = DeleteRoleRsp{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_erp_proto_msgTypes[22]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DeleteRoleRsp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteRoleRsp) ProtoMessage() {}
+
+func (x *DeleteRoleRsp) ProtoReflect() protoreflect.Message {
+	mi := &file_erp_proto_msgTypes[22]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteRoleRsp.ProtoReflect.Descriptor instead.
+func (*DeleteRoleRsp) Descriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{22}
+}
+
+type GetRoleReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (x *GetRoleReq) Reset() {
+	*x = GetRoleReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_erp_proto_msgTypes[23]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetRoleReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetRoleReq) ProtoMessage() {}
+
+func (x *GetRoleReq) ProtoReflect() protoreflect.Message {
+	mi := &file_erp_proto_msgTypes[23]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetRoleReq.ProtoReflect.Descriptor instead.
+func (*GetRoleReq) Descriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *GetRoleReq) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type GetRoleRsp struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Data *ModelRole `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (x *GetRoleRsp) Reset() {
+	*x = GetRoleRsp{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_erp_proto_msgTypes[24]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetRoleRsp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetRoleRsp) ProtoMessage() {}
+
+func (x *GetRoleRsp) ProtoReflect() protoreflect.Message {
+	mi := &file_erp_proto_msgTypes[24]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetRoleRsp.ProtoReflect.Descriptor instead.
+func (*GetRoleRsp) Descriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *GetRoleRsp) GetData() *ModelRole {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type ListRoleReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ListOption *listoption.ListOption `protobuf:"bytes,1,opt,name=list_option,json=listOption,proto3" json:"list_option,omitempty"`
+}
+
+func (x *ListRoleReq) Reset() {
+	*x = ListRoleReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_erp_proto_msgTypes[25]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListRoleReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListRoleReq) ProtoMessage() {}
+
+func (x *ListRoleReq) ProtoReflect() protoreflect.Message {
+	mi := &file_erp_proto_msgTypes[25]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListRoleReq.ProtoReflect.Descriptor instead.
+func (*ListRoleReq) Descriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *ListRoleReq) GetListOption() *listoption.ListOption {
+	if x != nil {
+		return x.ListOption
+	}
+	return nil
+}
+
+type ListRoleRsp struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Paginate *listoption.Paginate `protobuf:"bytes,1,opt,name=paginate,proto3" json:"paginate,omitempty"`
+	List     []*ModelRole         `protobuf:"bytes,2,rep,name=list,proto3" json:"list,omitempty"`
+}
+
+func (x *ListRoleRsp) Reset() {
+	*x = ListRoleRsp{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_erp_proto_msgTypes[26]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListRoleRsp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListRoleRsp) ProtoMessage() {}
+
+func (x *ListRoleRsp) ProtoReflect() protoreflect.Message {
+	mi := &file_erp_proto_msgTypes[26]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListRoleRsp.ProtoReflect.Descriptor instead.
+func (*ListRoleRsp) Descriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *ListRoleRsp) GetPaginate() *listoption.Paginate {
+	if x != nil {
+		return x.Paginate
+	}
+	return nil
+}
+
+func (x *ListRoleRsp) GetList() []*ModelRole {
+	if x != nil {
+		return x.List
+	}
+	return nil
+}
+
+type ListMenuReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ListOption *listoption.ListOption `protobuf:"bytes,1,opt,name=list_option,json=listOption,proto3" json:"list_option,omitempty"`
+}
+
+func (x *ListMenuReq) Reset() {
+	*x = ListMenuReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_erp_proto_msgTypes[27]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListMenuReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListMenuReq) ProtoMessage() {}
+
+func (x *ListMenuReq) ProtoReflect() protoreflect.Message {
+	mi := &file_erp_proto_msgTypes[27]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListMenuReq.ProtoReflect.Descriptor instead.
+func (*ListMenuReq) Descriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *ListMenuReq) GetListOption() *listoption.ListOption {
+	if x != nil {
+		return x.ListOption
+	}
+	return nil
+}
+
+type ListMenuRsp struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Paginate *listoption.Paginate `protobuf:"bytes,1,opt,name=paginate,proto3" json:"paginate,omitempty"`
+	List     []*ModelMenu         `protobuf:"bytes,2,rep,name=list,proto3" json:"list,omitempty"`
+}
+
+func (x *ListMenuRsp) Reset() {
+	*x = ListMenuRsp{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_erp_proto_msgTypes[28]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListMenuRsp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListMenuRsp) ProtoMessage() {}
+
+func (x *ListMenuRsp) ProtoReflect() protoreflect.Message {
+	mi := &file_erp_proto_msgTypes[28]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListMenuRsp.ProtoReflect.Descriptor instead.
+func (*ListMenuRsp) Descriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *ListMenuRsp) GetPaginate() *listoption.Paginate {
+	if x != nil {
+		return x.Paginate
+	}
+	return nil
+}
+
+func (x *ListMenuRsp) GetList() []*ModelMenu {
+	if x != nil {
+		return x.List
+	}
+	return nil
+}
+
+type UpdatePasswordReq_Data struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id               uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	OldPassword      string `protobuf:"bytes,2,opt,name=old_password,json=oldPassword,proto3" json:"old_password,omitempty"`
+	NewPassword      string `protobuf:"bytes,3,opt,name=new_password,json=newPassword,proto3" json:"new_password,omitempty"`
+	NewPasswordAgain string `protobuf:"bytes,4,opt,name=new_password_again,json=newPasswordAgain,proto3" json:"new_password_again,omitempty"`
+}
+
+func (x *UpdatePasswordReq_Data) Reset() {
+	*x = UpdatePasswordReq_Data{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_erp_proto_msgTypes[29]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UpdatePasswordReq_Data) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdatePasswordReq_Data) ProtoMessage() {}
+
+func (x *UpdatePasswordReq_Data) ProtoReflect() protoreflect.Message {
+	mi := &file_erp_proto_msgTypes[29]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdatePasswordReq_Data.ProtoReflect.Descriptor instead.
+func (*UpdatePasswordReq_Data) Descriptor() ([]byte, []int) {
+	return file_erp_proto_rawDescGZIP(), []int{9, 0}
+}
+
+func (x *UpdatePasswordReq_Data) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *UpdatePasswordReq_Data) GetOldPassword() string {
+	if x != nil {
+		return x.OldPassword
+	}
+	return ""
+}
+
+func (x *UpdatePasswordReq_Data) GetNewPassword() string {
+	if x != nil {
+		return x.NewPassword
+	}
+	return ""
+}
+
+func (x *UpdatePasswordReq_Data) GetNewPasswordAgain() string {
+	if x != nil {
+		return x.NewPasswordAgain
+	}
+	return ""
 }
 
 var File_erp_proto protoreflect.FileDescriptor
@@ -777,91 +2216,255 @@ var file_erp_proto_rawDesc = []byte{
 	0x1a, 0x17, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x2f, 0x76, 0x61, 0x6c, 0x69, 0x64,
 	0x61, 0x74, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1b, 0x6c, 0x69, 0x73, 0x74, 0x6f,
 	0x70, 0x74, 0x69, 0x6f, 0x6e, 0x2f, 0x6c, 0x69, 0x73, 0x74, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e,
-	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x90, 0x01, 0x0a, 0x08, 0x4d, 0x6f, 0x64, 0x65, 0x6c,
-	0x45, 0x72, 0x70, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52,
-	0x02, 0x69, 0x64, 0x12, 0x17, 0x0a, 0x07, 0x63, 0x6f, 0x72, 0x70, 0x5f, 0x69, 0x64, 0x18, 0x66,
-	0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x63, 0x6f, 0x72, 0x70, 0x49, 0x64, 0x12, 0x1d, 0x0a, 0x0a,
-	0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18, 0x67, 0x20, 0x01, 0x28, 0x0d,
-	0x52, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x75,
-	0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18, 0x68, 0x20, 0x01, 0x28, 0x0d, 0x52,
-	0x09, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x64, 0x65,
-	0x6c, 0x65, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18, 0x69, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x09,
-	0x64, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x64, 0x41, 0x74, 0x22, 0x91, 0x01, 0x0a, 0x09, 0x4d, 0x6f,
-	0x64, 0x65, 0x6c, 0x52, 0x6f, 0x6c, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x12, 0x17, 0x0a, 0x07, 0x63, 0x6f, 0x72, 0x70, 0x5f,
-	0x69, 0x64, 0x18, 0x66, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x63, 0x6f, 0x72, 0x70, 0x49, 0x64,
-	0x12, 0x1d, 0x0a, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18, 0x67,
-	0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x12,
-	0x1d, 0x0a, 0x0a, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18, 0x68, 0x20,
-	0x01, 0x28, 0x0d, 0x52, 0x09, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x12, 0x1d,
-	0x0a, 0x0a, 0x64, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18, 0x69, 0x20, 0x01,
-	0x28, 0x0d, 0x52, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x64, 0x41, 0x74, 0x22, 0x3b, 0x0a,
-	0x0c, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x45, 0x72, 0x70, 0x52, 0x65, 0x71, 0x12, 0x2b, 0x0a,
-	0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0d, 0x2e, 0x65, 0x72,
-	0x70, 0x2e, 0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x45, 0x72, 0x70, 0x42, 0x08, 0xfa, 0x42, 0x05, 0x8a,
-	0x01, 0x02, 0x10, 0x01, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x31, 0x0a, 0x0c, 0x43, 0x72,
-	0x65, 0x61, 0x74, 0x65, 0x45, 0x72, 0x70, 0x52, 0x73, 0x70, 0x12, 0x21, 0x0a, 0x04, 0x64, 0x61,
-	0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0d, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x4d,
-	0x6f, 0x64, 0x65, 0x6c, 0x45, 0x72, 0x70, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x3b, 0x0a,
-	0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x45, 0x72, 0x70, 0x52, 0x65, 0x71, 0x12, 0x2b, 0x0a,
-	0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0d, 0x2e, 0x65, 0x72,
-	0x70, 0x2e, 0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x45, 0x72, 0x70, 0x42, 0x08, 0xfa, 0x42, 0x05, 0x8a,
-	0x01, 0x02, 0x10, 0x01, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x31, 0x0a, 0x0c, 0x55, 0x70,
-	0x64, 0x61, 0x74, 0x65, 0x45, 0x72, 0x70, 0x52, 0x73, 0x70, 0x12, 0x21, 0x0a, 0x04, 0x64, 0x61,
-	0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0d, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x4d,
-	0x6f, 0x64, 0x65, 0x6c, 0x45, 0x72, 0x70, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x27, 0x0a,
-	0x0c, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x45, 0x72, 0x70, 0x52, 0x65, 0x71, 0x12, 0x17, 0x0a,
-	0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x32, 0x02,
-	0x20, 0x00, 0x52, 0x02, 0x69, 0x64, 0x22, 0x0e, 0x0a, 0x0c, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65,
-	0x45, 0x72, 0x70, 0x52, 0x73, 0x70, 0x22, 0x24, 0x0a, 0x09, 0x47, 0x65, 0x74, 0x45, 0x72, 0x70,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xc8, 0x02, 0x0a, 0x09, 0x4d, 0x6f, 0x64, 0x65, 0x6c,
+	0x55, 0x73, 0x65, 0x72, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04,
+	0x52, 0x02, 0x69, 0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x5f,
+	0x61, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65,
+	0x64, 0x41, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61,
+	0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64,
+	0x41, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x64, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74,
+	0x18, 0x04, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x64, 0x41,
+	0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1b, 0x0a, 0x09, 0x6e, 0x69, 0x63, 0x6b, 0x5f, 0x6e, 0x61,
+	0x6d, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x6e, 0x69, 0x63, 0x6b, 0x4e, 0x61,
+	0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x18, 0x07,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x12, 0x16,
+	0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x08, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x06,
+	0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x2b, 0x0a, 0x09, 0x72, 0x6f, 0x6c, 0x65, 0x5f, 0x6c,
+	0x69, 0x73, 0x74, 0x18, 0x09, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x65, 0x72, 0x70, 0x2e,
+	0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x08, 0x72, 0x6f, 0x6c, 0x65, 0x4c,
+	0x69, 0x73, 0x74, 0x22, 0x3c, 0x0a, 0x06, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x0d, 0x0a,
+	0x09, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x4e, 0x69, 0x6c, 0x10, 0x00, 0x12, 0x10, 0x0a, 0x0c,
+	0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x45, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x10, 0x01, 0x12, 0x11,
+	0x0a, 0x0d, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x44, 0x69, 0x73, 0x61, 0x62, 0x6c, 0x65, 0x10,
+	0x02, 0x22, 0x8f, 0x02, 0x0a, 0x09, 0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x52, 0x6f, 0x6c, 0x65, 0x12,
+	0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x12,
+	0x1d, 0x0a, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x0d, 0x52, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x12, 0x1d,
+	0x0a, 0x0a, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x0d, 0x52, 0x09, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x12, 0x1d, 0x0a,
+	0x0a, 0x64, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28,
+	0x0d, 0x52, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x64, 0x41, 0x74, 0x12, 0x12, 0x0a, 0x04,
+	0x6e, 0x61, 0x6d, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65,
+	0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0d,
+	0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x2b, 0x0a, 0x09, 0x6d, 0x65, 0x6e, 0x75,
+	0x5f, 0x6c, 0x69, 0x73, 0x74, 0x18, 0x07, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x65, 0x72,
+	0x70, 0x2e, 0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x4d, 0x65, 0x6e, 0x75, 0x52, 0x08, 0x6d, 0x65, 0x6e,
+	0x75, 0x4c, 0x69, 0x73, 0x74, 0x22, 0x3c, 0x0a, 0x06, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12,
+	0x0d, 0x0a, 0x09, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x4e, 0x69, 0x6c, 0x10, 0x00, 0x12, 0x10,
+	0x0a, 0x0c, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x45, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x10, 0x01,
+	0x12, 0x11, 0x0a, 0x0d, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x44, 0x69, 0x73, 0x61, 0x62, 0x6c,
+	0x65, 0x10, 0x02, 0x22, 0xb9, 0x03, 0x0a, 0x09, 0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x4d, 0x65, 0x6e,
+	0x75, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69,
+	0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74,
+	0x12, 0x1d, 0x0a, 0x0a, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18, 0x03,
+	0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x12,
+	0x1d, 0x0a, 0x0a, 0x64, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18, 0x04, 0x20,
+	0x01, 0x28, 0x0d, 0x52, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x64, 0x41, 0x74, 0x12, 0x12,
+	0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61,
+	0x6d, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x06, 0x20, 0x01,
+	0x28, 0x0d, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x12, 0x0a, 0x04, 0x69, 0x63,
+	0x6f, 0x6e, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x69, 0x63, 0x6f, 0x6e, 0x12, 0x12,
+	0x0a, 0x04, 0x70, 0x61, 0x74, 0x68, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x70, 0x61,
+	0x74, 0x68, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x64, 0x69, 0x72, 0x65, 0x63, 0x74, 0x18, 0x09,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x72, 0x65, 0x64, 0x69, 0x72, 0x65, 0x63, 0x74, 0x12, 0x1c,
+	0x0a, 0x09, 0x63, 0x6f, 0x6d, 0x70, 0x6f, 0x6e, 0x65, 0x6e, 0x74, 0x18, 0x0a, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x09, 0x63, 0x6f, 0x6d, 0x70, 0x6f, 0x6e, 0x65, 0x6e, 0x74, 0x12, 0x12, 0x0a, 0x04,
+	0x73, 0x6f, 0x72, 0x74, 0x18, 0x0b, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x04, 0x73, 0x6f, 0x72, 0x74,
+	0x12, 0x1b, 0x0a, 0x09, 0x69, 0x73, 0x5f, 0x68, 0x69, 0x64, 0x64, 0x65, 0x6e, 0x18, 0x0c, 0x20,
+	0x01, 0x28, 0x08, 0x52, 0x08, 0x69, 0x73, 0x48, 0x69, 0x64, 0x64, 0x65, 0x6e, 0x12, 0x12, 0x0a,
+	0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x0d, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x04, 0x74, 0x79, 0x70,
+	0x65, 0x22, 0x3c, 0x0a, 0x06, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x0d, 0x0a, 0x09, 0x53,
+	0x74, 0x61, 0x74, 0x75, 0x73, 0x4e, 0x69, 0x6c, 0x10, 0x00, 0x12, 0x10, 0x0a, 0x0c, 0x53, 0x74,
+	0x61, 0x74, 0x75, 0x73, 0x45, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x10, 0x01, 0x12, 0x11, 0x0a, 0x0d,
+	0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x44, 0x69, 0x73, 0x61, 0x62, 0x6c, 0x65, 0x10, 0x02, 0x22,
+	0x2e, 0x0a, 0x04, 0x54, 0x79, 0x70, 0x65, 0x12, 0x0b, 0x0a, 0x07, 0x54, 0x79, 0x70, 0x65, 0x4e,
+	0x69, 0x6c, 0x10, 0x00, 0x12, 0x0c, 0x0a, 0x08, 0x54, 0x79, 0x70, 0x65, 0x4d, 0x65, 0x6e, 0x75,
+	0x10, 0x01, 0x12, 0x0b, 0x0a, 0x07, 0x54, 0x79, 0x70, 0x65, 0x41, 0x70, 0x69, 0x10, 0x02, 0x22,
+	0xae, 0x01, 0x0a, 0x0d, 0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x55, 0x73, 0x65, 0x72, 0x52, 0x6f, 0x6c,
+	0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69,
+	0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74,
+	0x12, 0x1d, 0x0a, 0x0a, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18, 0x03,
+	0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74, 0x12,
+	0x1d, 0x0a, 0x0a, 0x64, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18, 0x04, 0x20,
+	0x01, 0x28, 0x0d, 0x52, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x64, 0x41, 0x74, 0x12, 0x17,
+	0x0a, 0x07, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28, 0x04, 0x52,
+	0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x17, 0x0a, 0x07, 0x72, 0x6f, 0x6c, 0x65, 0x5f,
+	0x69, 0x64, 0x18, 0x06, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x72, 0x6f, 0x6c, 0x65, 0x49, 0x64,
+	0x22, 0xae, 0x01, 0x0a, 0x0d, 0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x52, 0x6f, 0x6c, 0x65, 0x4d, 0x65,
+	0x6e, 0x75, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02,
+	0x69, 0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x41,
+	0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x41, 0x74,
+	0x12, 0x1d, 0x0a, 0x0a, 0x64, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74, 0x18, 0x04,
+	0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x64, 0x41, 0x74, 0x12,
+	0x17, 0x0a, 0x07, 0x72, 0x6f, 0x6c, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28, 0x04,
+	0x52, 0x06, 0x72, 0x6f, 0x6c, 0x65, 0x49, 0x64, 0x12, 0x17, 0x0a, 0x07, 0x6d, 0x65, 0x6e, 0x75,
+	0x5f, 0x69, 0x64, 0x18, 0x06, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x6d, 0x65, 0x6e, 0x75, 0x49,
+	0x64, 0x22, 0x3d, 0x0a, 0x0d, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52,
+	0x65, 0x71, 0x12, 0x2c, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x0e, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x55, 0x73, 0x65, 0x72,
+	0x42, 0x08, 0xfa, 0x42, 0x05, 0x8a, 0x01, 0x02, 0x10, 0x01, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61,
+	0x22, 0x33, 0x0a, 0x0d, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x73,
+	0x70, 0x12, 0x22, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x0e, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x55, 0x73, 0x65, 0x72, 0x52,
+	0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x3d, 0x0a, 0x0d, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x55,
+	0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x12, 0x2c, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x4d, 0x6f, 0x64, 0x65, 0x6c,
+	0x55, 0x73, 0x65, 0x72, 0x42, 0x08, 0xfa, 0x42, 0x05, 0x8a, 0x01, 0x02, 0x10, 0x01, 0x52, 0x04,
+	0x64, 0x61, 0x74, 0x61, 0x22, 0x33, 0x0a, 0x0d, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x55, 0x73,
+	0x65, 0x72, 0x52, 0x73, 0x70, 0x12, 0x22, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x55,
+	0x73, 0x65, 0x72, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0xd1, 0x01, 0x0a, 0x11, 0x55, 0x70,
+	0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x52, 0x65, 0x71, 0x12,
+	0x2f, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1b, 0x2e,
+	0x65, 0x72, 0x70, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f,
+	0x72, 0x64, 0x52, 0x65, 0x71, 0x2e, 0x44, 0x61, 0x74, 0x61, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61,
+	0x1a, 0x8a, 0x01, 0x0a, 0x04, 0x44, 0x61, 0x74, 0x61, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x02, 0x69, 0x64, 0x12, 0x21, 0x0a, 0x0c, 0x6f, 0x6c, 0x64,
+	0x5f, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x0b, 0x6f, 0x6c, 0x64, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x12, 0x21, 0x0a, 0x0c,
+	0x6e, 0x65, 0x77, 0x5f, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x0b, 0x6e, 0x65, 0x77, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x12,
+	0x2c, 0x0a, 0x12, 0x6e, 0x65, 0x77, 0x5f, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x5f,
+	0x61, 0x67, 0x61, 0x69, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x10, 0x6e, 0x65, 0x77,
+	0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x41, 0x67, 0x61, 0x69, 0x6e, 0x22, 0x13, 0x0a,
+	0x11, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x52,
+	0x73, 0x70, 0x22, 0x28, 0x0a, 0x0d, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72,
 	0x52, 0x65, 0x71, 0x12, 0x17, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x42,
-	0x07, 0xfa, 0x42, 0x04, 0x32, 0x02, 0x20, 0x00, 0x52, 0x02, 0x69, 0x64, 0x22, 0x2e, 0x0a, 0x09,
-	0x47, 0x65, 0x74, 0x45, 0x72, 0x70, 0x52, 0x73, 0x70, 0x12, 0x21, 0x0a, 0x04, 0x64, 0x61, 0x74,
-	0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0d, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x4d, 0x6f,
-	0x64, 0x65, 0x6c, 0x45, 0x72, 0x70, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x84, 0x01, 0x0a,
-	0x0a, 0x4c, 0x69, 0x73, 0x74, 0x45, 0x72, 0x70, 0x52, 0x65, 0x71, 0x12, 0x37, 0x0a, 0x0b, 0x6c,
-	0x69, 0x73, 0x74, 0x5f, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x16, 0x2e, 0x6c, 0x69, 0x73, 0x74, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x4c, 0x69,
-	0x73, 0x74, 0x4f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0a, 0x6c, 0x69, 0x73, 0x74, 0x4f, 0x70,
-	0x74, 0x69, 0x6f, 0x6e, 0x22, 0x3d, 0x0a, 0x07, 0x4c, 0x69, 0x73, 0x74, 0x4f, 0x70, 0x74, 0x12,
-	0x0e, 0x0a, 0x0a, 0x4c, 0x69, 0x73, 0x74, 0x4f, 0x70, 0x74, 0x4e, 0x69, 0x6c, 0x10, 0x00, 0x12,
-	0x11, 0x0a, 0x0d, 0x4c, 0x69, 0x73, 0x74, 0x4f, 0x70, 0x74, 0x49, 0x64, 0x4c, 0x69, 0x73, 0x74,
-	0x10, 0x01, 0x12, 0x0f, 0x0a, 0x0b, 0x4c, 0x69, 0x73, 0x74, 0x4f, 0x70, 0x74, 0x4e, 0x61, 0x6d,
-	0x65, 0x10, 0x02, 0x22, 0x61, 0x0a, 0x0a, 0x4c, 0x69, 0x73, 0x74, 0x45, 0x72, 0x70, 0x52, 0x73,
-	0x70, 0x12, 0x30, 0x0a, 0x08, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x65, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x6c, 0x69, 0x73, 0x74, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e,
-	0x2e, 0x50, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x65, 0x52, 0x08, 0x70, 0x61, 0x67, 0x69, 0x6e,
-	0x61, 0x74, 0x65, 0x12, 0x21, 0x0a, 0x04, 0x6c, 0x69, 0x73, 0x74, 0x18, 0x02, 0x20, 0x03, 0x28,
-	0x0b, 0x32, 0x0d, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x45, 0x72, 0x70,
-	0x52, 0x04, 0x6c, 0x69, 0x73, 0x74, 0x2a, 0x6a, 0x0a, 0x07, 0x45, 0x72, 0x72, 0x43, 0x6f, 0x64,
-	0x65, 0x12, 0x0b, 0x0a, 0x07, 0x53, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73, 0x10, 0x00, 0x12, 0x13,
-	0x0a, 0x0f, 0x45, 0x72, 0x72, 0x49, 0x6e, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x50, 0x61, 0x72, 0x61,
-	0x6d, 0x10, 0x01, 0x12, 0x14, 0x0a, 0x10, 0x45, 0x72, 0x72, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x52,
-	0x65, 0x71, 0x75, 0x69, 0x72, 0x65, 0x64, 0x10, 0x02, 0x12, 0x12, 0x0a, 0x0e, 0x45, 0x72, 0x72,
-	0x4e, 0x6f, 0x74, 0x46, 0x6f, 0x75, 0x6e, 0x64, 0x45, 0x72, 0x70, 0x10, 0x03, 0x12, 0x13, 0x0a,
-	0x0f, 0x45, 0x72, 0x72, 0x4e, 0x6f, 0x74, 0x46, 0x6f, 0x75, 0x6e, 0x64, 0x52, 0x6f, 0x6c, 0x65,
-	0x10, 0x04, 0x32, 0xa4, 0x02, 0x0a, 0x03, 0x65, 0x72, 0x70, 0x12, 0x31, 0x0a, 0x09, 0x43, 0x72,
-	0x65, 0x61, 0x74, 0x65, 0x45, 0x72, 0x70, 0x12, 0x11, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x43, 0x72,
-	0x65, 0x61, 0x74, 0x65, 0x45, 0x72, 0x70, 0x52, 0x65, 0x71, 0x1a, 0x11, 0x2e, 0x65, 0x72, 0x70,
-	0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x45, 0x72, 0x70, 0x52, 0x73, 0x70, 0x12, 0x31, 0x0a,
-	0x09, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x45, 0x72, 0x70, 0x12, 0x11, 0x2e, 0x65, 0x72, 0x70,
-	0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x45, 0x72, 0x70, 0x52, 0x65, 0x71, 0x1a, 0x11, 0x2e,
-	0x65, 0x72, 0x70, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x45, 0x72, 0x70, 0x52, 0x73, 0x70,
-	0x12, 0x31, 0x0a, 0x09, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x45, 0x72, 0x70, 0x12, 0x11, 0x2e,
-	0x65, 0x72, 0x70, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x45, 0x72, 0x70, 0x52, 0x65, 0x71,
-	0x1a, 0x11, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x45, 0x72, 0x70,
-	0x52, 0x73, 0x70, 0x12, 0x28, 0x0a, 0x06, 0x47, 0x65, 0x74, 0x45, 0x72, 0x70, 0x12, 0x0e, 0x2e,
-	0x65, 0x72, 0x70, 0x2e, 0x47, 0x65, 0x74, 0x45, 0x72, 0x70, 0x52, 0x65, 0x71, 0x1a, 0x0e, 0x2e,
-	0x65, 0x72, 0x70, 0x2e, 0x47, 0x65, 0x74, 0x45, 0x72, 0x70, 0x52, 0x73, 0x70, 0x12, 0x2b, 0x0a,
-	0x07, 0x4c, 0x69, 0x73, 0x74, 0x45, 0x72, 0x70, 0x12, 0x0f, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x4c,
-	0x69, 0x73, 0x74, 0x45, 0x72, 0x70, 0x52, 0x65, 0x71, 0x1a, 0x0f, 0x2e, 0x65, 0x72, 0x70, 0x2e,
-	0x4c, 0x69, 0x73, 0x74, 0x45, 0x72, 0x70, 0x52, 0x73, 0x70, 0x12, 0x2d, 0x0a, 0x09, 0x44, 0x44,
-	0x4c, 0x69, 0x73, 0x74, 0x45, 0x72, 0x70, 0x12, 0x0f, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x4c, 0x69,
-	0x73, 0x74, 0x45, 0x72, 0x70, 0x52, 0x65, 0x71, 0x1a, 0x0f, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x4c,
-	0x69, 0x73, 0x74, 0x45, 0x72, 0x70, 0x52, 0x73, 0x70, 0x42, 0x25, 0x5a, 0x23, 0x67, 0x69, 0x74,
-	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x4a, 0x49, 0x41, 0x57, 0x65, 0x61, 0x2f, 0x65,
-	0x72, 0x70, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x65, 0x72, 0x70,
-	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x07, 0xfa, 0x42, 0x04, 0x32, 0x02, 0x20, 0x00, 0x52, 0x02, 0x69, 0x64, 0x22, 0x0f, 0x0a, 0x0d,
+	0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x73, 0x70, 0x22, 0x25, 0x0a,
+	0x0a, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x12, 0x17, 0x0a, 0x02, 0x69,
+	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x32, 0x02, 0x20, 0x00,
+	0x52, 0x02, 0x69, 0x64, 0x22, 0x30, 0x0a, 0x0a, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x52,
+	0x73, 0x70, 0x12, 0x22, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x0e, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x55, 0x73, 0x65, 0x72,
+	0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x85, 0x01, 0x0a, 0x0b, 0x4c, 0x69, 0x73, 0x74, 0x55,
+	0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x12, 0x37, 0x0a, 0x0b, 0x6c, 0x69, 0x73, 0x74, 0x5f, 0x6f,
+	0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x6c, 0x69,
+	0x73, 0x74, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x4f, 0x70, 0x74,
+	0x69, 0x6f, 0x6e, 0x52, 0x0a, 0x6c, 0x69, 0x73, 0x74, 0x4f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x22,
+	0x3d, 0x0a, 0x07, 0x4c, 0x69, 0x73, 0x74, 0x4f, 0x70, 0x74, 0x12, 0x0e, 0x0a, 0x0a, 0x4c, 0x69,
+	0x73, 0x74, 0x4f, 0x70, 0x74, 0x4e, 0x69, 0x6c, 0x10, 0x00, 0x12, 0x11, 0x0a, 0x0d, 0x4c, 0x69,
+	0x73, 0x74, 0x4f, 0x70, 0x74, 0x49, 0x64, 0x4c, 0x69, 0x73, 0x74, 0x10, 0x01, 0x12, 0x0f, 0x0a,
+	0x0b, 0x4c, 0x69, 0x73, 0x74, 0x4f, 0x70, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x10, 0x02, 0x22, 0x63,
+	0x0a, 0x0b, 0x4c, 0x69, 0x73, 0x74, 0x55, 0x73, 0x65, 0x72, 0x52, 0x73, 0x70, 0x12, 0x30, 0x0a,
+	0x08, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x14, 0x2e, 0x6c, 0x69, 0x73, 0x74, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x50, 0x61, 0x67,
+	0x69, 0x6e, 0x61, 0x74, 0x65, 0x52, 0x08, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x65, 0x12,
+	0x22, 0x0a, 0x04, 0x6c, 0x69, 0x73, 0x74, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0e, 0x2e,
+	0x65, 0x72, 0x70, 0x2e, 0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x55, 0x73, 0x65, 0x72, 0x52, 0x04, 0x6c,
+	0x69, 0x73, 0x74, 0x22, 0x3d, 0x0a, 0x0d, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52, 0x6f, 0x6c,
+	0x65, 0x52, 0x65, 0x71, 0x12, 0x2c, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x52, 0x6f,
+	0x6c, 0x65, 0x42, 0x08, 0xfa, 0x42, 0x05, 0x8a, 0x01, 0x02, 0x10, 0x01, 0x52, 0x04, 0x64, 0x61,
+	0x74, 0x61, 0x22, 0x33, 0x0a, 0x0d, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52, 0x6f, 0x6c, 0x65,
+	0x52, 0x73, 0x70, 0x12, 0x22, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x0e, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x52, 0x6f, 0x6c,
+	0x65, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x3d, 0x0a, 0x0d, 0x55, 0x70, 0x64, 0x61, 0x74,
+	0x65, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x12, 0x2c, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x4d, 0x6f, 0x64,
+	0x65, 0x6c, 0x52, 0x6f, 0x6c, 0x65, 0x42, 0x08, 0xfa, 0x42, 0x05, 0x8a, 0x01, 0x02, 0x10, 0x01,
+	0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x33, 0x0a, 0x0d, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
+	0x52, 0x6f, 0x6c, 0x65, 0x52, 0x73, 0x70, 0x12, 0x22, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x4d, 0x6f, 0x64, 0x65,
+	0x6c, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x28, 0x0a, 0x0d, 0x44,
+	0x65, 0x6c, 0x65, 0x74, 0x65, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x12, 0x17, 0x0a, 0x02,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x32, 0x02, 0x20,
+	0x00, 0x52, 0x02, 0x69, 0x64, 0x22, 0x0f, 0x0a, 0x0d, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x52,
+	0x6f, 0x6c, 0x65, 0x52, 0x73, 0x70, 0x22, 0x25, 0x0a, 0x0a, 0x47, 0x65, 0x74, 0x52, 0x6f, 0x6c,
+	0x65, 0x52, 0x65, 0x71, 0x12, 0x17, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04,
+	0x42, 0x07, 0xfa, 0x42, 0x04, 0x32, 0x02, 0x20, 0x00, 0x52, 0x02, 0x69, 0x64, 0x22, 0x30, 0x0a,
+	0x0a, 0x47, 0x65, 0x74, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x73, 0x70, 0x12, 0x22, 0x0a, 0x04, 0x64,
+	0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x65, 0x72, 0x70, 0x2e,
+	0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22,
+	0x85, 0x01, 0x0a, 0x0b, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x12,
+	0x37, 0x0a, 0x0b, 0x6c, 0x69, 0x73, 0x74, 0x5f, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x6c, 0x69, 0x73, 0x74, 0x6f, 0x70, 0x74, 0x69, 0x6f,
+	0x6e, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x4f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0a, 0x6c, 0x69,
+	0x73, 0x74, 0x4f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x3d, 0x0a, 0x07, 0x4c, 0x69, 0x73, 0x74,
+	0x4f, 0x70, 0x74, 0x12, 0x0e, 0x0a, 0x0a, 0x4c, 0x69, 0x73, 0x74, 0x4f, 0x70, 0x74, 0x4e, 0x69,
+	0x6c, 0x10, 0x00, 0x12, 0x11, 0x0a, 0x0d, 0x4c, 0x69, 0x73, 0x74, 0x4f, 0x70, 0x74, 0x49, 0x64,
+	0x4c, 0x69, 0x73, 0x74, 0x10, 0x01, 0x12, 0x0f, 0x0a, 0x0b, 0x4c, 0x69, 0x73, 0x74, 0x4f, 0x70,
+	0x74, 0x4e, 0x61, 0x6d, 0x65, 0x10, 0x02, 0x22, 0x63, 0x0a, 0x0b, 0x4c, 0x69, 0x73, 0x74, 0x52,
+	0x6f, 0x6c, 0x65, 0x52, 0x73, 0x70, 0x12, 0x30, 0x0a, 0x08, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61,
+	0x74, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x6c, 0x69, 0x73, 0x74, 0x6f,
+	0x70, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x50, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x65, 0x52, 0x08,
+	0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x65, 0x12, 0x22, 0x0a, 0x04, 0x6c, 0x69, 0x73, 0x74,
+	0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x4d, 0x6f, 0x64,
+	0x65, 0x6c, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x04, 0x6c, 0x69, 0x73, 0x74, 0x22, 0x85, 0x01, 0x0a,
+	0x0b, 0x4c, 0x69, 0x73, 0x74, 0x4d, 0x65, 0x6e, 0x75, 0x52, 0x65, 0x71, 0x12, 0x37, 0x0a, 0x0b,
+	0x6c, 0x69, 0x73, 0x74, 0x5f, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x16, 0x2e, 0x6c, 0x69, 0x73, 0x74, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x4c,
+	0x69, 0x73, 0x74, 0x4f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0a, 0x6c, 0x69, 0x73, 0x74, 0x4f,
+	0x70, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x3d, 0x0a, 0x07, 0x4c, 0x69, 0x73, 0x74, 0x4f, 0x70, 0x74,
+	0x12, 0x0e, 0x0a, 0x0a, 0x4c, 0x69, 0x73, 0x74, 0x4f, 0x70, 0x74, 0x4e, 0x69, 0x6c, 0x10, 0x00,
+	0x12, 0x11, 0x0a, 0x0d, 0x4c, 0x69, 0x73, 0x74, 0x4f, 0x70, 0x74, 0x49, 0x64, 0x4c, 0x69, 0x73,
+	0x74, 0x10, 0x01, 0x12, 0x0f, 0x0a, 0x0b, 0x4c, 0x69, 0x73, 0x74, 0x4f, 0x70, 0x74, 0x4e, 0x61,
+	0x6d, 0x65, 0x10, 0x02, 0x22, 0x63, 0x0a, 0x0b, 0x4c, 0x69, 0x73, 0x74, 0x4d, 0x65, 0x6e, 0x75,
+	0x52, 0x73, 0x70, 0x12, 0x30, 0x0a, 0x08, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x65, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x6c, 0x69, 0x73, 0x74, 0x6f, 0x70, 0x74, 0x69,
+	0x6f, 0x6e, 0x2e, 0x50, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x65, 0x52, 0x08, 0x70, 0x61, 0x67,
+	0x69, 0x6e, 0x61, 0x74, 0x65, 0x12, 0x22, 0x0a, 0x04, 0x6c, 0x69, 0x73, 0x74, 0x18, 0x02, 0x20,
+	0x03, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x4d,
+	0x65, 0x6e, 0x75, 0x52, 0x04, 0x6c, 0x69, 0x73, 0x74, 0x2a, 0xb7, 0x01, 0x0a, 0x07, 0x45, 0x72,
+	0x72, 0x43, 0x6f, 0x64, 0x65, 0x12, 0x0b, 0x0a, 0x07, 0x53, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73,
+	0x10, 0x00, 0x12, 0x13, 0x0a, 0x0f, 0x45, 0x72, 0x72, 0x49, 0x6e, 0x76, 0x61, 0x6c, 0x69, 0x64,
+	0x50, 0x61, 0x72, 0x61, 0x6d, 0x10, 0x01, 0x12, 0x14, 0x0a, 0x10, 0x45, 0x72, 0x72, 0x50, 0x61,
+	0x72, 0x61, 0x6d, 0x52, 0x65, 0x71, 0x75, 0x69, 0x72, 0x65, 0x64, 0x10, 0x02, 0x12, 0x14, 0x0a,
+	0x0f, 0x45, 0x72, 0x72, 0x4e, 0x6f, 0x74, 0x46, 0x6f, 0x75, 0x6e, 0x64, 0x55, 0x73, 0x65, 0x72,
+	0x10, 0x90, 0x4e, 0x12, 0x14, 0x0a, 0x0f, 0x45, 0x72, 0x72, 0x4e, 0x6f, 0x74, 0x46, 0x6f, 0x75,
+	0x6e, 0x64, 0x52, 0x6f, 0x6c, 0x65, 0x10, 0x91, 0x4e, 0x12, 0x14, 0x0a, 0x0f, 0x45, 0x72, 0x72,
+	0x4e, 0x6f, 0x74, 0x46, 0x6f, 0x75, 0x6e, 0x64, 0x4d, 0x65, 0x6e, 0x75, 0x10, 0x92, 0x4e, 0x12,
+	0x18, 0x0a, 0x13, 0x45, 0x72, 0x72, 0x4e, 0x6f, 0x74, 0x46, 0x6f, 0x75, 0x6e, 0x64, 0x55, 0x73,
+	0x65, 0x72, 0x52, 0x6f, 0x6c, 0x65, 0x10, 0x93, 0x4e, 0x12, 0x18, 0x0a, 0x13, 0x45, 0x72, 0x72,
+	0x4e, 0x6f, 0x74, 0x46, 0x6f, 0x75, 0x6e, 0x64, 0x52, 0x6f, 0x6c, 0x65, 0x4d, 0x65, 0x6e, 0x75,
+	0x10, 0x94, 0x4e, 0x32, 0xf5, 0x04, 0x0a, 0x03, 0x65, 0x72, 0x70, 0x12, 0x34, 0x0a, 0x0a, 0x43,
+	0x72, 0x65, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x12, 0x12, 0x2e, 0x65, 0x72, 0x70, 0x2e,
+	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x1a, 0x12, 0x2e,
+	0x65, 0x72, 0x70, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x73,
+	0x70, 0x12, 0x34, 0x0a, 0x0a, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x12,
+	0x12, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72,
+	0x52, 0x65, 0x71, 0x1a, 0x12, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
+	0x55, 0x73, 0x65, 0x72, 0x52, 0x73, 0x70, 0x12, 0x40, 0x0a, 0x0e, 0x55, 0x70, 0x64, 0x61, 0x74,
+	0x65, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x12, 0x16, 0x2e, 0x65, 0x72, 0x70, 0x2e,
+	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x52, 0x65,
+	0x71, 0x1a, 0x16, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61,
+	0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x52, 0x73, 0x70, 0x12, 0x34, 0x0a, 0x0a, 0x44, 0x65, 0x6c,
+	0x65, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x12, 0x12, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x44, 0x65,
+	0x6c, 0x65, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x1a, 0x12, 0x2e, 0x65, 0x72,
+	0x70, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x73, 0x70, 0x12,
+	0x2b, 0x0a, 0x07, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x12, 0x0f, 0x2e, 0x65, 0x72, 0x70,
+	0x2e, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x1a, 0x0f, 0x2e, 0x65, 0x72,
+	0x70, 0x2e, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x52, 0x73, 0x70, 0x12, 0x2e, 0x0a, 0x08,
+	0x4c, 0x69, 0x73, 0x74, 0x55, 0x73, 0x65, 0x72, 0x12, 0x10, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x4c,
+	0x69, 0x73, 0x74, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x1a, 0x10, 0x2e, 0x65, 0x72, 0x70,
+	0x2e, 0x4c, 0x69, 0x73, 0x74, 0x55, 0x73, 0x65, 0x72, 0x52, 0x73, 0x70, 0x12, 0x34, 0x0a, 0x0a,
+	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52, 0x6f, 0x6c, 0x65, 0x12, 0x12, 0x2e, 0x65, 0x72, 0x70,
+	0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x1a, 0x12,
+	0x2e, 0x65, 0x72, 0x70, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52, 0x6f, 0x6c, 0x65, 0x52,
+	0x73, 0x70, 0x12, 0x34, 0x0a, 0x0a, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x6f, 0x6c, 0x65,
+	0x12, 0x12, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x6f, 0x6c,
+	0x65, 0x52, 0x65, 0x71, 0x1a, 0x12, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74,
+	0x65, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x73, 0x70, 0x12, 0x34, 0x0a, 0x0a, 0x44, 0x65, 0x6c, 0x65,
+	0x74, 0x65, 0x52, 0x6f, 0x6c, 0x65, 0x12, 0x12, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x44, 0x65, 0x6c,
+	0x65, 0x74, 0x65, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x1a, 0x12, 0x2e, 0x65, 0x72, 0x70,
+	0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x73, 0x70, 0x12, 0x2b,
+	0x0a, 0x07, 0x47, 0x65, 0x74, 0x52, 0x6f, 0x6c, 0x65, 0x12, 0x0f, 0x2e, 0x65, 0x72, 0x70, 0x2e,
+	0x47, 0x65, 0x74, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x1a, 0x0f, 0x2e, 0x65, 0x72, 0x70,
+	0x2e, 0x47, 0x65, 0x74, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x73, 0x70, 0x12, 0x2e, 0x0a, 0x08, 0x4c,
+	0x69, 0x73, 0x74, 0x52, 0x6f, 0x6c, 0x65, 0x12, 0x10, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x4c, 0x69,
+	0x73, 0x74, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x1a, 0x10, 0x2e, 0x65, 0x72, 0x70, 0x2e,
+	0x4c, 0x69, 0x73, 0x74, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x73, 0x70, 0x12, 0x2e, 0x0a, 0x08, 0x4c,
+	0x69, 0x73, 0x74, 0x4d, 0x65, 0x6e, 0x75, 0x12, 0x10, 0x2e, 0x65, 0x72, 0x70, 0x2e, 0x4c, 0x69,
+	0x73, 0x74, 0x4d, 0x65, 0x6e, 0x75, 0x52, 0x65, 0x71, 0x1a, 0x10, 0x2e, 0x65, 0x72, 0x70, 0x2e,
+	0x4c, 0x69, 0x73, 0x74, 0x4d, 0x65, 0x6e, 0x75, 0x52, 0x73, 0x70, 0x42, 0x25, 0x5a, 0x23, 0x67,
+	0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x4a, 0x49, 0x41, 0x57, 0x65, 0x61,
+	0x2f, 0x65, 0x72, 0x70, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x65,
+	0x72, 0x70, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -876,52 +2479,102 @@ func file_erp_proto_rawDescGZIP() []byte {
 	return file_erp_proto_rawDescData
 }
 
-var file_erp_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_erp_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_erp_proto_enumTypes = make([]protoimpl.EnumInfo, 8)
+var file_erp_proto_msgTypes = make([]protoimpl.MessageInfo, 30)
 var file_erp_proto_goTypes = []interface{}{
-	(ErrCode)(0),                  // 0: erp.ErrCode
-	(ListErpReq_ListOpt)(0),       // 1: erp.ListErpReq.ListOpt
-	(*ModelErp)(nil),              // 2: erp.ModelErp
-	(*ModelRole)(nil),             // 3: erp.ModelRole
-	(*CreateErpReq)(nil),          // 4: erp.CreateErpReq
-	(*CreateErpRsp)(nil),          // 5: erp.CreateErpRsp
-	(*UpdateErpReq)(nil),          // 6: erp.UpdateErpReq
-	(*UpdateErpRsp)(nil),          // 7: erp.UpdateErpRsp
-	(*DeleteErpReq)(nil),          // 8: erp.DeleteErpReq
-	(*DeleteErpRsp)(nil),          // 9: erp.DeleteErpRsp
-	(*GetErpReq)(nil),             // 10: erp.GetErpReq
-	(*GetErpRsp)(nil),             // 11: erp.GetErpRsp
-	(*ListErpReq)(nil),            // 12: erp.ListErpReq
-	(*ListErpRsp)(nil),            // 13: erp.ListErpRsp
-	(*listoption.ListOption)(nil), // 14: listoption.ListOption
-	(*listoption.Paginate)(nil),   // 15: listoption.Paginate
+	(ErrCode)(0),                   // 0: erp.ErrCode
+	(ModelUser_Status)(0),          // 1: erp.ModelUser.Status
+	(ModelRole_Status)(0),          // 2: erp.ModelRole.Status
+	(ModelMenu_Status)(0),          // 3: erp.ModelMenu.Status
+	(ModelMenu_Type)(0),            // 4: erp.ModelMenu.Type
+	(ListUserReq_ListOpt)(0),       // 5: erp.ListUserReq.ListOpt
+	(ListRoleReq_ListOpt)(0),       // 6: erp.ListRoleReq.ListOpt
+	(ListMenuReq_ListOpt)(0),       // 7: erp.ListMenuReq.ListOpt
+	(*ModelUser)(nil),              // 8: erp.ModelUser
+	(*ModelRole)(nil),              // 9: erp.ModelRole
+	(*ModelMenu)(nil),              // 10: erp.ModelMenu
+	(*ModelUserRole)(nil),          // 11: erp.ModelUserRole
+	(*ModelRoleMenu)(nil),          // 12: erp.ModelRoleMenu
+	(*CreateUserReq)(nil),          // 13: erp.CreateUserReq
+	(*CreateUserRsp)(nil),          // 14: erp.CreateUserRsp
+	(*UpdateUserReq)(nil),          // 15: erp.UpdateUserReq
+	(*UpdateUserRsp)(nil),          // 16: erp.UpdateUserRsp
+	(*UpdatePasswordReq)(nil),      // 17: erp.UpdatePasswordReq
+	(*UpdatePasswordRsp)(nil),      // 18: erp.UpdatePasswordRsp
+	(*DeleteUserReq)(nil),          // 19: erp.DeleteUserReq
+	(*DeleteUserRsp)(nil),          // 20: erp.DeleteUserRsp
+	(*GetUserReq)(nil),             // 21: erp.GetUserReq
+	(*GetUserRsp)(nil),             // 22: erp.GetUserRsp
+	(*ListUserReq)(nil),            // 23: erp.ListUserReq
+	(*ListUserRsp)(nil),            // 24: erp.ListUserRsp
+	(*CreateRoleReq)(nil),          // 25: erp.CreateRoleReq
+	(*CreateRoleRsp)(nil),          // 26: erp.CreateRoleRsp
+	(*UpdateRoleReq)(nil),          // 27: erp.UpdateRoleReq
+	(*UpdateRoleRsp)(nil),          // 28: erp.UpdateRoleRsp
+	(*DeleteRoleReq)(nil),          // 29: erp.DeleteRoleReq
+	(*DeleteRoleRsp)(nil),          // 30: erp.DeleteRoleRsp
+	(*GetRoleReq)(nil),             // 31: erp.GetRoleReq
+	(*GetRoleRsp)(nil),             // 32: erp.GetRoleRsp
+	(*ListRoleReq)(nil),            // 33: erp.ListRoleReq
+	(*ListRoleRsp)(nil),            // 34: erp.ListRoleRsp
+	(*ListMenuReq)(nil),            // 35: erp.ListMenuReq
+	(*ListMenuRsp)(nil),            // 36: erp.ListMenuRsp
+	(*UpdatePasswordReq_Data)(nil), // 37: erp.UpdatePasswordReq.Data
+	(*listoption.ListOption)(nil),  // 38: listoption.ListOption
+	(*listoption.Paginate)(nil),    // 39: listoption.Paginate
 }
 var file_erp_proto_depIdxs = []int32{
-	2,  // 0: erp.CreateErpReq.data:type_name -> erp.ModelErp
-	2,  // 1: erp.CreateErpRsp.data:type_name -> erp.ModelErp
-	2,  // 2: erp.UpdateErpReq.data:type_name -> erp.ModelErp
-	2,  // 3: erp.UpdateErpRsp.data:type_name -> erp.ModelErp
-	2,  // 4: erp.GetErpRsp.data:type_name -> erp.ModelErp
-	14, // 5: erp.ListErpReq.list_option:type_name -> listoption.ListOption
-	15, // 6: erp.ListErpRsp.paginate:type_name -> listoption.Paginate
-	2,  // 7: erp.ListErpRsp.list:type_name -> erp.ModelErp
-	4,  // 8: erp.erp.CreateErp:input_type -> erp.CreateErpReq
-	6,  // 9: erp.erp.UpdateErp:input_type -> erp.UpdateErpReq
-	8,  // 10: erp.erp.DeleteErp:input_type -> erp.DeleteErpReq
-	10, // 11: erp.erp.GetErp:input_type -> erp.GetErpReq
-	12, // 12: erp.erp.ListErp:input_type -> erp.ListErpReq
-	12, // 13: erp.erp.DDListErp:input_type -> erp.ListErpReq
-	5,  // 14: erp.erp.CreateErp:output_type -> erp.CreateErpRsp
-	7,  // 15: erp.erp.UpdateErp:output_type -> erp.UpdateErpRsp
-	9,  // 16: erp.erp.DeleteErp:output_type -> erp.DeleteErpRsp
-	11, // 17: erp.erp.GetErp:output_type -> erp.GetErpRsp
-	13, // 18: erp.erp.ListErp:output_type -> erp.ListErpRsp
-	13, // 19: erp.erp.DDListErp:output_type -> erp.ListErpRsp
-	14, // [14:20] is the sub-list for method output_type
-	8,  // [8:14] is the sub-list for method input_type
-	8,  // [8:8] is the sub-list for extension type_name
-	8,  // [8:8] is the sub-list for extension extendee
-	0,  // [0:8] is the sub-list for field type_name
+	9,  // 0: erp.ModelUser.role_list:type_name -> erp.ModelRole
+	10, // 1: erp.ModelRole.menu_list:type_name -> erp.ModelMenu
+	8,  // 2: erp.CreateUserReq.data:type_name -> erp.ModelUser
+	8,  // 3: erp.CreateUserRsp.data:type_name -> erp.ModelUser
+	8,  // 4: erp.UpdateUserReq.data:type_name -> erp.ModelUser
+	8,  // 5: erp.UpdateUserRsp.data:type_name -> erp.ModelUser
+	37, // 6: erp.UpdatePasswordReq.data:type_name -> erp.UpdatePasswordReq.Data
+	8,  // 7: erp.GetUserRsp.data:type_name -> erp.ModelUser
+	38, // 8: erp.ListUserReq.list_option:type_name -> listoption.ListOption
+	39, // 9: erp.ListUserRsp.paginate:type_name -> listoption.Paginate
+	8,  // 10: erp.ListUserRsp.list:type_name -> erp.ModelUser
+	9,  // 11: erp.CreateRoleReq.data:type_name -> erp.ModelRole
+	9,  // 12: erp.CreateRoleRsp.data:type_name -> erp.ModelRole
+	9,  // 13: erp.UpdateRoleReq.data:type_name -> erp.ModelRole
+	9,  // 14: erp.UpdateRoleRsp.data:type_name -> erp.ModelRole
+	9,  // 15: erp.GetRoleRsp.data:type_name -> erp.ModelRole
+	38, // 16: erp.ListRoleReq.list_option:type_name -> listoption.ListOption
+	39, // 17: erp.ListRoleRsp.paginate:type_name -> listoption.Paginate
+	9,  // 18: erp.ListRoleRsp.list:type_name -> erp.ModelRole
+	38, // 19: erp.ListMenuReq.list_option:type_name -> listoption.ListOption
+	39, // 20: erp.ListMenuRsp.paginate:type_name -> listoption.Paginate
+	10, // 21: erp.ListMenuRsp.list:type_name -> erp.ModelMenu
+	13, // 22: erp.erp.CreateUser:input_type -> erp.CreateUserReq
+	15, // 23: erp.erp.UpdateUser:input_type -> erp.UpdateUserReq
+	17, // 24: erp.erp.UpdatePassword:input_type -> erp.UpdatePasswordReq
+	19, // 25: erp.erp.DeleteUser:input_type -> erp.DeleteUserReq
+	21, // 26: erp.erp.GetUser:input_type -> erp.GetUserReq
+	23, // 27: erp.erp.ListUser:input_type -> erp.ListUserReq
+	25, // 28: erp.erp.CreateRole:input_type -> erp.CreateRoleReq
+	27, // 29: erp.erp.UpdateRole:input_type -> erp.UpdateRoleReq
+	29, // 30: erp.erp.DeleteRole:input_type -> erp.DeleteRoleReq
+	31, // 31: erp.erp.GetRole:input_type -> erp.GetRoleReq
+	33, // 32: erp.erp.ListRole:input_type -> erp.ListRoleReq
+	35, // 33: erp.erp.ListMenu:input_type -> erp.ListMenuReq
+	14, // 34: erp.erp.CreateUser:output_type -> erp.CreateUserRsp
+	16, // 35: erp.erp.UpdateUser:output_type -> erp.UpdateUserRsp
+	18, // 36: erp.erp.UpdatePassword:output_type -> erp.UpdatePasswordRsp
+	20, // 37: erp.erp.DeleteUser:output_type -> erp.DeleteUserRsp
+	22, // 38: erp.erp.GetUser:output_type -> erp.GetUserRsp
+	24, // 39: erp.erp.ListUser:output_type -> erp.ListUserRsp
+	26, // 40: erp.erp.CreateRole:output_type -> erp.CreateRoleRsp
+	28, // 41: erp.erp.UpdateRole:output_type -> erp.UpdateRoleRsp
+	30, // 42: erp.erp.DeleteRole:output_type -> erp.DeleteRoleRsp
+	32, // 43: erp.erp.GetRole:output_type -> erp.GetRoleRsp
+	34, // 44: erp.erp.ListRole:output_type -> erp.ListRoleRsp
+	36, // 45: erp.erp.ListMenu:output_type -> erp.ListMenuRsp
+	34, // [34:46] is the sub-list for method output_type
+	22, // [22:34] is the sub-list for method input_type
+	22, // [22:22] is the sub-list for extension type_name
+	22, // [22:22] is the sub-list for extension extendee
+	0,  // [0:22] is the sub-list for field type_name
 }
 
 func init() { file_erp_proto_init() }
@@ -931,7 +2584,7 @@ func file_erp_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_erp_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ModelErp); i {
+			switch v := v.(*ModelUser); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -955,7 +2608,7 @@ func file_erp_proto_init() {
 			}
 		}
 		file_erp_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateErpReq); i {
+			switch v := v.(*ModelMenu); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -967,7 +2620,7 @@ func file_erp_proto_init() {
 			}
 		}
 		file_erp_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateErpRsp); i {
+			switch v := v.(*ModelUserRole); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -979,7 +2632,7 @@ func file_erp_proto_init() {
 			}
 		}
 		file_erp_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateErpReq); i {
+			switch v := v.(*ModelRoleMenu); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -991,7 +2644,7 @@ func file_erp_proto_init() {
 			}
 		}
 		file_erp_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateErpRsp); i {
+			switch v := v.(*CreateUserReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1003,7 +2656,7 @@ func file_erp_proto_init() {
 			}
 		}
 		file_erp_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteErpReq); i {
+			switch v := v.(*CreateUserRsp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1015,7 +2668,7 @@ func file_erp_proto_init() {
 			}
 		}
 		file_erp_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteErpRsp); i {
+			switch v := v.(*UpdateUserReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1027,7 +2680,7 @@ func file_erp_proto_init() {
 			}
 		}
 		file_erp_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetErpReq); i {
+			switch v := v.(*UpdateUserRsp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1039,7 +2692,7 @@ func file_erp_proto_init() {
 			}
 		}
 		file_erp_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetErpRsp); i {
+			switch v := v.(*UpdatePasswordReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1051,7 +2704,7 @@ func file_erp_proto_init() {
 			}
 		}
 		file_erp_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListErpReq); i {
+			switch v := v.(*UpdatePasswordRsp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1063,7 +2716,223 @@ func file_erp_proto_init() {
 			}
 		}
 		file_erp_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListErpRsp); i {
+			switch v := v.(*DeleteUserReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_erp_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DeleteUserRsp); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_erp_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetUserReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_erp_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetUserRsp); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_erp_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListUserReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_erp_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListUserRsp); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_erp_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateRoleReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_erp_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateRoleRsp); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_erp_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateRoleReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_erp_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateRoleRsp); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_erp_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DeleteRoleReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_erp_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DeleteRoleRsp); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_erp_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetRoleReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_erp_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetRoleRsp); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_erp_proto_msgTypes[25].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListRoleReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_erp_proto_msgTypes[26].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListRoleRsp); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_erp_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListMenuReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_erp_proto_msgTypes[28].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListMenuRsp); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_erp_proto_msgTypes[29].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdatePasswordReq_Data); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1080,8 +2949,8 @@ func file_erp_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_erp_proto_rawDesc,
-			NumEnums:      2,
-			NumMessages:   12,
+			NumEnums:      8,
+			NumMessages:   30,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

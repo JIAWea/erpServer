@@ -19,24 +19,36 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Erp_CreateErp_FullMethodName = "/erp.erp/CreateErp"
-	Erp_UpdateErp_FullMethodName = "/erp.erp/UpdateErp"
-	Erp_DeleteErp_FullMethodName = "/erp.erp/DeleteErp"
-	Erp_GetErp_FullMethodName    = "/erp.erp/GetErp"
-	Erp_ListErp_FullMethodName   = "/erp.erp/ListErp"
-	Erp_DDListErp_FullMethodName = "/erp.erp/DDListErp"
+	Erp_CreateUser_FullMethodName     = "/erp.erp/CreateUser"
+	Erp_UpdateUser_FullMethodName     = "/erp.erp/UpdateUser"
+	Erp_UpdatePassword_FullMethodName = "/erp.erp/UpdatePassword"
+	Erp_DeleteUser_FullMethodName     = "/erp.erp/DeleteUser"
+	Erp_GetUser_FullMethodName        = "/erp.erp/GetUser"
+	Erp_ListUser_FullMethodName       = "/erp.erp/ListUser"
+	Erp_CreateRole_FullMethodName     = "/erp.erp/CreateRole"
+	Erp_UpdateRole_FullMethodName     = "/erp.erp/UpdateRole"
+	Erp_DeleteRole_FullMethodName     = "/erp.erp/DeleteRole"
+	Erp_GetRole_FullMethodName        = "/erp.erp/GetRole"
+	Erp_ListRole_FullMethodName       = "/erp.erp/ListRole"
+	Erp_ListMenu_FullMethodName       = "/erp.erp/ListMenu"
 )
 
 // ErpClient is the client API for Erp service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ErpClient interface {
-	CreateErp(ctx context.Context, in *CreateErpReq, opts ...grpc.CallOption) (*CreateErpRsp, error)
-	UpdateErp(ctx context.Context, in *UpdateErpReq, opts ...grpc.CallOption) (*UpdateErpRsp, error)
-	DeleteErp(ctx context.Context, in *DeleteErpReq, opts ...grpc.CallOption) (*DeleteErpRsp, error)
-	GetErp(ctx context.Context, in *GetErpReq, opts ...grpc.CallOption) (*GetErpRsp, error)
-	ListErp(ctx context.Context, in *ListErpReq, opts ...grpc.CallOption) (*ListErpRsp, error)
-	DDListErp(ctx context.Context, in *ListErpReq, opts ...grpc.CallOption) (*ListErpRsp, error)
+	CreateUser(ctx context.Context, in *CreateUserReq, opts ...grpc.CallOption) (*CreateUserRsp, error)
+	UpdateUser(ctx context.Context, in *UpdateUserReq, opts ...grpc.CallOption) (*UpdateUserRsp, error)
+	UpdatePassword(ctx context.Context, in *UpdatePasswordReq, opts ...grpc.CallOption) (*UpdatePasswordRsp, error)
+	DeleteUser(ctx context.Context, in *DeleteUserReq, opts ...grpc.CallOption) (*DeleteUserRsp, error)
+	GetUser(ctx context.Context, in *GetUserReq, opts ...grpc.CallOption) (*GetUserRsp, error)
+	ListUser(ctx context.Context, in *ListUserReq, opts ...grpc.CallOption) (*ListUserRsp, error)
+	CreateRole(ctx context.Context, in *CreateRoleReq, opts ...grpc.CallOption) (*CreateRoleRsp, error)
+	UpdateRole(ctx context.Context, in *UpdateRoleReq, opts ...grpc.CallOption) (*UpdateRoleRsp, error)
+	DeleteRole(ctx context.Context, in *DeleteRoleReq, opts ...grpc.CallOption) (*DeleteRoleRsp, error)
+	GetRole(ctx context.Context, in *GetRoleReq, opts ...grpc.CallOption) (*GetRoleRsp, error)
+	ListRole(ctx context.Context, in *ListRoleReq, opts ...grpc.CallOption) (*ListRoleRsp, error)
+	ListMenu(ctx context.Context, in *ListMenuReq, opts ...grpc.CallOption) (*ListMenuRsp, error)
 }
 
 type erpClient struct {
@@ -47,54 +59,108 @@ func NewErpClient(cc grpc.ClientConnInterface) ErpClient {
 	return &erpClient{cc}
 }
 
-func (c *erpClient) CreateErp(ctx context.Context, in *CreateErpReq, opts ...grpc.CallOption) (*CreateErpRsp, error) {
-	out := new(CreateErpRsp)
-	err := c.cc.Invoke(ctx, Erp_CreateErp_FullMethodName, in, out, opts...)
+func (c *erpClient) CreateUser(ctx context.Context, in *CreateUserReq, opts ...grpc.CallOption) (*CreateUserRsp, error) {
+	out := new(CreateUserRsp)
+	err := c.cc.Invoke(ctx, Erp_CreateUser_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *erpClient) UpdateErp(ctx context.Context, in *UpdateErpReq, opts ...grpc.CallOption) (*UpdateErpRsp, error) {
-	out := new(UpdateErpRsp)
-	err := c.cc.Invoke(ctx, Erp_UpdateErp_FullMethodName, in, out, opts...)
+func (c *erpClient) UpdateUser(ctx context.Context, in *UpdateUserReq, opts ...grpc.CallOption) (*UpdateUserRsp, error) {
+	out := new(UpdateUserRsp)
+	err := c.cc.Invoke(ctx, Erp_UpdateUser_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *erpClient) DeleteErp(ctx context.Context, in *DeleteErpReq, opts ...grpc.CallOption) (*DeleteErpRsp, error) {
-	out := new(DeleteErpRsp)
-	err := c.cc.Invoke(ctx, Erp_DeleteErp_FullMethodName, in, out, opts...)
+func (c *erpClient) UpdatePassword(ctx context.Context, in *UpdatePasswordReq, opts ...grpc.CallOption) (*UpdatePasswordRsp, error) {
+	out := new(UpdatePasswordRsp)
+	err := c.cc.Invoke(ctx, Erp_UpdatePassword_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *erpClient) GetErp(ctx context.Context, in *GetErpReq, opts ...grpc.CallOption) (*GetErpRsp, error) {
-	out := new(GetErpRsp)
-	err := c.cc.Invoke(ctx, Erp_GetErp_FullMethodName, in, out, opts...)
+func (c *erpClient) DeleteUser(ctx context.Context, in *DeleteUserReq, opts ...grpc.CallOption) (*DeleteUserRsp, error) {
+	out := new(DeleteUserRsp)
+	err := c.cc.Invoke(ctx, Erp_DeleteUser_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *erpClient) ListErp(ctx context.Context, in *ListErpReq, opts ...grpc.CallOption) (*ListErpRsp, error) {
-	out := new(ListErpRsp)
-	err := c.cc.Invoke(ctx, Erp_ListErp_FullMethodName, in, out, opts...)
+func (c *erpClient) GetUser(ctx context.Context, in *GetUserReq, opts ...grpc.CallOption) (*GetUserRsp, error) {
+	out := new(GetUserRsp)
+	err := c.cc.Invoke(ctx, Erp_GetUser_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *erpClient) DDListErp(ctx context.Context, in *ListErpReq, opts ...grpc.CallOption) (*ListErpRsp, error) {
-	out := new(ListErpRsp)
-	err := c.cc.Invoke(ctx, Erp_DDListErp_FullMethodName, in, out, opts...)
+func (c *erpClient) ListUser(ctx context.Context, in *ListUserReq, opts ...grpc.CallOption) (*ListUserRsp, error) {
+	out := new(ListUserRsp)
+	err := c.cc.Invoke(ctx, Erp_ListUser_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *erpClient) CreateRole(ctx context.Context, in *CreateRoleReq, opts ...grpc.CallOption) (*CreateRoleRsp, error) {
+	out := new(CreateRoleRsp)
+	err := c.cc.Invoke(ctx, Erp_CreateRole_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *erpClient) UpdateRole(ctx context.Context, in *UpdateRoleReq, opts ...grpc.CallOption) (*UpdateRoleRsp, error) {
+	out := new(UpdateRoleRsp)
+	err := c.cc.Invoke(ctx, Erp_UpdateRole_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *erpClient) DeleteRole(ctx context.Context, in *DeleteRoleReq, opts ...grpc.CallOption) (*DeleteRoleRsp, error) {
+	out := new(DeleteRoleRsp)
+	err := c.cc.Invoke(ctx, Erp_DeleteRole_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *erpClient) GetRole(ctx context.Context, in *GetRoleReq, opts ...grpc.CallOption) (*GetRoleRsp, error) {
+	out := new(GetRoleRsp)
+	err := c.cc.Invoke(ctx, Erp_GetRole_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *erpClient) ListRole(ctx context.Context, in *ListRoleReq, opts ...grpc.CallOption) (*ListRoleRsp, error) {
+	out := new(ListRoleRsp)
+	err := c.cc.Invoke(ctx, Erp_ListRole_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *erpClient) ListMenu(ctx context.Context, in *ListMenuReq, opts ...grpc.CallOption) (*ListMenuRsp, error) {
+	out := new(ListMenuRsp)
+	err := c.cc.Invoke(ctx, Erp_ListMenu_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -105,12 +171,18 @@ func (c *erpClient) DDListErp(ctx context.Context, in *ListErpReq, opts ...grpc.
 // All implementations must embed UnimplementedErpServer
 // for forward compatibility
 type ErpServer interface {
-	CreateErp(context.Context, *CreateErpReq) (*CreateErpRsp, error)
-	UpdateErp(context.Context, *UpdateErpReq) (*UpdateErpRsp, error)
-	DeleteErp(context.Context, *DeleteErpReq) (*DeleteErpRsp, error)
-	GetErp(context.Context, *GetErpReq) (*GetErpRsp, error)
-	ListErp(context.Context, *ListErpReq) (*ListErpRsp, error)
-	DDListErp(context.Context, *ListErpReq) (*ListErpRsp, error)
+	CreateUser(context.Context, *CreateUserReq) (*CreateUserRsp, error)
+	UpdateUser(context.Context, *UpdateUserReq) (*UpdateUserRsp, error)
+	UpdatePassword(context.Context, *UpdatePasswordReq) (*UpdatePasswordRsp, error)
+	DeleteUser(context.Context, *DeleteUserReq) (*DeleteUserRsp, error)
+	GetUser(context.Context, *GetUserReq) (*GetUserRsp, error)
+	ListUser(context.Context, *ListUserReq) (*ListUserRsp, error)
+	CreateRole(context.Context, *CreateRoleReq) (*CreateRoleRsp, error)
+	UpdateRole(context.Context, *UpdateRoleReq) (*UpdateRoleRsp, error)
+	DeleteRole(context.Context, *DeleteRoleReq) (*DeleteRoleRsp, error)
+	GetRole(context.Context, *GetRoleReq) (*GetRoleRsp, error)
+	ListRole(context.Context, *ListRoleReq) (*ListRoleRsp, error)
+	ListMenu(context.Context, *ListMenuReq) (*ListMenuRsp, error)
 	mustEmbedUnimplementedErpServer()
 }
 
@@ -118,23 +190,41 @@ type ErpServer interface {
 type UnimplementedErpServer struct {
 }
 
-func (UnimplementedErpServer) CreateErp(context.Context, *CreateErpReq) (*CreateErpRsp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateErp not implemented")
+func (UnimplementedErpServer) CreateUser(context.Context, *CreateUserReq) (*CreateUserRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
 }
-func (UnimplementedErpServer) UpdateErp(context.Context, *UpdateErpReq) (*UpdateErpRsp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateErp not implemented")
+func (UnimplementedErpServer) UpdateUser(context.Context, *UpdateUserReq) (*UpdateUserRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateUser not implemented")
 }
-func (UnimplementedErpServer) DeleteErp(context.Context, *DeleteErpReq) (*DeleteErpRsp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteErp not implemented")
+func (UnimplementedErpServer) UpdatePassword(context.Context, *UpdatePasswordReq) (*UpdatePasswordRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdatePassword not implemented")
 }
-func (UnimplementedErpServer) GetErp(context.Context, *GetErpReq) (*GetErpRsp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetErp not implemented")
+func (UnimplementedErpServer) DeleteUser(context.Context, *DeleteUserReq) (*DeleteUserRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteUser not implemented")
 }
-func (UnimplementedErpServer) ListErp(context.Context, *ListErpReq) (*ListErpRsp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListErp not implemented")
+func (UnimplementedErpServer) GetUser(context.Context, *GetUserReq) (*GetUserRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
 }
-func (UnimplementedErpServer) DDListErp(context.Context, *ListErpReq) (*ListErpRsp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DDListErp not implemented")
+func (UnimplementedErpServer) ListUser(context.Context, *ListUserReq) (*ListUserRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListUser not implemented")
+}
+func (UnimplementedErpServer) CreateRole(context.Context, *CreateRoleReq) (*CreateRoleRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateRole not implemented")
+}
+func (UnimplementedErpServer) UpdateRole(context.Context, *UpdateRoleReq) (*UpdateRoleRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateRole not implemented")
+}
+func (UnimplementedErpServer) DeleteRole(context.Context, *DeleteRoleReq) (*DeleteRoleRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteRole not implemented")
+}
+func (UnimplementedErpServer) GetRole(context.Context, *GetRoleReq) (*GetRoleRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRole not implemented")
+}
+func (UnimplementedErpServer) ListRole(context.Context, *ListRoleReq) (*ListRoleRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListRole not implemented")
+}
+func (UnimplementedErpServer) ListMenu(context.Context, *ListMenuReq) (*ListMenuRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListMenu not implemented")
 }
 func (UnimplementedErpServer) mustEmbedUnimplementedErpServer() {}
 
@@ -149,110 +239,218 @@ func RegisterErpServer(s grpc.ServiceRegistrar, srv ErpServer) {
 	s.RegisterService(&Erp_ServiceDesc, srv)
 }
 
-func _Erp_CreateErp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateErpReq)
+func _Erp_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateUserReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ErpServer).CreateErp(ctx, in)
+		return srv.(ErpServer).CreateUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Erp_CreateErp_FullMethodName,
+		FullMethod: Erp_CreateUser_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ErpServer).CreateErp(ctx, req.(*CreateErpReq))
+		return srv.(ErpServer).CreateUser(ctx, req.(*CreateUserReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Erp_UpdateErp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateErpReq)
+func _Erp_UpdateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ErpServer).UpdateErp(ctx, in)
+		return srv.(ErpServer).UpdateUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Erp_UpdateErp_FullMethodName,
+		FullMethod: Erp_UpdateUser_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ErpServer).UpdateErp(ctx, req.(*UpdateErpReq))
+		return srv.(ErpServer).UpdateUser(ctx, req.(*UpdateUserReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Erp_DeleteErp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteErpReq)
+func _Erp_UpdatePassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdatePasswordReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ErpServer).DeleteErp(ctx, in)
+		return srv.(ErpServer).UpdatePassword(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Erp_DeleteErp_FullMethodName,
+		FullMethod: Erp_UpdatePassword_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ErpServer).DeleteErp(ctx, req.(*DeleteErpReq))
+		return srv.(ErpServer).UpdatePassword(ctx, req.(*UpdatePasswordReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Erp_GetErp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetErpReq)
+func _Erp_DeleteUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteUserReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ErpServer).GetErp(ctx, in)
+		return srv.(ErpServer).DeleteUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Erp_GetErp_FullMethodName,
+		FullMethod: Erp_DeleteUser_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ErpServer).GetErp(ctx, req.(*GetErpReq))
+		return srv.(ErpServer).DeleteUser(ctx, req.(*DeleteUserReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Erp_ListErp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListErpReq)
+func _Erp_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ErpServer).ListErp(ctx, in)
+		return srv.(ErpServer).GetUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Erp_ListErp_FullMethodName,
+		FullMethod: Erp_GetUser_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ErpServer).ListErp(ctx, req.(*ListErpReq))
+		return srv.(ErpServer).GetUser(ctx, req.(*GetUserReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Erp_DDListErp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListErpReq)
+func _Erp_ListUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListUserReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ErpServer).DDListErp(ctx, in)
+		return srv.(ErpServer).ListUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Erp_DDListErp_FullMethodName,
+		FullMethod: Erp_ListUser_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ErpServer).DDListErp(ctx, req.(*ListErpReq))
+		return srv.(ErpServer).ListUser(ctx, req.(*ListUserReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Erp_CreateRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateRoleReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).CreateRole(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_CreateRole_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).CreateRole(ctx, req.(*CreateRoleReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Erp_UpdateRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateRoleReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).UpdateRole(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_UpdateRole_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).UpdateRole(ctx, req.(*UpdateRoleReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Erp_DeleteRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteRoleReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).DeleteRole(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_DeleteRole_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).DeleteRole(ctx, req.(*DeleteRoleReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Erp_GetRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRoleReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).GetRole(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_GetRole_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).GetRole(ctx, req.(*GetRoleReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Erp_ListRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListRoleReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).ListRole(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_ListRole_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).ListRole(ctx, req.(*ListRoleReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Erp_ListMenu_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListMenuReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).ListMenu(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_ListMenu_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).ListMenu(ctx, req.(*ListMenuReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -265,28 +463,52 @@ var Erp_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ErpServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateErp",
-			Handler:    _Erp_CreateErp_Handler,
+			MethodName: "CreateUser",
+			Handler:    _Erp_CreateUser_Handler,
 		},
 		{
-			MethodName: "UpdateErp",
-			Handler:    _Erp_UpdateErp_Handler,
+			MethodName: "UpdateUser",
+			Handler:    _Erp_UpdateUser_Handler,
 		},
 		{
-			MethodName: "DeleteErp",
-			Handler:    _Erp_DeleteErp_Handler,
+			MethodName: "UpdatePassword",
+			Handler:    _Erp_UpdatePassword_Handler,
 		},
 		{
-			MethodName: "GetErp",
-			Handler:    _Erp_GetErp_Handler,
+			MethodName: "DeleteUser",
+			Handler:    _Erp_DeleteUser_Handler,
 		},
 		{
-			MethodName: "ListErp",
-			Handler:    _Erp_ListErp_Handler,
+			MethodName: "GetUser",
+			Handler:    _Erp_GetUser_Handler,
 		},
 		{
-			MethodName: "DDListErp",
-			Handler:    _Erp_DDListErp_Handler,
+			MethodName: "ListUser",
+			Handler:    _Erp_ListUser_Handler,
+		},
+		{
+			MethodName: "CreateRole",
+			Handler:    _Erp_CreateRole_Handler,
+		},
+		{
+			MethodName: "UpdateRole",
+			Handler:    _Erp_UpdateRole_Handler,
+		},
+		{
+			MethodName: "DeleteRole",
+			Handler:    _Erp_DeleteRole_Handler,
+		},
+		{
+			MethodName: "GetRole",
+			Handler:    _Erp_GetRole_Handler,
+		},
+		{
+			MethodName: "ListRole",
+			Handler:    _Erp_ListRole_Handler,
+		},
+		{
+			MethodName: "ListMenu",
+			Handler:    _Erp_ListMenu_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
