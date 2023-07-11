@@ -8,8 +8,12 @@ import "validate/validate.proto";
 import "listoption/listoption.proto";
 
 service erp {
+  rpc UserLogin (UserLoginReq) returns (UserLoginRsp);
+  rpc UserLogout (UserLogoutReq) returns (UserLogoutRsp);
+  rpc GetUserInfo (GetUserInfoReq) returns (GetUserInfoRsp);
   rpc CreateUser (CreateUserReq) returns (CreateUserRsp);
   rpc UpdateUser (UpdateUserReq) returns (UpdateUserRsp);
+  rpc UpdateUserRole (UpdateUserRoleReq) returns (UpdateUserRoleRsp);
   rpc UpdatePassword (UpdatePasswordReq) returns (UpdatePasswordRsp);
   rpc DeleteUser (DeleteUserReq) returns (DeleteUserRsp);
   rpc GetUser (GetUserReq) returns (GetUserRsp);
@@ -22,15 +26,32 @@ service erp {
   rpc ListRole (ListRoleReq) returns (ListRoleRsp);
 
   rpc ListMenu (ListMenuReq) returns (ListMenuRsp);
+
+  rpc CreateAccount (CreateAccountReq) returns (CreateAccountRsp);
+  rpc UpdateAccount (UpdateAccountReq) returns (UpdateAccountRsp);
+  rpc DeleteAccount (DeleteAccountReq) returns (DeleteAccountRsp);
+  rpc GetAccount (GetAccountReq) returns (GetAccountRsp);
+  rpc ListAccount (ListAccountReq) returns (ListAccountRsp);
 }
 
 // range of error codes: [1, 2147483648]
 enum ErrCode {
   Success = 0;
+  //@status_code: 500
+  ErrInternal = 99999;     // 系统错误
+
   //@status_code: 400
   ErrInvalidParam = 1;   // 非法参数
   //@status_code: 400
   ErrParamRequired = 2;      // 缺失参数
+  //@status_code: 401
+  ErrAuthContext = 4000;   // 认证失败
+  //@status_code: 401
+  ErrTokenUnverifiable = 4001; // 认证异常
+  //@status_code: 401
+  ErrInvalidToken = 4002; // 认证错误
+  //@status_code: 401
+  ErrTokenExpired = 4003; // 认证过期
   //@status_code: 404
   ErrNotFoundUser = 10000;       // 未找到相关记录
   //@status_code: 404
@@ -41,6 +62,12 @@ enum ErrCode {
   ErrNotFoundUserRole = 10003;       // 未找到相关记录
   //@status_code: 404
   ErrNotFoundRoleMenu = 10004;       // 未找到相关记录
+  //@status_code: 400
+  ErrPasswordFormatInvalid = 10005;       // 密码不合法
+  //@status_code: 400
+  ErrPassword = 10006;       // 密码错误
+  //@status_code: 404
+  ErrNotFoundAccount = 10007;       // 未找到相关记录
 }
 
 // GORM USAGE: 
@@ -70,8 +97,10 @@ message ModelUser {
   string password = 7;
   // @gorm: type:tinyint(1);default:1;comment:'1正常, 2禁用'
   uint32 status = 8;
-  // @gorm: many2many:erp_user_role
+  // @gorm: many2many:erp_user_role;joinForeignKey:user_id;joinReferences:role_id;
   repeated ModelRole role_list = 9;
+  // @gorm: type:tinyint(1);default:0
+  bool is_creator = 10;
 }
 
 message ModelRole {
@@ -151,8 +180,6 @@ message ModelUserRole {
   uint32 created_at = 2;
   // @gorm: comment:'更新时间'
   uint32 updated_at = 3;
-  // @gorm: uniqueIndex:uniq_user_role;comment:'删除时间'
-  uint32 deleted_at = 4;
   // @gorm: type:bigint;uniqueIndex:uniq_user_role
   uint64 user_id = 5;
   // @gorm: type:bigint;uniqueIndex:uniq_user_role
@@ -166,12 +193,42 @@ message ModelRoleMenu {
   uint32 created_at = 2;
   // @gorm: comment:'更新时间'
   uint32 updated_at = 3;
-  // @gorm: uniqueIndex:uniq_role_menu;comment:'删除时间'
-  uint32 deleted_at = 4;
   // @gorm: type:bigint;uniqueIndex:uniq_role_menu
   uint64 role_id = 5;
   // @gorm: type:bigint;uniqueIndex:uniq_role_menu
   uint64 menu_id = 6;
+}
+
+message ModelAccount {
+  // @gorm: primarykey
+  uint64 id = 1;
+  // @gorm: comment:'创建时间'
+  uint32 created_at = 2;
+  // @gorm: comment:'更新时间'
+  uint32 updated_at = 3;
+  // @gorm: uniqueIndex:uniq_role_menu;comment:'删除时间'
+  uint32 deleted_at = 4;
+  // @gorm: type:varchar(32);comment:'账户名'
+  string name = 5;
+  // @gorm: type:int(11);comment:'初期余额'
+  string initial_money = 6;
+}
+
+message UserLoginReq {
+  string username = 1;
+  string password = 2;
+}
+
+message UserLoginRsp {
+  string token = 1;
+}
+
+message UserLogoutReq {}
+message UserLogoutRsp {}
+
+message GetUserInfoReq {}
+message GetUserInfoRsp {
+  ModelUser data = 1;
 }
 
 message CreateUserReq {
@@ -188,6 +245,12 @@ message UpdateUserRsp {
   ModelUser data = 1;
 }
 
+message UpdateUserRoleReq {
+  uint64 id = 1 [(validate.rules).uint64.gt = 0];
+  repeated uint64 role_id_list =2 [(validate.rules).repeated.min_items = 1];
+}
+message UpdateUserRoleRsp {}
+
 message UpdatePasswordReq {
   message Data {
     uint64 id = 1;
@@ -200,7 +263,7 @@ message UpdatePasswordReq {
 message UpdatePasswordRsp {}
 
 message DeleteUserReq {
-  uint64 id = 1 [(validate.rules).uint64.gt = 0];
+  repeated uint64 id_list = 1 [(validate.rules).repeated.min_items = 1];
 }
 message DeleteUserRsp {}
 
@@ -214,10 +277,12 @@ message GetUserRsp {
 message ListUserReq {
   enum ListOpt {
     ListOptNil = 0;
-    // @valueType: uint64List
-    ListOptIdList = 1;
     // @valueType: string
-    ListOptName = 2;
+    ListOptName = 1;
+    // @valueType: uint32
+    ListOptStatus = 2;
+    // @valueType: uint64
+    ListOptId = 3;
   }
   listoption.ListOption list_option = 1;
 }
@@ -280,4 +345,45 @@ message ListMenuReq {
 message ListMenuRsp {
   listoption.Paginate paginate = 1;
   repeated ModelMenu list = 2;
+}
+
+message CreateAccountReq {
+  ModelAccount data = 1 [(validate.rules).message.required = true];
+}
+message CreateAccountRsp {
+  ModelAccount data = 1;
+}
+
+message UpdateAccountReq {
+  ModelAccount data = 1 [(validate.rules).message.required = true];
+}
+message UpdateAccountRsp {
+  ModelAccount data = 1;
+}
+
+message DeleteAccountReq {
+  uint64 id = 1 [(validate.rules).uint64.gt = 0];
+}
+message DeleteAccountRsp {}
+
+message GetAccountReq {
+  uint64 id = 1 [(validate.rules).uint64.gt = 0];
+}
+message GetAccountRsp {
+  ModelAccount data = 1;
+}
+
+message ListAccountReq {
+  enum ListOpt {
+    ListOptNil = 0;
+    // @valueType: string
+    ListOptName = 1;
+    // @valueType: uint32Range
+    ListOptTimeRange = 2;
+  }
+  listoption.ListOption list_option = 1;
+}
+message ListAccountRsp {
+  listoption.Paginate paginate = 1;
+  repeated ModelAccount list = 2;
 }

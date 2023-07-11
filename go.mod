@@ -4,9 +4,12 @@ go 1.20
 
 require (
 	github.com/envoyproxy/protoc-gen-validate v1.0.2
+	github.com/golang-jwt/jwt/v4 v4.4.1
+	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.8.0
-	github.com/ml444/gkit v0.0.0-20230701041704-a708fb00f53a
+	github.com/ml444/gkit v0.0.0-20230709100042-e6f3bdd3b4a2
 	github.com/ml444/glog v0.2.12
+	golang.org/x/crypto v0.10.0
 	google.golang.org/grpc v1.56.1
 	google.golang.org/protobuf v1.31.0
 	gorm.io/driver/mysql v1.5.1

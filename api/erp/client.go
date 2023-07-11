@@ -8,6 +8,27 @@ const ClientName = "erp"
 
 
 
+func UserLogin(ctx context.Context, req *UserLoginReq) (*UserLoginRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.UserLogin(ctx, req)
+}
+
+func UserLogout(ctx context.Context, req *UserLogoutReq) (*UserLogoutRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.UserLogout(ctx, req)
+}
+
+func GetUserInfo(ctx context.Context, req *GetUserInfoReq) (*GetUserInfoRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.GetUserInfo(ctx, req)
+}
+
 func CreateUser(ctx context.Context, req *CreateUserReq) (*CreateUserRsp, error) {
 	if cliMgr.conn == nil {
 		return nil, cliMgr.initErr
@@ -20,6 +41,13 @@ func UpdateUser(ctx context.Context, req *UpdateUserReq) (*UpdateUserRsp, error)
 		return nil, cliMgr.initErr
 	}
     return cliMgr.cli.UpdateUser(ctx, req)
+}
+
+func UpdateUserRole(ctx context.Context, req *UpdateUserRoleReq) (*UpdateUserRoleRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.UpdateUserRole(ctx, req)
 }
 
 func UpdatePassword(ctx context.Context, req *UpdatePasswordReq) (*UpdatePasswordRsp, error) {
@@ -90,6 +118,41 @@ func ListMenu(ctx context.Context, req *ListMenuReq) (*ListMenuRsp, error) {
 		return nil, cliMgr.initErr
 	}
     return cliMgr.cli.ListMenu(ctx, req)
+}
+
+func CreateAccount(ctx context.Context, req *CreateAccountReq) (*CreateAccountRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.CreateAccount(ctx, req)
+}
+
+func UpdateAccount(ctx context.Context, req *UpdateAccountReq) (*UpdateAccountRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.UpdateAccount(ctx, req)
+}
+
+func DeleteAccount(ctx context.Context, req *DeleteAccountReq) (*DeleteAccountRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.DeleteAccount(ctx, req)
+}
+
+func GetAccount(ctx context.Context, req *GetAccountReq) (*GetAccountRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.GetAccount(ctx, req)
+}
+
+func ListAccount(ctx context.Context, req *ListAccountReq) (*ListAccountRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.ListAccount(ctx, req)
 }
 
 

@@ -2,7 +2,6 @@ package app
 
 import (
 	"context"
-
 	"github.com/ml444/gkit/dbx"
 	"github.com/ml444/gkit/listoption"
 	log "github.com/ml444/glog"
@@ -38,11 +37,12 @@ func (d *TUser) newScope() *dbx.Scope {
 }
 
 func (d *TUser) Create(ctx context.Context, m *erp.ModelUser) error {
+	m.Id = 0
 	return d.newScope().Create(ctx, &m)
 }
 
-func (d *TUser) Update(ctx context.Context, m *erp.ModelUser, whereMap map[string]interface{}) error {
-	return d.newScope().Where(whereMap).Update(&m)
+func (d *TUser) Update(ctx context.Context, m, whereMap map[string]interface{}) error {
+	return d.newScope().Where(whereMap).Update(m)
 }
 
 func (d *TUser) DeleteById(ctx context.Context, pk uint64) error {
@@ -53,22 +53,35 @@ func (d *TUser) DeleteByWhere(ctx context.Context, whereMap map[string]interface
 	return d.newScope().Delete(&erp.ModelUser{}, whereMap)
 }
 
+func (d *TUser) DeleteByIdList(ctx context.Context, pkList []uint64) error {
+	if len(pkList) == 0 {
+		return nil
+	}
+	return d.newScope().In(dbId, pkList).Delete(&erp.ModelUser{})
+}
+
 func (d *TUser) GetOne(ctx context.Context, pk uint64) (*erp.ModelUser, error) {
 	var m erp.ModelUser
-	err := d.newScope().SetNotFoundErr(erp.ErrNotFoundUser).First(&m, pk)
+	err := d.newScope().SetNotFoundErr(erp.ErrNotFoundUser).Preload("RoleList").First(&m, pk)
+	m.Password = ""
 	return &m, err
 }
 
 func (d *TUser) ListWithListOption(ctx context.Context, listOption *listoption.ListOption, whereOpts interface{}) ([]*erp.ModelUser, *listoption.Paginate, error) {
 	var err error
-	scope := d.newScope().Where(whereOpts)
+	scope := d.newScope().Eq(dbIsCreator, uint32(0)).Preload("RoleList")
 	if listOption != nil {
-
 		err = listoption.NewProcessor(listOption).
-			AddUint64List(erp.ListUserReq_ListOptIdList, func(valList []uint64) error {
+			AddString(erp.ListUserReq_ListOptName, func(val string) error {
+				scope.Like(dbName, val)
 				return nil
 			}).
-			AddString(erp.ListUserReq_ListOptName, func(val string) error {
+			AddUint32(erp.ListUserReq_ListOptStatus, func(val uint32) error {
+				scope.Eq(dbStatus, val)
+				return nil
+			}).
+			AddUint64(erp.ListUserReq_ListOptId, func(val uint64) error {
+				scope.Eq(dbId, val)
 				return nil
 			}).
 			Process()
@@ -76,7 +89,6 @@ func (d *TUser) ListWithListOption(ctx context.Context, listOption *listoption.L
 			log.Error(err.Error())
 			return nil, nil, err
 		}
-
 	}
 
 	var userList []*erp.ModelUser
@@ -135,7 +147,7 @@ func (d *TRole) GetOne(ctx context.Context, pk uint64) (*erp.ModelRole, error) {
 
 func (d *TRole) ListWithListOption(ctx context.Context, listOption *listoption.ListOption, whereOpts interface{}) ([]*erp.ModelRole, *listoption.Paginate, error) {
 	var err error
-	scope := d.newScope().Where(whereOpts)
+	scope := d.newScope()
 	if listOption != nil {
 
 		err = listoption.NewProcessor(listOption).
@@ -263,6 +275,13 @@ func (d *TUserRole) Create(ctx context.Context, m *erp.ModelUserRole) error {
 	return d.newScope().Create(ctx, &m)
 }
 
+func (d *TUserRole) CreateInBatches(ctx context.Context, list []*erp.ModelUserRole) error {
+	if len(list) == 0 {
+		return nil
+	}
+	return d.newScope().CreateInBatches(list, 100)
+}
+
 func (d *TUserRole) Update(ctx context.Context, m *erp.ModelUserRole, whereMap map[string]interface{}) error {
 	return d.newScope().Where(whereMap).Update(&m)
 }
@@ -358,4 +377,78 @@ func (d *TRoleMenu) ListWithListOption(ctx context.Context, listOption *listopti
 	}
 
 	return roleMenuList, paginate, nil
+}
+
+var dbAccount = NewTAccount(db.Db())
+
+type TAccount struct {
+	db    *gorm.DB
+	model *erp.ModelAccount
+}
+
+func NewTAccount(db *gorm.DB) *TAccount {
+	return &TAccount{
+		db:    db,
+		model: &erp.ModelAccount{},
+	}
+}
+
+func (d *TAccount) newScope() *dbx.Scope {
+	if d.db == nil {
+		d.db = db.Db()
+	}
+	return dbx.NewScope(d.db, &erp.ModelAccount{})
+}
+
+func (d *TAccount) Create(ctx context.Context, m *erp.ModelAccount) error {
+	return d.newScope().Create(ctx, &m)
+}
+
+func (d *TAccount) Update(ctx context.Context, m *erp.ModelAccount, whereMap map[string]interface{}) error {
+	return d.newScope().Where(whereMap).Update(&m)
+}
+
+func (d *TAccount) DeleteById(ctx context.Context, pk uint64) error {
+	return d.newScope().Delete(&erp.ModelAccount{}, pk)
+}
+
+func (d *TAccount) DeleteByWhere(ctx context.Context, whereMap map[string]interface{}) error {
+	return d.newScope().Delete(&erp.ModelAccount{}, whereMap)
+}
+
+func (d *TAccount) GetOne(ctx context.Context, pk uint64) (*erp.ModelAccount, error) {
+	var m erp.ModelAccount
+	err := d.newScope().SetNotFoundErr(erp.ErrNotFoundAccount).First(&m, pk)
+	return &m, err
+}
+
+func (d *TAccount) ListWithListOption(ctx context.Context, listOption *listoption.ListOption, whereOpts interface{}) ([]*erp.ModelAccount, *listoption.Paginate, error) {
+	var err error
+	scope := d.newScope().Where(whereOpts)
+	if listOption != nil {
+
+		err = listoption.NewProcessor(listOption).
+			AddString(erp.ListAccountReq_ListOptName, func(val string) error {
+				return nil
+			}).
+			AddUint32Range(erp.ListAccountReq_ListOptTimeRange, func(begin, end uint32) error {
+				return nil
+			}).
+			Process()
+		if err != nil {
+			log.Error(err.Error())
+			return nil, nil, err
+		}
+
+	}
+
+	var accountList []*erp.ModelAccount
+	var paginate *listoption.Paginate
+	paginate, err = scope.PaginateQuery(listOption, &accountList)
+	if err != nil {
+		log.Errorf("err: %v", err)
+		return nil, nil, err
+	}
+
+	return accountList, paginate, nil
 }

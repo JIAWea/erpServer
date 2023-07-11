@@ -16,3 +16,6 @@ func (m *ModelUserRole) TableName() string {
 func (m *ModelRoleMenu) TableName() string {
 	return "erp_role_menu"
 }
+func (m *ModelAccount) TableName() string {
+	return "erp_account"
+}
