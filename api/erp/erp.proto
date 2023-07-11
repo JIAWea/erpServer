@@ -320,10 +320,12 @@ message GetRoleRsp {
 message ListRoleReq {
   enum ListOpt {
     ListOptNil = 0;
-    // @valueType: uint64List
-    ListOptIdList = 1;
     // @valueType: string
-    ListOptName = 2;
+    ListOptName = 1;
+    // @valueType: uint32
+    ListOptStatus = 2;
+    // @valueType: uint64
+    ListOptId = 3;
   }
   listoption.ListOption list_option = 1;
 }
