@@ -120,6 +120,27 @@ func ListMenu(ctx context.Context, req *ListMenuReq) (*ListMenuRsp, error) {
     return cliMgr.cli.ListMenu(ctx, req)
 }
 
+func ListMenuTree(ctx context.Context, req *ListMenuTreeReq) (*ListMenuTreeRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.ListMenuTree(ctx, req)
+}
+
+func GetRoleMenuIdList(ctx context.Context, req *GetRoleMenuIdListReq) (*GetRoleMenuIdListRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.GetRoleMenuIdList(ctx, req)
+}
+
+func UpdateRoleMenu(ctx context.Context, req *UpdateRoleMenuReq) (*UpdateRoleMenuRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.UpdateRoleMenu(ctx, req)
+}
+
 func CreateAccount(ctx context.Context, req *CreateAccountReq) (*CreateAccountRsp, error) {
 	if cliMgr.conn == nil {
 		return nil, cliMgr.initErr

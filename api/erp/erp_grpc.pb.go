@@ -19,27 +19,30 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Erp_UserLogin_FullMethodName      = "/erp.erp/UserLogin"
-	Erp_UserLogout_FullMethodName     = "/erp.erp/UserLogout"
-	Erp_GetUserInfo_FullMethodName    = "/erp.erp/GetUserInfo"
-	Erp_CreateUser_FullMethodName     = "/erp.erp/CreateUser"
-	Erp_UpdateUser_FullMethodName     = "/erp.erp/UpdateUser"
-	Erp_UpdateUserRole_FullMethodName = "/erp.erp/UpdateUserRole"
-	Erp_UpdatePassword_FullMethodName = "/erp.erp/UpdatePassword"
-	Erp_DeleteUser_FullMethodName     = "/erp.erp/DeleteUser"
-	Erp_GetUser_FullMethodName        = "/erp.erp/GetUser"
-	Erp_ListUser_FullMethodName       = "/erp.erp/ListUser"
-	Erp_CreateRole_FullMethodName     = "/erp.erp/CreateRole"
-	Erp_UpdateRole_FullMethodName     = "/erp.erp/UpdateRole"
-	Erp_DeleteRole_FullMethodName     = "/erp.erp/DeleteRole"
-	Erp_GetRole_FullMethodName        = "/erp.erp/GetRole"
-	Erp_ListRole_FullMethodName       = "/erp.erp/ListRole"
-	Erp_ListMenu_FullMethodName       = "/erp.erp/ListMenu"
-	Erp_CreateAccount_FullMethodName  = "/erp.erp/CreateAccount"
-	Erp_UpdateAccount_FullMethodName  = "/erp.erp/UpdateAccount"
-	Erp_DeleteAccount_FullMethodName  = "/erp.erp/DeleteAccount"
-	Erp_GetAccount_FullMethodName     = "/erp.erp/GetAccount"
-	Erp_ListAccount_FullMethodName    = "/erp.erp/ListAccount"
+	Erp_UserLogin_FullMethodName         = "/erp.erp/UserLogin"
+	Erp_UserLogout_FullMethodName        = "/erp.erp/UserLogout"
+	Erp_GetUserInfo_FullMethodName       = "/erp.erp/GetUserInfo"
+	Erp_CreateUser_FullMethodName        = "/erp.erp/CreateUser"
+	Erp_UpdateUser_FullMethodName        = "/erp.erp/UpdateUser"
+	Erp_UpdateUserRole_FullMethodName    = "/erp.erp/UpdateUserRole"
+	Erp_UpdatePassword_FullMethodName    = "/erp.erp/UpdatePassword"
+	Erp_DeleteUser_FullMethodName        = "/erp.erp/DeleteUser"
+	Erp_GetUser_FullMethodName           = "/erp.erp/GetUser"
+	Erp_ListUser_FullMethodName          = "/erp.erp/ListUser"
+	Erp_CreateRole_FullMethodName        = "/erp.erp/CreateRole"
+	Erp_UpdateRole_FullMethodName        = "/erp.erp/UpdateRole"
+	Erp_DeleteRole_FullMethodName        = "/erp.erp/DeleteRole"
+	Erp_GetRole_FullMethodName           = "/erp.erp/GetRole"
+	Erp_ListRole_FullMethodName          = "/erp.erp/ListRole"
+	Erp_ListMenu_FullMethodName          = "/erp.erp/ListMenu"
+	Erp_ListMenuTree_FullMethodName      = "/erp.erp/ListMenuTree"
+	Erp_GetRoleMenuIdList_FullMethodName = "/erp.erp/GetRoleMenuIdList"
+	Erp_UpdateRoleMenu_FullMethodName    = "/erp.erp/UpdateRoleMenu"
+	Erp_CreateAccount_FullMethodName     = "/erp.erp/CreateAccount"
+	Erp_UpdateAccount_FullMethodName     = "/erp.erp/UpdateAccount"
+	Erp_DeleteAccount_FullMethodName     = "/erp.erp/DeleteAccount"
+	Erp_GetAccount_FullMethodName        = "/erp.erp/GetAccount"
+	Erp_ListAccount_FullMethodName       = "/erp.erp/ListAccount"
 )
 
 // ErpClient is the client API for Erp service.
@@ -62,6 +65,9 @@ type ErpClient interface {
 	GetRole(ctx context.Context, in *GetRoleReq, opts ...grpc.CallOption) (*GetRoleRsp, error)
 	ListRole(ctx context.Context, in *ListRoleReq, opts ...grpc.CallOption) (*ListRoleRsp, error)
 	ListMenu(ctx context.Context, in *ListMenuReq, opts ...grpc.CallOption) (*ListMenuRsp, error)
+	ListMenuTree(ctx context.Context, in *ListMenuTreeReq, opts ...grpc.CallOption) (*ListMenuTreeRsp, error)
+	GetRoleMenuIdList(ctx context.Context, in *GetRoleMenuIdListReq, opts ...grpc.CallOption) (*GetRoleMenuIdListRsp, error)
+	UpdateRoleMenu(ctx context.Context, in *UpdateRoleMenuReq, opts ...grpc.CallOption) (*UpdateRoleMenuRsp, error)
 	CreateAccount(ctx context.Context, in *CreateAccountReq, opts ...grpc.CallOption) (*CreateAccountRsp, error)
 	UpdateAccount(ctx context.Context, in *UpdateAccountReq, opts ...grpc.CallOption) (*UpdateAccountRsp, error)
 	DeleteAccount(ctx context.Context, in *DeleteAccountReq, opts ...grpc.CallOption) (*DeleteAccountRsp, error)
@@ -221,6 +227,33 @@ func (c *erpClient) ListMenu(ctx context.Context, in *ListMenuReq, opts ...grpc.
 	return out, nil
 }
 
+func (c *erpClient) ListMenuTree(ctx context.Context, in *ListMenuTreeReq, opts ...grpc.CallOption) (*ListMenuTreeRsp, error) {
+	out := new(ListMenuTreeRsp)
+	err := c.cc.Invoke(ctx, Erp_ListMenuTree_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *erpClient) GetRoleMenuIdList(ctx context.Context, in *GetRoleMenuIdListReq, opts ...grpc.CallOption) (*GetRoleMenuIdListRsp, error) {
+	out := new(GetRoleMenuIdListRsp)
+	err := c.cc.Invoke(ctx, Erp_GetRoleMenuIdList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *erpClient) UpdateRoleMenu(ctx context.Context, in *UpdateRoleMenuReq, opts ...grpc.CallOption) (*UpdateRoleMenuRsp, error) {
+	out := new(UpdateRoleMenuRsp)
+	err := c.cc.Invoke(ctx, Erp_UpdateRoleMenu_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *erpClient) CreateAccount(ctx context.Context, in *CreateAccountReq, opts ...grpc.CallOption) (*CreateAccountRsp, error) {
 	out := new(CreateAccountRsp)
 	err := c.cc.Invoke(ctx, Erp_CreateAccount_FullMethodName, in, out, opts...)
@@ -286,6 +319,9 @@ type ErpServer interface {
 	GetRole(context.Context, *GetRoleReq) (*GetRoleRsp, error)
 	ListRole(context.Context, *ListRoleReq) (*ListRoleRsp, error)
 	ListMenu(context.Context, *ListMenuReq) (*ListMenuRsp, error)
+	ListMenuTree(context.Context, *ListMenuTreeReq) (*ListMenuTreeRsp, error)
+	GetRoleMenuIdList(context.Context, *GetRoleMenuIdListReq) (*GetRoleMenuIdListRsp, error)
+	UpdateRoleMenu(context.Context, *UpdateRoleMenuReq) (*UpdateRoleMenuRsp, error)
 	CreateAccount(context.Context, *CreateAccountReq) (*CreateAccountRsp, error)
 	UpdateAccount(context.Context, *UpdateAccountReq) (*UpdateAccountRsp, error)
 	DeleteAccount(context.Context, *DeleteAccountReq) (*DeleteAccountRsp, error)
@@ -345,6 +381,15 @@ func (UnimplementedErpServer) ListRole(context.Context, *ListRoleReq) (*ListRole
 }
 func (UnimplementedErpServer) ListMenu(context.Context, *ListMenuReq) (*ListMenuRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListMenu not implemented")
+}
+func (UnimplementedErpServer) ListMenuTree(context.Context, *ListMenuTreeReq) (*ListMenuTreeRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListMenuTree not implemented")
+}
+func (UnimplementedErpServer) GetRoleMenuIdList(context.Context, *GetRoleMenuIdListReq) (*GetRoleMenuIdListRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRoleMenuIdList not implemented")
+}
+func (UnimplementedErpServer) UpdateRoleMenu(context.Context, *UpdateRoleMenuReq) (*UpdateRoleMenuRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateRoleMenu not implemented")
 }
 func (UnimplementedErpServer) CreateAccount(context.Context, *CreateAccountReq) (*CreateAccountRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateAccount not implemented")
@@ -662,6 +707,60 @@ func _Erp_ListMenu_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Erp_ListMenuTree_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListMenuTreeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).ListMenuTree(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_ListMenuTree_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).ListMenuTree(ctx, req.(*ListMenuTreeReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Erp_GetRoleMenuIdList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRoleMenuIdListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).GetRoleMenuIdList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_GetRoleMenuIdList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).GetRoleMenuIdList(ctx, req.(*GetRoleMenuIdListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Erp_UpdateRoleMenu_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateRoleMenuReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).UpdateRoleMenu(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_UpdateRoleMenu_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).UpdateRoleMenu(ctx, req.(*UpdateRoleMenuReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Erp_CreateAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateAccountReq)
 	if err := dec(in); err != nil {
@@ -822,6 +921,18 @@ var Erp_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListMenu",
 			Handler:    _Erp_ListMenu_Handler,
+		},
+		{
+			MethodName: "ListMenuTree",
+			Handler:    _Erp_ListMenuTree_Handler,
+		},
+		{
+			MethodName: "GetRoleMenuIdList",
+			Handler:    _Erp_GetRoleMenuIdList_Handler,
+		},
+		{
+			MethodName: "UpdateRoleMenu",
+			Handler:    _Erp_UpdateRoleMenu_Handler,
 		},
 		{
 			MethodName: "CreateAccount",

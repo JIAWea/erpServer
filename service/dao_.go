@@ -15,80 +15,6 @@ func init() {
 	db.RegisterModel(&erp.ModelUser{}, &erp.ModelRole{}, &erp.ModelMenu{}, &erp.ModelUserRole{}, &erp.ModelRoleMenu{})
 }
 
-var dbMenu = NewTMenu(db.Db())
-
-type TMenu struct {
-	db    *gorm.DB
-	model *erp.ModelMenu
-}
-
-func NewTMenu(db *gorm.DB) *TMenu {
-	return &TMenu{
-		db:    db,
-		model: &erp.ModelMenu{},
-	}
-}
-
-func (d *TMenu) newScope() *dbx.Scope {
-	if d.db == nil {
-		d.db = db.Db()
-	}
-	return dbx.NewScope(d.db, &erp.ModelMenu{})
-}
-
-func (d *TMenu) Create(ctx context.Context, m *erp.ModelMenu) error {
-	return d.newScope().Create(ctx, &m)
-}
-
-func (d *TMenu) Update(ctx context.Context, m *erp.ModelMenu, whereMap map[string]interface{}) error {
-	return d.newScope().Where(whereMap).Update(&m)
-}
-
-func (d *TMenu) DeleteById(ctx context.Context, pk uint64) error {
-	return d.newScope().Delete(&erp.ModelMenu{}, pk)
-}
-
-func (d *TMenu) DeleteByWhere(ctx context.Context, whereMap map[string]interface{}) error {
-	return d.newScope().Delete(&erp.ModelMenu{}, whereMap)
-}
-
-func (d *TMenu) GetOne(ctx context.Context, pk uint64) (*erp.ModelMenu, error) {
-	var m erp.ModelMenu
-	err := d.newScope().SetNotFoundErr(erp.ErrNotFoundMenu).First(&m, pk)
-	return &m, err
-}
-
-func (d *TMenu) ListWithListOption(ctx context.Context, listOption *listoption.ListOption, whereOpts interface{}) ([]*erp.ModelMenu, *listoption.Paginate, error) {
-	var err error
-	scope := d.newScope().Where(whereOpts)
-	if listOption != nil {
-
-		err = listoption.NewProcessor(listOption).
-			AddUint64List(erp.ListMenuReq_ListOptIdList, func(valList []uint64) error {
-				return nil
-			}).
-			AddString(erp.ListMenuReq_ListOptName, func(val string) error {
-				return nil
-			}).
-			Process()
-		if err != nil {
-			log.Error(err.Error())
-			return nil, nil, err
-		}
-
-	}
-
-	var menuList []*erp.ModelMenu
-	var paginate *listoption.Paginate
-	paginate, err = scope.PaginateQuery(listOption, &menuList)
-	if err != nil {
-		log.Errorf("err: %v", err)
-		return nil, nil, err
-	}
-
-	return menuList, paginate, nil
-}
-
 var dbUserRole = NewTUserRole(db.Db())
 
 type TUserRole struct {
@@ -130,6 +56,9 @@ func (d *TUserRole) DeleteById(ctx context.Context, pk uint64) error {
 }
 
 func (d *TUserRole) DeleteByWhere(ctx context.Context, whereMap map[string]interface{}) error {
+	if len(whereMap) == 0 {
+		return nil
+	}
 	return d.newScope().Where(whereMap).Delete(&erp.ModelUserRole{})
 }
 
@@ -182,6 +111,13 @@ func (d *TRoleMenu) Create(ctx context.Context, m *erp.ModelRoleMenu) error {
 	return d.newScope().Create(ctx, &m)
 }
 
+func (d *TRoleMenu) CreateInBatches(ctx context.Context, list []*erp.ModelRoleMenu) error {
+	if len(list) == 0 {
+		return nil
+	}
+	return d.newScope().CreateInBatches(list, 100)
+}
+
 func (d *TRoleMenu) Update(ctx context.Context, m *erp.ModelRoleMenu, whereMap map[string]interface{}) error {
 	return d.newScope().Where(whereMap).Update(&m)
 }
@@ -191,7 +127,7 @@ func (d *TRoleMenu) DeleteById(ctx context.Context, pk uint64) error {
 }
 
 func (d *TRoleMenu) DeleteByWhere(ctx context.Context, whereMap map[string]interface{}) error {
-	return d.newScope().Delete(&erp.ModelRoleMenu{}, whereMap)
+	return d.newScope().Where(whereMap).Delete(&erp.ModelRoleMenu{})
 }
 
 func (d *TRoleMenu) GetOne(ctx context.Context, pk uint64) (*erp.ModelRoleMenu, error) {

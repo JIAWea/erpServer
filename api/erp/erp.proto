@@ -26,6 +26,10 @@ service erp {
   rpc ListRole (ListRoleReq) returns (ListRoleRsp);
 
   rpc ListMenu (ListMenuReq) returns (ListMenuRsp);
+  rpc ListMenuTree (ListMenuTreeReq) returns (ListMenuTreeRsp);
+
+  rpc GetRoleMenuIdList (GetRoleMenuIdListReq) returns (GetRoleMenuIdListRsp);
+  rpc UpdateRoleMenu (UpdateRoleMenuReq) returns (UpdateRoleMenuRsp);
 
   rpc CreateAccount (CreateAccountReq) returns (CreateAccountRsp);
   rpc UpdateAccount (UpdateAccountReq) returns (UpdateAccountRsp);
@@ -171,6 +175,8 @@ message ModelMenu {
   bool is_hidden = 12;
   // @gorm: type:tinyint(1);default:1;comment:'1菜单, 2api'
   uint32 type = 13;
+  // @gorm: type:bigint;default:0;comment:'父级'
+  uint64 parent_id = 14;
 }
 
 message ModelUserRole {
@@ -247,7 +253,7 @@ message UpdateUserRsp {
 
 message UpdateUserRoleReq {
   uint64 id = 1 [(validate.rules).uint64.gt = 0];
-  repeated uint64 role_id_list =2 [(validate.rules).repeated.min_items = 1];
+  repeated uint64 role_id_list = 2 [(validate.rules).repeated.min_items = 1];
 }
 message UpdateUserRoleRsp {}
 
@@ -337,10 +343,8 @@ message ListRoleRsp {
 message ListMenuReq {
   enum ListOpt {
     ListOptNil = 0;
-    // @valueType: uint64List
-    ListOptIdList = 1;
-    // @valueType: string
-    ListOptName = 2;
+    // @valueType: uint32
+    ListOptType = 1;
   }
   listoption.ListOption list_option = 1;
 }
@@ -348,6 +352,38 @@ message ListMenuRsp {
   listoption.Paginate paginate = 1;
   repeated ModelMenu list = 2;
 }
+
+message ListMenuTreeReq {
+  enum ListOpt {
+    ListOptNil = 0;
+    // @valueType: uint32
+    ListOptType = 1;
+  }
+  listoption.ListOption list_option = 1;
+}
+message ListMenuTreeRsp {
+  message Node {
+    uint64 id = 1;
+    string name = 2;
+    uint64 parent_id = 3;
+    repeated Node children = 4;
+  }
+  repeated Node list = 2;
+}
+
+message GetRoleMenuIdListReq {
+  uint32 type = 1;
+  uint64 role_id = 2;
+}
+message GetRoleMenuIdListRsp {
+  repeated uint64 menu_id_list = 1;
+}
+
+message UpdateRoleMenuReq {
+  uint64 id = 1 [(validate.rules).uint64.gt = 0];
+  repeated uint64 menu_id_list = 2 [(validate.rules).repeated.min_items = 1];
+}
+message UpdateRoleMenuRsp {}
 
 message CreateAccountReq {
   ModelAccount data = 1 [(validate.rules).message.required = true];

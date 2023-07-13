@@ -17,23 +17,6 @@ func NewErpService() ErpService {
 	return ErpService{}
 }
 
-func (s ErpService) ListMenu(ctx context.Context, req *erp.ListMenuReq) (*erp.ListMenuRsp, error) {
-	var err error
-	var rsp erp.ListMenuRsp
-
-	queryOpts := make(map[string]interface{})
-	// do something...
-	list, paginate, err := dbMenu.ListWithListOption(ctx, req.ListOption, queryOpts)
-	if err != nil {
-		log.Errorf("err: %v", err)
-		return nil, err
-	}
-	rsp.Paginate = paginate
-	rsp.List = list
-
-	return &rsp, nil
-}
-
 func (s ErpService) CreateAccount(ctx context.Context, req *erp.CreateAccountReq) (*erp.CreateAccountRsp, error) {
 	var err error
 	var rsp erp.CreateAccountRsp
