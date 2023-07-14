@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"regexp"
+	"strings"
 
 	"github.com/JIAWea/erpServer/api/erp"
 	"github.com/JIAWea/erpServer/pkg/utils"
@@ -41,6 +42,7 @@ func (s ErpService) UserLogin(ctx context.Context, req *erp.UserLoginReq) (*erp.
 
 func (s ErpService) UserLogout(ctx context.Context, req *erp.UserLogoutReq) (*erp.UserLogoutRsp, error) {
 	var rsp erp.UserLogoutRsp
+	auth.DelCacheAuthDataBySign(ctx, strings.TrimPrefix(req.Token, "Bearer "))
 	return &rsp, nil
 }
 
@@ -95,9 +97,9 @@ func (s ErpService) UpdateUser(ctx context.Context, req *erp.UpdateUserReq) (*er
 	}
 	err = dbUser.Update(ctx,
 		map[string]interface{}{
-			FieldName:     m.Name,
-			FieldNickName: m.NickName,
-			FieldStatus:   m.Status,
+			dbName:     m.Name,
+			dbNickName: m.NickName,
+			dbStatus:   m.Status,
 		},
 		map[string]interface{}{
 			"id": m.Id,
@@ -152,6 +154,7 @@ func (s ErpService) UpdatePassword(ctx context.Context, req *erp.UpdatePasswordR
 	var rsp erp.UpdatePasswordRsp
 
 	m := req.Data
+	m.Id = core.GetUserId(ctx)
 	if m == nil || m.Id == 0 {
 		log.Error("update request must have an Id")
 		return nil, errorx.New(erp.ErrParamRequired)
@@ -165,18 +168,13 @@ func (s ErpService) UpdatePassword(ctx context.Context, req *erp.UpdatePasswordR
 		return nil, errorx.New(erp.ErrPasswordFormatInvalid)
 	}
 
-	// 密码判断
-	user, err := dbUser.GetOne(ctx, m.Id)
-	if err != nil {
-		return nil, err
-	}
-	if err = utils.ComparePasswd(user.Password, m.OldPassword); err != nil {
+	if err = dbUser.CheckPassword(ctx, m.Id, m.OldPassword); err != nil {
 		return nil, errorx.New(erp.ErrPassword)
 	}
 
 	err = dbUser.Update(ctx,
 		map[string]interface{}{
-			FieldPassword: utils.GenPasswd(m.NewPassword),
+			dbPassword: utils.GenPasswd(m.NewPassword),
 		},
 		map[string]interface{}{
 			"id": m.Id,

@@ -2,9 +2,9 @@ package app
 
 import (
 	"context"
-
 	"github.com/JIAWea/erpServer/api/erp"
 	"github.com/JIAWea/erpServer/internal/db"
+	"github.com/JIAWea/erpServer/pkg/utils"
 	"github.com/ml444/gkit/dbx"
 	"github.com/ml444/gkit/listoption"
 	log "github.com/ml444/glog"
@@ -61,6 +61,15 @@ func (d *TUser) GetOne(ctx context.Context, pk uint64) (*erp.ModelUser, error) {
 	err := d.newScope().SetNotFoundErr(erp.ErrNotFoundUser).Preload("RoleList").First(&m, pk)
 	m.Password = ""
 	return &m, err
+}
+
+func (d *TUser) CheckPassword(ctx context.Context, pk uint64, pwd string) error {
+	var m erp.ModelUser
+	err := d.newScope().SetNotFoundErr(erp.ErrNotFoundUser).First(&m, pk)
+	if err != nil {
+		return err
+	}
+	return utils.ComparePasswd(m.Password, pwd)
 }
 
 func (d *TUser) ListWithListOption(ctx context.Context, listOption *listoption.ListOption, whereOpts interface{}) ([]*erp.ModelUser, *listoption.Paginate, error) {

@@ -229,7 +229,9 @@ message UserLoginRsp {
   string token = 1;
 }
 
-message UserLogoutReq {}
+message UserLogoutReq {
+  string token = 1;
+}
 message UserLogoutRsp {}
 
 message GetUserInfoReq {}
