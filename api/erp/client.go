@@ -176,4 +176,32 @@ func ListAccount(ctx context.Context, req *ListAccountReq) (*ListAccountRsp, err
     return cliMgr.cli.ListAccount(ctx, req)
 }
 
+func ImportExpense(ctx context.Context, req *ImportExpenseReq) (*ImportExpenseRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.ImportExpense(ctx, req)
+}
+
+func CreateExpense(ctx context.Context, req *CreateExpenseReq) (*CreateExpenseRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.CreateExpense(ctx, req)
+}
+
+func DeleteExpense(ctx context.Context, req *DeleteExpenseReq) (*DeleteExpenseRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.DeleteExpense(ctx, req)
+}
+
+func ListExpense(ctx context.Context, req *ListExpenseReq) (*ListExpenseRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.ListExpense(ctx, req)
+}
+
 

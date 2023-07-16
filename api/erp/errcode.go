@@ -21,6 +21,7 @@ const (
         ErrPassword int32	=	10006
         ErrNotFoundAccount int32	=	10007
         ErrUserExist int32	=	10008
+        ErrNotFoundExpense int32	=	10009
 )
 
 
@@ -44,6 +45,7 @@ var ErrCodeMap = map[int32]string{
         ErrPassword: "密码错误",
         ErrNotFoundAccount: "未找到相关记录",
         ErrUserExist: "用户名已存在",
+        ErrNotFoundExpense: "记录不存在",
 }
 
 var ErrCode4StatusCodeMap = map[int32]int32{
@@ -65,4 +67,5 @@ var ErrCode4StatusCodeMap = map[int32]int32{
         ErrPassword: 400,
         ErrNotFoundAccount: 404,
         ErrUserExist: 400,
+        ErrNotFoundExpense: 404,
 }

@@ -43,6 +43,10 @@ const (
 	Erp_DeleteAccount_FullMethodName     = "/erp.erp/DeleteAccount"
 	Erp_GetAccount_FullMethodName        = "/erp.erp/GetAccount"
 	Erp_ListAccount_FullMethodName       = "/erp.erp/ListAccount"
+	Erp_ImportExpense_FullMethodName     = "/erp.erp/ImportExpense"
+	Erp_CreateExpense_FullMethodName     = "/erp.erp/CreateExpense"
+	Erp_DeleteExpense_FullMethodName     = "/erp.erp/DeleteExpense"
+	Erp_ListExpense_FullMethodName       = "/erp.erp/ListExpense"
 )
 
 // ErpClient is the client API for Erp service.
@@ -73,6 +77,10 @@ type ErpClient interface {
 	DeleteAccount(ctx context.Context, in *DeleteAccountReq, opts ...grpc.CallOption) (*DeleteAccountRsp, error)
 	GetAccount(ctx context.Context, in *GetAccountReq, opts ...grpc.CallOption) (*GetAccountRsp, error)
 	ListAccount(ctx context.Context, in *ListAccountReq, opts ...grpc.CallOption) (*ListAccountRsp, error)
+	ImportExpense(ctx context.Context, in *ImportExpenseReq, opts ...grpc.CallOption) (*ImportExpenseRsp, error)
+	CreateExpense(ctx context.Context, in *CreateExpenseReq, opts ...grpc.CallOption) (*CreateExpenseRsp, error)
+	DeleteExpense(ctx context.Context, in *DeleteExpenseReq, opts ...grpc.CallOption) (*DeleteExpenseRsp, error)
+	ListExpense(ctx context.Context, in *ListExpenseReq, opts ...grpc.CallOption) (*ListExpenseRsp, error)
 }
 
 type erpClient struct {
@@ -299,6 +307,42 @@ func (c *erpClient) ListAccount(ctx context.Context, in *ListAccountReq, opts ..
 	return out, nil
 }
 
+func (c *erpClient) ImportExpense(ctx context.Context, in *ImportExpenseReq, opts ...grpc.CallOption) (*ImportExpenseRsp, error) {
+	out := new(ImportExpenseRsp)
+	err := c.cc.Invoke(ctx, Erp_ImportExpense_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *erpClient) CreateExpense(ctx context.Context, in *CreateExpenseReq, opts ...grpc.CallOption) (*CreateExpenseRsp, error) {
+	out := new(CreateExpenseRsp)
+	err := c.cc.Invoke(ctx, Erp_CreateExpense_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *erpClient) DeleteExpense(ctx context.Context, in *DeleteExpenseReq, opts ...grpc.CallOption) (*DeleteExpenseRsp, error) {
+	out := new(DeleteExpenseRsp)
+	err := c.cc.Invoke(ctx, Erp_DeleteExpense_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *erpClient) ListExpense(ctx context.Context, in *ListExpenseReq, opts ...grpc.CallOption) (*ListExpenseRsp, error) {
+	out := new(ListExpenseRsp)
+	err := c.cc.Invoke(ctx, Erp_ListExpense_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ErpServer is the server API for Erp service.
 // All implementations must embed UnimplementedErpServer
 // for forward compatibility
@@ -327,6 +371,10 @@ type ErpServer interface {
 	DeleteAccount(context.Context, *DeleteAccountReq) (*DeleteAccountRsp, error)
 	GetAccount(context.Context, *GetAccountReq) (*GetAccountRsp, error)
 	ListAccount(context.Context, *ListAccountReq) (*ListAccountRsp, error)
+	ImportExpense(context.Context, *ImportExpenseReq) (*ImportExpenseRsp, error)
+	CreateExpense(context.Context, *CreateExpenseReq) (*CreateExpenseRsp, error)
+	DeleteExpense(context.Context, *DeleteExpenseReq) (*DeleteExpenseRsp, error)
+	ListExpense(context.Context, *ListExpenseReq) (*ListExpenseRsp, error)
 	mustEmbedUnimplementedErpServer()
 }
 
@@ -405,6 +453,18 @@ func (UnimplementedErpServer) GetAccount(context.Context, *GetAccountReq) (*GetA
 }
 func (UnimplementedErpServer) ListAccount(context.Context, *ListAccountReq) (*ListAccountRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListAccount not implemented")
+}
+func (UnimplementedErpServer) ImportExpense(context.Context, *ImportExpenseReq) (*ImportExpenseRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ImportExpense not implemented")
+}
+func (UnimplementedErpServer) CreateExpense(context.Context, *CreateExpenseReq) (*CreateExpenseRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateExpense not implemented")
+}
+func (UnimplementedErpServer) DeleteExpense(context.Context, *DeleteExpenseReq) (*DeleteExpenseRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteExpense not implemented")
+}
+func (UnimplementedErpServer) ListExpense(context.Context, *ListExpenseReq) (*ListExpenseRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListExpense not implemented")
 }
 func (UnimplementedErpServer) mustEmbedUnimplementedErpServer() {}
 
@@ -851,6 +911,78 @@ func _Erp_ListAccount_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Erp_ImportExpense_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ImportExpenseReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).ImportExpense(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_ImportExpense_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).ImportExpense(ctx, req.(*ImportExpenseReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Erp_CreateExpense_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateExpenseReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).CreateExpense(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_CreateExpense_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).CreateExpense(ctx, req.(*CreateExpenseReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Erp_DeleteExpense_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteExpenseReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).DeleteExpense(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_DeleteExpense_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).DeleteExpense(ctx, req.(*DeleteExpenseReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Erp_ListExpense_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListExpenseReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).ListExpense(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_ListExpense_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).ListExpense(ctx, req.(*ListExpenseReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Erp_ServiceDesc is the grpc.ServiceDesc for Erp service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -953,6 +1085,22 @@ var Erp_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListAccount",
 			Handler:    _Erp_ListAccount_Handler,
+		},
+		{
+			MethodName: "ImportExpense",
+			Handler:    _Erp_ImportExpense_Handler,
+		},
+		{
+			MethodName: "CreateExpense",
+			Handler:    _Erp_CreateExpense_Handler,
+		},
+		{
+			MethodName: "DeleteExpense",
+			Handler:    _Erp_DeleteExpense_Handler,
+		},
+		{
+			MethodName: "ListExpense",
+			Handler:    _Erp_ListExpense_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

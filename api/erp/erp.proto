@@ -36,6 +36,11 @@ service erp {
   rpc DeleteAccount (DeleteAccountReq) returns (DeleteAccountRsp);
   rpc GetAccount (GetAccountReq) returns (GetAccountRsp);
   rpc ListAccount (ListAccountReq) returns (ListAccountRsp);
+
+  rpc ImportExpense (ImportExpenseReq) returns (ImportExpenseRsp);
+  rpc CreateExpense (CreateExpenseReq) returns (CreateExpenseRsp);
+  rpc DeleteExpense (DeleteExpenseReq) returns (DeleteExpenseRsp);
+  rpc ListExpense (ListExpenseReq) returns (ListExpenseRsp);
 }
 
 // range of error codes: [1, 2147483648]
@@ -78,6 +83,52 @@ enum ErrCode {
   ErrNotFoundAccount = 10007;       // 未找到相关记录
   //@status_code: 400
   ErrUserExist = 10008;   // 用户名已存在
+  //@status_code: 404
+  ErrNotFoundExpense = 10009; // 记录不存在
+}
+
+enum ExpenseCategory {
+  ExpenseCategoryNil = 0;
+  // 其他
+  ExpenseCategoryOther = 1;
+  // 采购
+  ExpenseCategoryPurchase = 2;
+  // 人力
+  ExpenseCategoryHR = 3;
+  // 办公杂费
+  ExpenseCategoryOfficeOther = 4;
+  // 借款
+  ExpenseCategoryBorrow = 5;
+  // 外发加工
+  ExpenseCategoryProcess = 6;
+  // 办公用品
+  ExpenseCategoryOffice = 7;
+  // 食堂伙食
+  ExpenseCategoryCanteen = 8;
+  // 员工工资
+  ExpenseCategorySalary = 9;
+  // 临时工
+  ExpenseCategoryPartTime = 10;
+  // 备用金
+  ExpenseCategoryStandby = 11;
+  // 头程
+  ExpenseCategoryHead = 12;
+  // 推广测评
+  ExpenseCategoryEvaluation = 13;
+  // 产品采购
+  ExpenseCategoryProductPurchase = 14;
+  // 国内运费
+  ExpenseCategoryDeliveryCN = 15;
+}
+
+enum IncomeCategory {
+  IncomeCategoryNil = 0;
+  // 其他
+  IncomeCategoryOther = 1;
+  // 备用金
+  IncomeCategoryStandby = 2;
+  // 销售
+  IncomeCategorySale = 3;
 }
 
 // GORM USAGE: 
@@ -224,6 +275,37 @@ message ModelAccount {
   string name = 5;
   // @gorm: type:int(11);comment:'初期余额'
   string initial_money = 6;
+}
+
+message ModelExpense {
+  // @gorm: primarykey
+  uint64 id = 1;
+  // @gorm: comment:'创建时间'
+  uint32 created_at = 2;
+  // @gorm: comment:'更新时间'
+  uint32 updated_at = 3;
+  // @gorm: comment:'删除时间'
+  uint32 deleted_at = 4;
+  // @gorm: comment:'支出日期'
+  uint32 pay_at = 5;
+  // @gorm: uniqueIndex:uniq_uuid;type:varchar(32);comment:'支出ID'
+  string uuid = 6;
+  // @gorm: comment:'科目'
+  uint32 category = 7;
+  // @gorm: type:varchar(64);comment:'摘要'
+  string mark = 8;
+  // @gorm: comment:'支出，单位分'
+  uint32 pay_money = 9;
+  // @gorm: comment:'账户'
+  uint64 account_id = 10;
+  // @gorm: type:varchar(64);comment:'凭证'
+  string ticket = 11;
+  // @gorm: type:varchar(64);comment:'经手人'
+  string handle_by = 12;
+  // @gorm: comment:'创建用户'
+  uint64 user_id = 13;
+  // @gorm: type:varchar(128);comment:'附件'
+  string attachment = 14;
 }
 
 message UserLoginReq {
@@ -447,4 +529,28 @@ message ListAccountReq {
 message ListAccountRsp {
   listoption.Paginate paginate = 1;
   repeated ModelAccount list = 2;
+}
+
+message ImportExpenseReq {}
+message ImportExpenseRsp {}
+
+message CreateExpenseReq {
+  ModelExpense data = 1 [(validate.rules).message.required = true];
+}
+message CreateExpenseRsp {}
+
+message DeleteExpenseReq {
+  uint64 id = 1 [(validate.rules).uint64.gt = 0];
+}
+message DeleteExpenseRsp {}
+
+message ListExpenseReq {
+  enum ListOpt {
+    ListOptNil = 0;
+  }
+  listoption.ListOption list_option = 1;
+}
+message ListExpenseRsp {
+  listoption.Paginate paginate = 1;
+  repeated ModelExpense list = 2;
 }

@@ -11,10 +11,6 @@ import (
 	"github.com/JIAWea/erpServer/internal/db"
 )
 
-func init() {
-	db.RegisterModel(&erp.ModelUser{}, &erp.ModelRole{}, &erp.ModelMenu{}, &erp.ModelUserRole{}, &erp.ModelRoleMenu{})
-}
-
 var dbMenu = NewTMenu(db.Db())
 
 type TMenu struct {

@@ -1,16 +1,13 @@
 package main
 
 import (
-	"github.com/JIAWea/erpServer/api/erp"
-	"github.com/JIAWea/erpServer/config"
-	"github.com/JIAWea/erpServer/internal/db"
-	"github.com/ml444/gkit/auth"
 	gkitlog "github.com/ml444/gkit/log"
 	log "github.com/ml444/glog"
 	logconf "github.com/ml444/glog/config"
 	level "github.com/ml444/glog/level"
-	"github.com/redis/go-redis/v9"
-	"os"
+	"github.com/JIAWea/erpServer/api/erp"
+	"github.com/JIAWea/erpServer/config"
+	"github.com/JIAWea/erpServer/internal/db"
 )
 
 func Init(cfg *config.Config) error {
@@ -29,17 +26,6 @@ func Init(cfg *config.Config) error {
 		log.Errorf("err: %v", err)
 		return err
 	}
-
-	//err = auth.InitAuth([]byte(auth.PriKey), []byte(auth.PubKey))
-	//if err != nil {
-	//	log.Errorf("err: %v", err)
-	//	return err
-	//}
-
-	// TODO ?
-	auth.InitRedis(&redis.Options{
-		Addr: os.Getenv("REDIS_ADDR"),
-	})
 
 	return nil
 }
