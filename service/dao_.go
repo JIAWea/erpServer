@@ -12,7 +12,14 @@ import (
 )
 
 func init() {
-	db.RegisterModel(&erp.ModelUser{}, &erp.ModelRole{}, &erp.ModelMenu{}, &erp.ModelUserRole{}, &erp.ModelRoleMenu{})
+	db.RegisterModel(
+		&erp.ModelUser{},
+		&erp.ModelRole{},
+		&erp.ModelMenu{},
+		&erp.ModelUserRole{},
+		&erp.ModelRoleMenu{},
+		&erp.ModelAccount{},
+	)
 }
 
 var dbUserRole = NewTUserRole(db.Db())
@@ -176,6 +183,7 @@ func (d *TAccount) newScope() *dbx.Scope {
 }
 
 func (d *TAccount) Create(ctx context.Context, m *erp.ModelAccount) error {
+	m.Id = 0
 	return d.newScope().Create(ctx, &m)
 }
 
@@ -199,11 +207,12 @@ func (d *TAccount) GetOne(ctx context.Context, pk uint64) (*erp.ModelAccount, er
 
 func (d *TAccount) ListWithListOption(ctx context.Context, listOption *listoption.ListOption, whereOpts interface{}) ([]*erp.ModelAccount, *listoption.Paginate, error) {
 	var err error
-	scope := d.newScope().Where(whereOpts)
+	scope := d.newScope()
 	if listOption != nil {
 
 		err = listoption.NewProcessor(listOption).
-			AddString(erp.ListAccountReq_ListOptName, func(val string) error {
+			AddString(erp.ListUserReq_ListOptName, func(val string) error {
+				scope.Like(dbName, val)
 				return nil
 			}).
 			AddUint32Range(erp.ListAccountReq_ListOptTimeRange, func(begin, end uint32) error {

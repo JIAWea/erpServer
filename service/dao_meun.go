@@ -108,8 +108,12 @@ func (d *TMenu) GetMenuTree(ctx context.Context, listOption *listoption.ListOpti
 	if listOption != nil {
 		listOption.SkipCount = true
 		err = listoption.NewProcessor(listOption).
-			AddUint32(erp.ListMenuReq_ListOptType, func(val uint32) error {
+			AddUint32(erp.ListMenuTreeReq_ListOptType, func(val uint32) error {
 				scope.Eq(dbType, val)
+				return nil
+			}).
+			AddString(erp.ListMenuTreeReq_ListOptComponent, func(val string) error {
+				scope.Eq(dbComponent, val)
 				return nil
 			}).
 			Process()
@@ -151,6 +155,7 @@ func (d *TRoleMenu) GetRoleMenuIdList(ctx context.Context, typ uint32, roleId ui
 		Joins("INNER JOIN erp_menu m ON m.id = erp_role_menu.menu_id").
 		Where("erp_role_menu.role_id = ?", roleId).
 		Where("m.type = ?", typ).
+		Where("m.status = ?", uint32(erp.ModelMenu_StatusEnable)).
 		Find(&roleMenuList)
 	if err != nil {
 		return nil, err
@@ -161,4 +166,78 @@ func (d *TRoleMenu) GetRoleMenuIdList(ctx context.Context, typ uint32, roleId ui
 	}
 
 	return idList, nil
+}
+
+func (d *TMenu) getUserMenuTree(parentId uint64, menus []*erp.MenuTree) []*erp.MenuTree {
+	tree := make([]*erp.MenuTree, 0)
+	for _, m := range menus {
+		if m.ParentId == parentId {
+			children := d.getUserMenuTree(m.Id, menus)
+			m.Children = children
+			tree = append(tree, m)
+		}
+	}
+	return tree
+}
+
+func (d *TMenu) GetUserMenuList(ctx context.Context, userId uint64) ([]*erp.MenuTree, error) {
+	var menuList []*erp.ModelMenu
+	err := d.newScope().
+		Joins("INNER JOIN erp_role_menu r ON r.menu_id = erp_menu.id").
+		Where("erp_menu.type = ?", uint32(erp.ModelMenu_TypeMenu)).
+		Where("erp_menu.status = ?", uint32(erp.ModelMenu_StatusEnable)).
+		Where("r.role_id IN (SELECT role_id FROM erp_user_role WHERE user_id = ?)", userId).
+		Find(&menuList)
+	if err != nil {
+		return nil, err
+	}
+
+	var data []*erp.MenuTree
+	for _, v := range menuList {
+		data = append(data, &erp.MenuTree{
+			Id:        v.Id,
+			Name:      v.Name,
+			Icon:      v.Icon,
+			Path:      v.Path,
+			Redirect:  v.Redirect,
+			Component: v.Component,
+			IsHidden:  v.IsHidden,
+			ParentId:  v.ParentId,
+		})
+	}
+	if len(data) == 0 {
+		return data, nil
+	}
+
+	return d.getUserMenuTree(0, data), nil
+}
+
+func (d *TMenu) GetAllUserMenuList(ctx context.Context) ([]*erp.MenuTree, error) {
+	var menuList []*erp.ModelMenu
+	err := d.newScope().
+		Where("erp_menu.type = ?", uint32(erp.ModelMenu_TypeMenu)).
+		Where("erp_menu.status = ?", uint32(erp.ModelMenu_StatusEnable)).
+		Find(&menuList)
+	if err != nil {
+		return nil, err
+	}
+
+	var data []*erp.MenuTree
+	for _, v := range menuList {
+		data = append(data, &erp.MenuTree{
+			Id:        v.Id,
+			Name:      v.Name,
+			Icon:      v.Icon,
+			Path:      v.Path,
+			Redirect:  v.Redirect,
+			Component: v.Component,
+			IsHidden:  v.IsHidden,
+			ParentId:  v.ParentId,
+		})
+	}
+	if len(data) == 0 {
+		return data, nil
+	}
+
+	return d.getUserMenuTree(0, data), nil
 }

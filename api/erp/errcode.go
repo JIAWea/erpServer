@@ -6,6 +6,8 @@ const (
         ErrInternal int32	=	99999
         ErrInvalidParam int32	=	1
         ErrParamRequired int32	=	2
+        ErrUserNotExist int32	=	3998
+        ErrUserDisable int32	=	3999
         ErrAuthContext int32	=	4000
         ErrTokenUnverifiable int32	=	4001
         ErrInvalidToken int32	=	4002
@@ -18,6 +20,7 @@ const (
         ErrPasswordFormatInvalid int32	=	10005
         ErrPassword int32	=	10006
         ErrNotFoundAccount int32	=	10007
+        ErrUserExist int32	=	10008
 )
 
 
@@ -26,6 +29,8 @@ var ErrCodeMap = map[int32]string{
         ErrInternal: "系统错误",
         ErrInvalidParam: "非法参数",
         ErrParamRequired: "缺失参数",
+        ErrUserNotExist: "该用户不存在",
+        ErrUserDisable: "账号已禁用",
         ErrAuthContext: "认证失败",
         ErrTokenUnverifiable: "认证异常",
         ErrInvalidToken: "认证错误",
@@ -38,12 +43,15 @@ var ErrCodeMap = map[int32]string{
         ErrPasswordFormatInvalid: "密码不合法",
         ErrPassword: "密码错误",
         ErrNotFoundAccount: "未找到相关记录",
+        ErrUserExist: "用户名已存在",
 }
 
 var ErrCode4StatusCodeMap = map[int32]int32{
         ErrInternal: 500,
         ErrInvalidParam: 400,
         ErrParamRequired: 400,
+        ErrUserNotExist: 401,
+        ErrUserDisable: 401,
         ErrAuthContext: 401,
         ErrTokenUnverifiable: 401,
         ErrInvalidToken: 401,
@@ -56,4 +64,5 @@ var ErrCode4StatusCodeMap = map[int32]int32{
         ErrPasswordFormatInvalid: 400,
         ErrPassword: 400,
         ErrNotFoundAccount: 404,
+        ErrUserExist: 400,
 }

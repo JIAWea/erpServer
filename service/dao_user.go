@@ -2,10 +2,12 @@ package app
 
 import (
 	"context"
+	"errors"
 	"github.com/JIAWea/erpServer/api/erp"
 	"github.com/JIAWea/erpServer/internal/db"
 	"github.com/JIAWea/erpServer/pkg/utils"
 	"github.com/ml444/gkit/dbx"
+	"github.com/ml444/gkit/errorx"
 	"github.com/ml444/gkit/listoption"
 	log "github.com/ml444/glog"
 	"gorm.io/gorm"
@@ -111,7 +113,18 @@ func (d *TUser) GetOneByName(ctx context.Context, name string) (*erp.ModelUser, 
 	var m erp.ModelUser
 	err := d.newScope().SetNotFoundErr(erp.ErrNotFoundUser).
 		Eq(dbName, name).
-		Eq(dbStatus, uint32(erp.ModelUser_StatusEnable)).
 		First(&m)
 	return &m, err
+}
+
+func (d *TUser) IsNameExist(ctx context.Context, name string) (bool, error) {
+	var m erp.ModelUser
+	err := d.newScope().SetNotFoundErr(erp.ErrNotFoundUser).Eq(dbName, name).First(&m)
+	if errors.Is(err, errorx.New(erp.ErrNotFoundUser)) {
+		return false, nil
+	}
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }

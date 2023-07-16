@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"errors"
 	"regexp"
 	"strings"
 
@@ -23,9 +24,16 @@ func (s ErpService) UserLogin(ctx context.Context, req *erp.UserLoginReq) (*erp.
 
 	// 密码判断
 	user, err := dbUser.GetOneByName(ctx, req.Username)
+	if errors.Is(err, errorx.New(erp.ErrNotFoundUser)) {
+		return nil, errorx.New(erp.ErrUserNotExist)
+	}
 	if err != nil {
 		return nil, err
 	}
+	if user.Status != uint32(erp.ModelUser_StatusEnable) {
+		return nil, errorx.New(erp.ErrUserDisable)
+	}
+
 	if err = utils.ComparePasswd(user.Password, req.Password); err != nil {
 		return nil, errorx.New(erp.ErrPassword)
 	}
@@ -55,7 +63,22 @@ func (s ErpService) GetUserInfo(ctx context.Context, req *erp.GetUserInfoReq) (*
 		return nil, err
 	}
 
+	var menuList []*erp.MenuTree
+	if user.IsCreator {
+		// 超管获取所有
+		menuList, err = dbMenu.GetAllUserMenuList(ctx)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		menuList, err = dbMenu.GetUserMenuList(ctx, user.Id)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	rsp.Data = user
+	rsp.MenuList = menuList
 
 	return &rsp, nil
 }
@@ -72,6 +95,14 @@ func (s ErpService) CreateUser(ctx context.Context, req *erp.CreateUserReq) (*er
 
 	if ok, _ := regexp.MatchString(utils.DefaultPasswordRegex, m.Password); !ok {
 		return nil, errorx.New(erp.ErrPasswordFormatInvalid)
+	}
+
+	exist, err := dbUser.IsNameExist(ctx, m.Name)
+	if err != nil {
+		return nil, err
+	}
+	if exist {
+		return nil, errorx.New(erp.ErrUserExist)
 	}
 
 	m.Password = utils.GenPasswd(m.Password)

@@ -1195,6 +1195,155 @@ var _ interface {
 	ErrorName() string
 } = UserLogoutRspValidationError{}
 
+// Validate checks the field values on MenuTree with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *MenuTree) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on MenuTree with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in MenuTreeMultiError, or nil
+// if none found.
+func (m *MenuTree) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *MenuTree) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for Name
+
+	// no validation rules for Icon
+
+	// no validation rules for Path
+
+	// no validation rules for Redirect
+
+	// no validation rules for Component
+
+	// no validation rules for IsHidden
+
+	// no validation rules for ParentId
+
+	for idx, item := range m.GetChildren() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, MenuTreeValidationError{
+						field:  fmt.Sprintf("Children[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, MenuTreeValidationError{
+						field:  fmt.Sprintf("Children[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return MenuTreeValidationError{
+					field:  fmt.Sprintf("Children[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return MenuTreeMultiError(errors)
+	}
+
+	return nil
+}
+
+// MenuTreeMultiError is an error wrapping multiple validation errors returned
+// by MenuTree.ValidateAll() if the designated constraints aren't met.
+type MenuTreeMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m MenuTreeMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m MenuTreeMultiError) AllErrors() []error { return m }
+
+// MenuTreeValidationError is the validation error returned by
+// MenuTree.Validate if the designated constraints aren't met.
+type MenuTreeValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e MenuTreeValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e MenuTreeValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e MenuTreeValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e MenuTreeValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e MenuTreeValidationError) ErrorName() string { return "MenuTreeValidationError" }
+
+// Error satisfies the builtin error interface
+func (e MenuTreeValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sMenuTree.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = MenuTreeValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = MenuTreeValidationError{}
+
 // Validate checks the field values on GetUserInfoReq with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -1344,6 +1493,40 @@ func (m *GetUserInfoRsp) validate(all bool) error {
 				cause:  err,
 			}
 		}
+	}
+
+	for idx, item := range m.GetMenuList() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, GetUserInfoRspValidationError{
+						field:  fmt.Sprintf("MenuList[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, GetUserInfoRspValidationError{
+						field:  fmt.Sprintf("MenuList[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return GetUserInfoRspValidationError{
+					field:  fmt.Sprintf("MenuList[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
 	}
 
 	if len(errors) > 0 {
