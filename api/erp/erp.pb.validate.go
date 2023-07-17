@@ -7477,10 +7477,10 @@ func (m *DeleteExpenseReq) validate(all bool) error {
 
 	var errors []error
 
-	if m.GetId() <= 0 {
+	if len(m.GetIdList()) < 1 {
 		err := DeleteExpenseReqValidationError{
-			field:  "Id",
-			reason: "value must be greater than 0",
+			field:  "IdList",
+			reason: "value must contain at least 1 item(s)",
 		}
 		if !all {
 			return err
@@ -7878,6 +7878,52 @@ func (m *ListExpenseRsp) validate(all bool) error {
 			}
 		}
 
+	}
+
+	{
+		sorted_keys := make([]uint64, len(m.GetAccountMap()))
+		i := 0
+		for key := range m.GetAccountMap() {
+			sorted_keys[i] = key
+			i++
+		}
+		sort.Slice(sorted_keys, func(i, j int) bool { return sorted_keys[i] < sorted_keys[j] })
+		for _, key := range sorted_keys {
+			val := m.GetAccountMap()[key]
+			_ = val
+
+			// no validation rules for AccountMap[key]
+
+			if all {
+				switch v := interface{}(val).(type) {
+				case interface{ ValidateAll() error }:
+					if err := v.ValidateAll(); err != nil {
+						errors = append(errors, ListExpenseRspValidationError{
+							field:  fmt.Sprintf("AccountMap[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				case interface{ Validate() error }:
+					if err := v.Validate(); err != nil {
+						errors = append(errors, ListExpenseRspValidationError{
+							field:  fmt.Sprintf("AccountMap[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				}
+			} else if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+				if err := v.Validate(); err != nil {
+					return ListExpenseRspValidationError{
+						field:  fmt.Sprintf("AccountMap[%v]", key),
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		}
 	}
 
 	if len(errors) > 0 {

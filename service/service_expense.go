@@ -2,7 +2,9 @@ package app
 
 import (
 	"context"
+	"github.com/ml444/gkit/core"
 
+	"github.com/JIAWea/erpServer/pkg/utils"
 	"github.com/ml444/gkit/errorx"
 	log "github.com/ml444/glog"
 
@@ -25,7 +27,10 @@ func (s ErpService) CreateExpense(ctx context.Context, req *erp.CreateExpenseReq
 		return nil, errorx.New(erp.ErrParamRequired)
 	}
 
-	// do something
+	m.UserId = core.GetUserId(ctx)
+	if m.Uuid == "" {
+		m.Uuid = utils.RandomUUID(m.PayAt)
+	}
 
 	err = dbExpense.Create(ctx, m)
 	if err != nil {
@@ -40,9 +45,7 @@ func (s ErpService) DeleteExpense(ctx context.Context, req *erp.DeleteExpenseReq
 	var err error
 	var rsp erp.DeleteExpenseRsp
 
-	err = dbExpense.DeleteByWhere(ctx, map[string]interface{}{
-		"id": req.Id,
-	})
+	err = dbExpense.DeleteByIdList(ctx, req.IdList)
 	if err != nil {
 		log.Error(err)
 		return nil, err
@@ -63,6 +66,25 @@ func (s ErpService) ListExpense(ctx context.Context, req *erp.ListExpenseReq) (*
 	}
 	rsp.Paginate = paginate
 	rsp.List = list
+
+	var accIdList []uint64
+	for _, v := range list {
+		if v.AccountId != 0 {
+			accIdList = append(accIdList, v.AccountId)
+		}
+	}
+	if len(accIdList) > 0 {
+		var accList []*erp.ModelAccount
+		err = dbAccount.newScope().In(dbId, accIdList).Find(&accList)
+		if err != nil {
+			return nil, err
+		}
+		accMap := make(map[uint64]*erp.ModelAccount)
+		for _, v := range accList {
+			accMap[v.Id] = v
+		}
+		rsp.AccountMap = accMap
+	}
 
 	return &rsp, nil
 }

@@ -4,11 +4,11 @@ go 1.20
 
 require (
 	github.com/envoyproxy/protoc-gen-validate v1.0.2
-	github.com/golang-jwt/jwt/v4 v4.4.1
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.8.0
-	github.com/ml444/gkit v0.0.0-20230714162803-d8d00a5722d9
+	github.com/ml444/gkit v0.0.0-20230717142134-f97e5b092c11
 	github.com/ml444/glog v0.2.12
+	github.com/redis/go-redis/v9 v9.0.5
 	golang.org/x/crypto v0.10.0
 	google.golang.org/grpc v1.56.1
 	google.golang.org/protobuf v1.31.0
@@ -33,7 +33,6 @@ require (
 	github.com/ml444/gutil v0.0.0-20230626092149-ac531df0e53f // indirect
 	github.com/petermattis/goid v0.0.0-20230518223814-80aa455d8761 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/redis/go-redis/v9 v9.0.5 // indirect
 	golang.org/x/net v0.11.0 // indirect
 	golang.org/x/oauth2 v0.7.0 // indirect
 	golang.org/x/sys v0.9.0 // indirect

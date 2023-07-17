@@ -44,6 +44,13 @@ func (d *TExpense) DeleteById(ctx context.Context, pk uint64) error {
 	return d.newScope().Delete(&erp.ModelExpense{}, pk)
 }
 
+func (d *TExpense) DeleteByIdList(ctx context.Context, idList []uint64) error {
+	if len(idList) == 0 {
+		return nil
+	}
+	return d.newScope().In(dbId, idList).Delete(&erp.ModelExpense{})
+}
+
 func (d *TExpense) DeleteByWhere(ctx context.Context, whereMap map[string]interface{}) error {
 	return d.newScope().Delete(&erp.ModelExpense{}, whereMap)
 }
@@ -56,9 +63,31 @@ func (d *TExpense) GetOne(ctx context.Context, pk uint64) (*erp.ModelExpense, er
 
 func (d *TExpense) ListWithListOption(ctx context.Context, listOption *listoption.ListOption, whereOpts interface{}) ([]*erp.ModelExpense, *listoption.Paginate, error) {
 	var err error
-	scope := d.newScope()
+	scope := d.newScope().Order("created_at DESC")
 	if listOption != nil {
-
+		err = listoption.NewProcessor(listOption).
+			AddString(erp.ListExpenseReq_ListOptAccountName, func(val string) error {
+				var accList []*erp.ModelAccount
+				err = dbAccount.newScope().Like(dbName, val).Find(&accList)
+				if err != nil {
+					return err
+				}
+				if len(accList) == 0 {
+					scope.Eq("1", 0)
+					return nil
+				}
+				var idList []uint64
+				for _, v := range accList {
+					idList = append(idList, v.Id)
+				}
+				scope.In(dbAccountId, idList)
+				return nil
+			}).
+			Process()
+		if err != nil {
+			log.Error(err.Error())
+			return nil, nil, err
+		}
 	}
 
 	var expenseList []*erp.ModelExpense

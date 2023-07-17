@@ -57,7 +57,7 @@ func (d *TAccount) GetOne(ctx context.Context, pk uint64) (*erp.ModelAccount, er
 
 func (d *TAccount) ListWithListOption(ctx context.Context, listOption *listoption.ListOption, whereOpts interface{}) ([]*erp.ModelAccount, *listoption.Paginate, error) {
 	var err error
-	scope := d.newScope()
+	scope := d.newScope().Order("created_at DESC")
 	if listOption != nil {
 
 		err = listoption.NewProcessor(listOption).

@@ -76,7 +76,7 @@ func (d *TUser) CheckPassword(ctx context.Context, pk uint64, pwd string) error 
 
 func (d *TUser) ListWithListOption(ctx context.Context, listOption *listoption.ListOption, whereOpts interface{}) ([]*erp.ModelUser, *listoption.Paginate, error) {
 	var err error
-	scope := d.newScope().Eq(dbIsCreator, uint32(0)).Preload("RoleList")
+	scope := d.newScope().Eq(dbIsCreator, uint32(0)).Preload("RoleList").Order("created_at DESC")
 	if listOption != nil {
 		err = listoption.NewProcessor(listOption).
 			AddString(erp.ListUserReq_ListOptName, func(val string) error {

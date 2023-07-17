@@ -540,17 +540,20 @@ message CreateExpenseReq {
 message CreateExpenseRsp {}
 
 message DeleteExpenseReq {
-  uint64 id = 1 [(validate.rules).uint64.gt = 0];
+  repeated uint64 id_list = 1 [(validate.rules).repeated.min_items = 1];
 }
 message DeleteExpenseRsp {}
 
 message ListExpenseReq {
   enum ListOpt {
     ListOptNil = 0;
+    // @valueType: string
+    ListOptAccountName = 1;
   }
   listoption.ListOption list_option = 1;
 }
 message ListExpenseRsp {
   listoption.Paginate paginate = 1;
   repeated ModelExpense list = 2;
+  map<uint64, ModelAccount> accountMap = 3;
 }
