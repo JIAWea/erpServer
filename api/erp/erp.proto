@@ -39,6 +39,7 @@ service erp {
 
   rpc ImportExpense (ImportExpenseReq) returns (ImportExpenseRsp);
   rpc CreateExpense (CreateExpenseReq) returns (CreateExpenseRsp);
+  rpc UpdateExpense (UpdateExpenseReq) returns (UpdateExpenseRsp);
   rpc DeleteExpense (DeleteExpenseReq) returns (DeleteExpenseRsp);
   rpc ListExpense (ListExpenseReq) returns (ListExpenseRsp);
 }
@@ -152,9 +153,11 @@ message ModelUser {
   uint32 updated_at = 3;
   // @gorm: comment:'删除时间'
   uint32 deleted_at = 4;
-  // @gorm: type:varchar(32);comment:'用户名'
+  // @gorm: type:varchar(32);not null;comment:'用户名'
   string name = 5;
+  // @gorm: type:varchar(32);not null;comment:'昵称'
   string nick_name = 6;
+  // @gorm: type:varchar(128);not null;comment:'密码'
   string password = 7;
   // @gorm: type:tinyint(1);default:1;comment:'1正常, 2禁用'
   uint32 status = 8;
@@ -181,7 +184,7 @@ message ModelRole {
   uint32 updated_at = 3;
   // @gorm: comment:'删除时间'
   uint32 deleted_at = 4;
-  // @gorm: type:varchar(32);comment:'名称'
+  // @gorm: type:varchar(32);not null;comment:'名称'
   string name = 5;
   // @gorm: type:tinyint(1);default:1;comment:'1正常, 2禁用'
   uint32 status = 6;
@@ -214,19 +217,19 @@ message ModelMenu {
   uint32 updated_at = 3;
   // @gorm: comment:'删除时间'
   uint32 deleted_at = 4;
-  // @gorm: type:varchar(32);comment:'名称'
+  // @gorm: type:varchar(32);not null;comment:'名称'
   string name = 5;
   // @gorm: type:tinyint(1);default:1;comment:'1正常, 2禁用'
   uint32 status = 6;
-  // @gorm: type:varchar(50);comment:'菜单图标'
+  // @gorm: type:varchar(50);not null;comment:'菜单图标'
   string icon = 7;
-  // @gorm: type:varchar(100);comment:'菜单访问路径'
+  // @gorm: type:varchar(100);not null;comment:'菜单访问路径'
   string path = 8;
-  // @gorm: type:varchar(100);comment:'重定向路径'
+  // @gorm: type:varchar(100);not null;comment:'重定向路径'
   string redirect = 9;
-  // @gorm: type:varchar(100);comment:'前端组件'
+  // @gorm: type:varchar(100);not null;comment:'前端组件'
   string component = 10;
-  // @gorm: type:int(3) unsigned;default:999;comment:'菜单顺序(1-999)'
+  // @gorm: type:int(3) unsigned;not null;default:999;comment:'菜单顺序(1-999)'
   uint32 sort = 11;
   // @gorm: type:tinyint(1);default:0;comment:'是否隐藏'
   bool is_hidden = 12;
@@ -292,20 +295,22 @@ message ModelExpense {
   string uuid = 6;
   // @gorm: comment:'科目'
   uint32 category = 7;
-  // @gorm: type:varchar(64);comment:'摘要'
+  // @gorm: type:varchar(64);not null;comment:'摘要'
   string mark = 8;
   // @gorm: comment:'支出，单位分'
   uint32 pay_money = 9;
   // @gorm: comment:'账户'
   uint64 account_id = 10;
-  // @gorm: type:varchar(64);comment:'凭证'
+  // @gorm: type:varchar(64);not null;comment:'凭证'
   string ticket = 11;
-  // @gorm: type:varchar(64);comment:'经手人'
+  // @gorm: type:varchar(64);not null;comment:'经手人'
   string handle_by = 12;
   // @gorm: comment:'创建用户'
   uint64 user_id = 13;
-  // @gorm: type:varchar(128);comment:'附件'
+  // @gorm: type:varchar(128);not null;comment:'附件'
   string attachment = 14;
+  // @gorm: type:varchar(128);not null;comment:'附件名'
+  string att_name = 15;
 }
 
 message UserLoginReq {
@@ -538,6 +543,13 @@ message CreateExpenseReq {
   ModelExpense data = 1 [(validate.rules).message.required = true];
 }
 message CreateExpenseRsp {}
+
+message UpdateExpenseReq {
+  ModelExpense data = 1 [(validate.rules).message.required = true];
+}
+message UpdateExpenseRsp {
+  ModelExpense data = 1;
+}
 
 message DeleteExpenseReq {
   repeated uint64 id_list = 1 [(validate.rules).repeated.min_items = 1];

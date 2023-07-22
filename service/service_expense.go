@@ -29,7 +29,7 @@ func (s ErpService) CreateExpense(ctx context.Context, req *erp.CreateExpenseReq
 
 	m.UserId = core.GetUserId(ctx)
 	if m.Uuid == "" {
-		m.Uuid = utils.RandomUUID(m.PayAt)
+		m.Uuid = utils.GenUUID()
 	}
 
 	err = dbExpense.Create(ctx, m)
@@ -37,6 +37,35 @@ func (s ErpService) CreateExpense(ctx context.Context, req *erp.CreateExpenseReq
 		log.Error(err)
 		return nil, err
 	}
+
+	return &rsp, nil
+}
+
+func (s ErpService) UpdateExpense(ctx context.Context, req *erp.UpdateExpenseReq) (*erp.UpdateExpenseRsp, error) {
+	var err error
+	var rsp erp.UpdateExpenseRsp
+
+	m := req.Data
+	if m == nil || m.Id == 0 {
+		log.Error("update request must have an Id")
+		return nil, errorx.New(erp.ErrParamRequired)
+	}
+	err = dbExpense.Update(ctx, m.Id, map[string]interface{}{
+		dbPayAt:      m.PayAt,
+		dbCategory:   m.Category,
+		dbMark:       m.Mark,
+		dbPayMoney:   m.PayMoney,
+		dbAccountId:  m.AccountId,
+		dbTicket:     m.Ticket,
+		dbHandleBy:   m.HandleBy,
+		dbAttachment: m.Attachment,
+		dbAttName:    m.AttName,
+	})
+	if err != nil {
+		log.Errorf("err: %v", err)
+		return nil, err
+	}
+	rsp.Data = m
 
 	return &rsp, nil
 }

@@ -2,27 +2,30 @@ package config
 
 import (
 	"flag"
+	"github.com/JIAWea/erpServer/pkg/utils"
 	"os"
-    "strconv"
+	"strconv"
 
-    log "github.com/ml444/glog"
+	log "github.com/ml444/glog"
 )
 
 const (
 	EnvKeyDebug        = "SERVICE_DEBUG"
 	EnvKeyServiceDbDSN = "SERVICE_DB_DSN"
+	EnvKeyASSET        = "SERVICE_ASSET"
 )
 
 // Config contains the fields for running a server
 type Config struct {
-	Debug       bool
-	EnableHTTP  bool
-	EnableGRPC  bool
-	HTTPAddr    string
-	PprofAddr   string
-	GRPCAddr    string
+	Debug      bool
+	EnableHTTP bool
+	EnableGRPC bool
+	HTTPAddr   string
+	PprofAddr  string
+	GRPCAddr   string
 
-	DbDSN       string
+	DbDSN    string
+	AssetDir string
 }
 
 var DefaultConfig Config
@@ -71,14 +74,19 @@ func init() {
 		DefaultConfig.GRPCAddr = addr
 	}
 	if DefaultConfig.DbDSN == "" {
-        DefaultConfig.DbDSN = os.Getenv(EnvKeyServiceDbDSN)
-        if DefaultConfig.Debug {
-            log.Info("DB:", DefaultConfig.DbDSN)
-        }
-    }
+		DefaultConfig.DbDSN = os.Getenv(EnvKeyServiceDbDSN)
+		if DefaultConfig.Debug {
+			log.Info("DB:", DefaultConfig.DbDSN)
+		}
+	}
+
+	DefaultConfig.AssetDir = os.Getenv(EnvKeyASSET)
+	exist, _ := utils.IsPathExist(DefaultConfig.AssetDir)
+	if !exist {
+		_ = os.MkdirAll(DefaultConfig.AssetDir, 0777)
+	}
 }
 
 func GetConfig() *Config {
 	return &DefaultConfig
 }
-

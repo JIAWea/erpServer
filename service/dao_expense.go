@@ -36,8 +36,8 @@ func (d *TExpense) Create(ctx context.Context, m *erp.ModelExpense) error {
 	return d.newScope().Create(ctx, &m)
 }
 
-func (d *TExpense) Update(ctx context.Context, m *erp.ModelExpense, whereMap map[string]interface{}) error {
-	return d.newScope().Where(whereMap).Update(&m)
+func (d *TExpense) Update(ctx context.Context, id uint64, data map[string]interface{}) error {
+	return d.newScope().Where(dbId, id).Update(data)
 }
 
 func (d *TExpense) DeleteById(ctx context.Context, pk uint64) error {

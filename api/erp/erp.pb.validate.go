@@ -839,6 +839,8 @@ func (m *ModelExpense) validate(all bool) error {
 
 	// no validation rules for Attachment
 
+	// no validation rules for AttName
+
 	if len(errors) > 0 {
 		return ModelExpenseMultiError(errors)
 	}
@@ -7454,6 +7456,275 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CreateExpenseRspValidationError{}
+
+// Validate checks the field values on UpdateExpenseReq with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *UpdateExpenseReq) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on UpdateExpenseReq with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// UpdateExpenseReqMultiError, or nil if none found.
+func (m *UpdateExpenseReq) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UpdateExpenseReq) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.GetData() == nil {
+		err := UpdateExpenseReqValidationError{
+			field:  "Data",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdateExpenseReqValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdateExpenseReqValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdateExpenseReqValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return UpdateExpenseReqMultiError(errors)
+	}
+
+	return nil
+}
+
+// UpdateExpenseReqMultiError is an error wrapping multiple validation errors
+// returned by UpdateExpenseReq.ValidateAll() if the designated constraints
+// aren't met.
+type UpdateExpenseReqMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateExpenseReqMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateExpenseReqMultiError) AllErrors() []error { return m }
+
+// UpdateExpenseReqValidationError is the validation error returned by
+// UpdateExpenseReq.Validate if the designated constraints aren't met.
+type UpdateExpenseReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateExpenseReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateExpenseReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateExpenseReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateExpenseReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateExpenseReqValidationError) ErrorName() string { return "UpdateExpenseReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e UpdateExpenseReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateExpenseReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateExpenseReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateExpenseReqValidationError{}
+
+// Validate checks the field values on UpdateExpenseRsp with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *UpdateExpenseRsp) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on UpdateExpenseRsp with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// UpdateExpenseRspMultiError, or nil if none found.
+func (m *UpdateExpenseRsp) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UpdateExpenseRsp) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdateExpenseRspValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdateExpenseRspValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdateExpenseRspValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return UpdateExpenseRspMultiError(errors)
+	}
+
+	return nil
+}
+
+// UpdateExpenseRspMultiError is an error wrapping multiple validation errors
+// returned by UpdateExpenseRsp.ValidateAll() if the designated constraints
+// aren't met.
+type UpdateExpenseRspMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateExpenseRspMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateExpenseRspMultiError) AllErrors() []error { return m }
+
+// UpdateExpenseRspValidationError is the validation error returned by
+// UpdateExpenseRsp.Validate if the designated constraints aren't met.
+type UpdateExpenseRspValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateExpenseRspValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateExpenseRspValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateExpenseRspValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateExpenseRspValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateExpenseRspValidationError) ErrorName() string { return "UpdateExpenseRspValidationError" }
+
+// Error satisfies the builtin error interface
+func (e UpdateExpenseRspValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateExpenseRsp.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateExpenseRspValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateExpenseRspValidationError{}
 
 // Validate checks the field values on DeleteExpenseReq with the rules defined
 // in the proto definition for this message. If any rules are violated, the

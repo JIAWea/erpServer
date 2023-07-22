@@ -190,6 +190,13 @@ func CreateExpense(ctx context.Context, req *CreateExpenseReq) (*CreateExpenseRs
     return cliMgr.cli.CreateExpense(ctx, req)
 }
 
+func UpdateExpense(ctx context.Context, req *UpdateExpenseReq) (*UpdateExpenseRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.UpdateExpense(ctx, req)
+}
+
 func DeleteExpense(ctx context.Context, req *DeleteExpenseReq) (*DeleteExpenseRsp, error) {
 	if cliMgr.conn == nil {
 		return nil, cliMgr.initErr

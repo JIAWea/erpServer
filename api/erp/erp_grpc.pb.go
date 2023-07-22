@@ -45,6 +45,7 @@ const (
 	Erp_ListAccount_FullMethodName       = "/erp.erp/ListAccount"
 	Erp_ImportExpense_FullMethodName     = "/erp.erp/ImportExpense"
 	Erp_CreateExpense_FullMethodName     = "/erp.erp/CreateExpense"
+	Erp_UpdateExpense_FullMethodName     = "/erp.erp/UpdateExpense"
 	Erp_DeleteExpense_FullMethodName     = "/erp.erp/DeleteExpense"
 	Erp_ListExpense_FullMethodName       = "/erp.erp/ListExpense"
 )
@@ -79,6 +80,7 @@ type ErpClient interface {
 	ListAccount(ctx context.Context, in *ListAccountReq, opts ...grpc.CallOption) (*ListAccountRsp, error)
 	ImportExpense(ctx context.Context, in *ImportExpenseReq, opts ...grpc.CallOption) (*ImportExpenseRsp, error)
 	CreateExpense(ctx context.Context, in *CreateExpenseReq, opts ...grpc.CallOption) (*CreateExpenseRsp, error)
+	UpdateExpense(ctx context.Context, in *UpdateExpenseReq, opts ...grpc.CallOption) (*UpdateExpenseRsp, error)
 	DeleteExpense(ctx context.Context, in *DeleteExpenseReq, opts ...grpc.CallOption) (*DeleteExpenseRsp, error)
 	ListExpense(ctx context.Context, in *ListExpenseReq, opts ...grpc.CallOption) (*ListExpenseRsp, error)
 }
@@ -325,6 +327,15 @@ func (c *erpClient) CreateExpense(ctx context.Context, in *CreateExpenseReq, opt
 	return out, nil
 }
 
+func (c *erpClient) UpdateExpense(ctx context.Context, in *UpdateExpenseReq, opts ...grpc.CallOption) (*UpdateExpenseRsp, error) {
+	out := new(UpdateExpenseRsp)
+	err := c.cc.Invoke(ctx, Erp_UpdateExpense_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *erpClient) DeleteExpense(ctx context.Context, in *DeleteExpenseReq, opts ...grpc.CallOption) (*DeleteExpenseRsp, error) {
 	out := new(DeleteExpenseRsp)
 	err := c.cc.Invoke(ctx, Erp_DeleteExpense_FullMethodName, in, out, opts...)
@@ -373,6 +384,7 @@ type ErpServer interface {
 	ListAccount(context.Context, *ListAccountReq) (*ListAccountRsp, error)
 	ImportExpense(context.Context, *ImportExpenseReq) (*ImportExpenseRsp, error)
 	CreateExpense(context.Context, *CreateExpenseReq) (*CreateExpenseRsp, error)
+	UpdateExpense(context.Context, *UpdateExpenseReq) (*UpdateExpenseRsp, error)
 	DeleteExpense(context.Context, *DeleteExpenseReq) (*DeleteExpenseRsp, error)
 	ListExpense(context.Context, *ListExpenseReq) (*ListExpenseRsp, error)
 	mustEmbedUnimplementedErpServer()
@@ -459,6 +471,9 @@ func (UnimplementedErpServer) ImportExpense(context.Context, *ImportExpenseReq) 
 }
 func (UnimplementedErpServer) CreateExpense(context.Context, *CreateExpenseReq) (*CreateExpenseRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateExpense not implemented")
+}
+func (UnimplementedErpServer) UpdateExpense(context.Context, *UpdateExpenseReq) (*UpdateExpenseRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateExpense not implemented")
 }
 func (UnimplementedErpServer) DeleteExpense(context.Context, *DeleteExpenseReq) (*DeleteExpenseRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteExpense not implemented")
@@ -947,6 +962,24 @@ func _Erp_CreateExpense_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Erp_UpdateExpense_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateExpenseReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).UpdateExpense(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_UpdateExpense_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).UpdateExpense(ctx, req.(*UpdateExpenseReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Erp_DeleteExpense_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteExpenseReq)
 	if err := dec(in); err != nil {
@@ -1093,6 +1126,10 @@ var Erp_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateExpense",
 			Handler:    _Erp_CreateExpense_Handler,
+		},
+		{
+			MethodName: "UpdateExpense",
+			Handler:    _Erp_UpdateExpense_Handler,
 		},
 		{
 			MethodName: "DeleteExpense",
