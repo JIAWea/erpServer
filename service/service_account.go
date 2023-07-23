@@ -2,7 +2,6 @@ package app
 
 import (
 	"context"
-
 	"github.com/ml444/gkit/errorx"
 	log "github.com/ml444/glog"
 
@@ -89,6 +88,26 @@ func (s ErpService) ListAccount(ctx context.Context, req *erp.ListAccountReq) (*
 		log.Errorf("err: %v", err)
 		return nil, err
 	}
+
+	rsp.AccountStat = make(map[uint64]*erp.ListAccountRsp_AccountStat, len(list))
+
+	for _, v := range list {
+		var exp erp.ModelExpense
+		err = dbExpense.newScope().
+			Select("SUM(pay_money) AS pay_money").
+			Eq(dbAccountId, v.Id).
+			First(&exp)
+		if err != nil {
+			log.Errorf("err: %v", err)
+			return nil, err
+		}
+
+		rsp.AccountStat[v.Id] = &erp.ListAccountRsp_AccountStat{
+			TotalExpense: exp.PayMoney,
+			//TotalIncome:  totalIncome,
+		}
+	}
+
 	rsp.Paginate = paginate
 	rsp.List = list
 

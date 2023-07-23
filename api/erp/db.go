@@ -22,3 +22,6 @@ func (m *ModelAccount) TableName() string {
 func (m *ModelExpense) TableName() string {
 	return "erp_expense"
 }
+func (m *ModelIncome) TableName() string {
+	return "erp_income"
+}

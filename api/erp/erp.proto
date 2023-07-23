@@ -313,6 +313,38 @@ message ModelExpense {
   string att_name = 15;
 }
 
+message ModelIncome {
+  // @gorm: primarykey
+  uint64 id = 1;
+  // @gorm: comment:'创建时间'
+  uint32 created_at = 2;
+  // @gorm: comment:'更新时间'
+  uint32 updated_at = 3;
+  // @gorm: comment:'删除时间'
+  uint32 deleted_at = 4;
+  // @gorm: comment:'收入日期'
+  uint32 income_at = 5;
+  // @gorm: uniqueIndex:uniq_uuid;type:varchar(32);comment:'收入ID'
+  string uuid = 6;
+  // @gorm: comment:'科目'
+  uint32 category = 7;
+  // @gorm: type:varchar(64);not null;comment:'摘要'
+  string mark = 8;
+  // @gorm: comment:'收入，单位分'
+  uint32 income_money = 9;
+  // @gorm: comment:'账户'
+  uint64 account_id = 10;
+  // @gorm: type:varchar(64);not null;comment:'经手人'
+  string handle_by = 12;
+  // @gorm: comment:'创建用户'
+  uint64 user_id = 13;
+  // @gorm: type:varchar(128);not null;comment:'附件'
+  string attachment = 14;
+  // @gorm: type:varchar(128);not null;comment:'附件名'
+  string att_name = 15;
+  // TODO 收入来源
+}
+
 message UserLoginReq {
   string username = 1;
   string password = 2;
@@ -532,8 +564,13 @@ message ListAccountReq {
   listoption.ListOption list_option = 1;
 }
 message ListAccountRsp {
+  message AccountStat {
+    uint32 total_expense = 1;
+    uint32 total_income = 2;
+  }
   listoption.Paginate paginate = 1;
   repeated ModelAccount list = 2;
+  map<uint64, AccountStat> account_stat = 3;
 }
 
 message ImportExpenseReq {}
