@@ -65,7 +65,7 @@ func (d *TAccount) ListWithListOption(ctx context.Context, listOption *listoptio
 				scope.Like(dbName, val)
 				return nil
 			}).
-			AddUint32Range(erp.ListAccountReq_ListOptTimeRange, func(begin, end uint32) error {
+			AddUint32Range(erp.ListAccountReq_ListOptStatTimeRange, func(begin, end uint32) error {
 				return nil
 			}).
 			Process()

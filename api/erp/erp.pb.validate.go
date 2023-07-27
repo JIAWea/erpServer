@@ -8726,6 +8726,8 @@ func (m *ListAccountRsp_AccountStat) validate(all bool) error {
 
 	// no validation rules for TotalIncome
 
+	// no validation rules for Balance
+
 	if len(errors) > 0 {
 		return ListAccountRsp_AccountStatMultiError(errors)
 	}

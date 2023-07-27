@@ -2,8 +2,12 @@ package app
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"github.com/ml444/gkit/errorx"
 	log "github.com/ml444/glog"
+	"strconv"
+	"strings"
 
 	"github.com/JIAWea/erpServer/api/erp"
 )
@@ -89,22 +93,66 @@ func (s ErpService) ListAccount(ctx context.Context, req *erp.ListAccountReq) (*
 		return nil, err
 	}
 
+	statStartAt := uint32(0)
+	statEndAt := uint32(0)
+	if req.ListOption != nil {
+		for _, option := range req.ListOption.Options {
+			if option.Type == int32(erp.ListAccountReq_ListOptStatTimeRange) {
+				valList := strings.Split(option.Value, ",")
+				if len(valList) != 2 {
+					return nil, errorx.New(erp.ErrInvalidParam)
+				}
+				s1, _ := strconv.ParseUint(valList[0], 10, 64)
+				s2, _ := strconv.ParseUint(valList[1], 10, 64)
+				statStartAt, statEndAt = uint32(s1), uint32(s2)
+			}
+		}
+	}
+
 	rsp.AccountStat = make(map[uint64]*erp.ListAccountRsp_AccountStat, len(list))
 
 	for _, v := range list {
 		var exp erp.ModelExpense
-		err = dbExpense.newScope().
+		expScope := dbExpense.newScope().
 			Select("SUM(pay_money) AS pay_money").
-			Eq(dbAccountId, v.Id).
-			First(&exp)
+			SetNotFoundErr(erp.ErrNotFoundExpense).
+			Eq(dbAccountId, v.Id)
+		if statStartAt > 0 && statEndAt > 0 {
+			expScope.Where(fmt.Sprintf("%s >= ? AND %s <= ?", dbPayAt, dbPayAt), statStartAt, statEndAt)
+		}
+		err = expScope.First(&exp)
 		if err != nil {
-			log.Errorf("err: %v", err)
-			return nil, err
+			if !errors.Is(err, errorx.New(erp.ErrNotFoundExpense)) {
+				log.Errorf("err: %v", err)
+				return nil, err
+			}
+		}
+
+		var inc erp.ModelIncome
+		incScope := dbIncome.newScope().
+			Select("SUM(income_money) AS income_money").
+			SetNotFoundErr(erp.ErrNotFoundIncome).
+			Eq(dbAccountId, v.Id)
+		if statStartAt > 0 && statEndAt > 0 {
+			expScope.Where(fmt.Sprintf("%s >= ? AND %s <= ?", dbIncomeAt, dbIncomeAt), statStartAt, statEndAt)
+		}
+		err = incScope.First(&inc)
+		if err != nil {
+			if !errors.Is(err, errorx.New(erp.ErrNotFoundIncome)) {
+				log.Errorf("err: %v", err)
+				return nil, err
+			}
+		}
+
+		var balance uint32
+		if exp.PayMoney <= v.InitialMoney {
+			balance = v.InitialMoney + inc.IncomeMoney - exp.PayMoney
 		}
 
 		rsp.AccountStat[v.Id] = &erp.ListAccountRsp_AccountStat{
 			TotalExpense: exp.PayMoney,
-			//TotalIncome:  totalIncome,
+			TotalIncome:  inc.IncomeMoney,
+			Balance:      balance,
 		}
 	}
 
