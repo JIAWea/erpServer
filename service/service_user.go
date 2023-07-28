@@ -260,3 +260,69 @@ func (s ErpService) ListUser(ctx context.Context, req *erp.ListUserReq) (*erp.Li
 
 	return &rsp, nil
 }
+
+func (s ErpService) ListUserAccount(ctx context.Context, req *erp.ListUserAccountReq) (*erp.ListUserAccountRsp, error) {
+	var err error
+	var rsp erp.ListUserAccountRsp
+
+	var list []*erp.ModelUserAccount
+	err = dbUserAccount.newScope().Eq(dbUserId, req.UserId).Find(&list)
+	if err != nil {
+		log.Errorf("err: %v", err)
+		return nil, err
+	}
+
+	if len(list) > 0 {
+		var accIdList []uint64
+		for _, v := range list {
+			accIdList = append(accIdList, v.AccountId)
+		}
+		if len(accIdList) > 0 {
+			var accList []*erp.ModelAccount
+			err = dbAccount.newScope().In(dbId, accIdList).Find(&accList)
+			if err != nil {
+				log.Errorf("err: %v", err)
+				return nil, err
+			}
+			rsp.List = accList
+		}
+	}
+
+	return &rsp, nil
+}
+
+func (s ErpService) UpdateUserAccount(ctx context.Context, req *erp.UpdateUserAccountReq) (*erp.UpdateUserAccountRsp, error) {
+	var err error
+	var rsp erp.UpdateUserAccountRsp
+
+	if req.Id == 0 {
+		return nil, errorx.New(erp.ErrParamRequired)
+	}
+	err = dbUserAccount.DeleteByWhere(ctx,
+		map[string]interface{}{
+			"user_id": req.Id,
+		})
+	if err != nil {
+		log.Errorf("err: %v", err)
+		return nil, err
+	}
+
+	existMap := make(map[uint64]struct{})
+	var list []*erp.ModelUserAccount
+	for _, v := range req.AccountIdList {
+		if _, ok := existMap[v]; !ok {
+			list = append(list, &erp.ModelUserAccount{
+				UserId:    req.Id,
+				AccountId: v,
+			})
+			existMap[v] = struct{}{}
+		}
+	}
+	err = dbUserAccount.CreateInBatches(ctx, list)
+	if err != nil {
+		log.Errorf("err: %v", err)
+		return nil, err
+	}
+
+	return &rsp, nil
+}

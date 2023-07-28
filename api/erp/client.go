@@ -176,6 +176,20 @@ func ListAccount(ctx context.Context, req *ListAccountReq) (*ListAccountRsp, err
     return cliMgr.cli.ListAccount(ctx, req)
 }
 
+func ListUserAccount(ctx context.Context, req *ListUserAccountReq) (*ListUserAccountRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.ListUserAccount(ctx, req)
+}
+
+func UpdateUserAccount(ctx context.Context, req *UpdateUserAccountReq) (*UpdateUserAccountRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.UpdateUserAccount(ctx, req)
+}
+
 func ImportExpense(ctx context.Context, req *ImportExpenseReq) (*ImportExpenseRsp, error) {
 	if cliMgr.conn == nil {
 		return nil, cliMgr.initErr

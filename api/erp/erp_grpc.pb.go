@@ -43,6 +43,8 @@ const (
 	Erp_DeleteAccount_FullMethodName     = "/erp.erp/DeleteAccount"
 	Erp_GetAccount_FullMethodName        = "/erp.erp/GetAccount"
 	Erp_ListAccount_FullMethodName       = "/erp.erp/ListAccount"
+	Erp_ListUserAccount_FullMethodName   = "/erp.erp/ListUserAccount"
+	Erp_UpdateUserAccount_FullMethodName = "/erp.erp/UpdateUserAccount"
 	Erp_ImportExpense_FullMethodName     = "/erp.erp/ImportExpense"
 	Erp_CreateExpense_FullMethodName     = "/erp.erp/CreateExpense"
 	Erp_UpdateExpense_FullMethodName     = "/erp.erp/UpdateExpense"
@@ -78,6 +80,8 @@ type ErpClient interface {
 	DeleteAccount(ctx context.Context, in *DeleteAccountReq, opts ...grpc.CallOption) (*DeleteAccountRsp, error)
 	GetAccount(ctx context.Context, in *GetAccountReq, opts ...grpc.CallOption) (*GetAccountRsp, error)
 	ListAccount(ctx context.Context, in *ListAccountReq, opts ...grpc.CallOption) (*ListAccountRsp, error)
+	ListUserAccount(ctx context.Context, in *ListUserAccountReq, opts ...grpc.CallOption) (*ListUserAccountRsp, error)
+	UpdateUserAccount(ctx context.Context, in *UpdateUserAccountReq, opts ...grpc.CallOption) (*UpdateUserAccountRsp, error)
 	ImportExpense(ctx context.Context, in *ImportExpenseReq, opts ...grpc.CallOption) (*ImportExpenseRsp, error)
 	CreateExpense(ctx context.Context, in *CreateExpenseReq, opts ...grpc.CallOption) (*CreateExpenseRsp, error)
 	UpdateExpense(ctx context.Context, in *UpdateExpenseReq, opts ...grpc.CallOption) (*UpdateExpenseRsp, error)
@@ -309,6 +313,24 @@ func (c *erpClient) ListAccount(ctx context.Context, in *ListAccountReq, opts ..
 	return out, nil
 }
 
+func (c *erpClient) ListUserAccount(ctx context.Context, in *ListUserAccountReq, opts ...grpc.CallOption) (*ListUserAccountRsp, error) {
+	out := new(ListUserAccountRsp)
+	err := c.cc.Invoke(ctx, Erp_ListUserAccount_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *erpClient) UpdateUserAccount(ctx context.Context, in *UpdateUserAccountReq, opts ...grpc.CallOption) (*UpdateUserAccountRsp, error) {
+	out := new(UpdateUserAccountRsp)
+	err := c.cc.Invoke(ctx, Erp_UpdateUserAccount_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *erpClient) ImportExpense(ctx context.Context, in *ImportExpenseReq, opts ...grpc.CallOption) (*ImportExpenseRsp, error) {
 	out := new(ImportExpenseRsp)
 	err := c.cc.Invoke(ctx, Erp_ImportExpense_FullMethodName, in, out, opts...)
@@ -382,6 +404,8 @@ type ErpServer interface {
 	DeleteAccount(context.Context, *DeleteAccountReq) (*DeleteAccountRsp, error)
 	GetAccount(context.Context, *GetAccountReq) (*GetAccountRsp, error)
 	ListAccount(context.Context, *ListAccountReq) (*ListAccountRsp, error)
+	ListUserAccount(context.Context, *ListUserAccountReq) (*ListUserAccountRsp, error)
+	UpdateUserAccount(context.Context, *UpdateUserAccountReq) (*UpdateUserAccountRsp, error)
 	ImportExpense(context.Context, *ImportExpenseReq) (*ImportExpenseRsp, error)
 	CreateExpense(context.Context, *CreateExpenseReq) (*CreateExpenseRsp, error)
 	UpdateExpense(context.Context, *UpdateExpenseReq) (*UpdateExpenseRsp, error)
@@ -465,6 +489,12 @@ func (UnimplementedErpServer) GetAccount(context.Context, *GetAccountReq) (*GetA
 }
 func (UnimplementedErpServer) ListAccount(context.Context, *ListAccountReq) (*ListAccountRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListAccount not implemented")
+}
+func (UnimplementedErpServer) ListUserAccount(context.Context, *ListUserAccountReq) (*ListUserAccountRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListUserAccount not implemented")
+}
+func (UnimplementedErpServer) UpdateUserAccount(context.Context, *UpdateUserAccountReq) (*UpdateUserAccountRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserAccount not implemented")
 }
 func (UnimplementedErpServer) ImportExpense(context.Context, *ImportExpenseReq) (*ImportExpenseRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ImportExpense not implemented")
@@ -926,6 +956,42 @@ func _Erp_ListAccount_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Erp_ListUserAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListUserAccountReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).ListUserAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_ListUserAccount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).ListUserAccount(ctx, req.(*ListUserAccountReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Erp_UpdateUserAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserAccountReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).UpdateUserAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_UpdateUserAccount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).UpdateUserAccount(ctx, req.(*UpdateUserAccountReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Erp_ImportExpense_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ImportExpenseReq)
 	if err := dec(in); err != nil {
@@ -1118,6 +1184,14 @@ var Erp_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListAccount",
 			Handler:    _Erp_ListAccount_Handler,
+		},
+		{
+			MethodName: "ListUserAccount",
+			Handler:    _Erp_ListUserAccount_Handler,
+		},
+		{
+			MethodName: "UpdateUserAccount",
+			Handler:    _Erp_UpdateUserAccount_Handler,
 		},
 		{
 			MethodName: "ImportExpense",

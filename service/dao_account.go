@@ -68,6 +68,10 @@ func (d *TAccount) ListWithListOption(ctx context.Context, listOption *listoptio
 			AddUint32Range(erp.ListAccountReq_ListOptStatTimeRange, func(begin, end uint32) error {
 				return nil
 			}).
+			AddUint64(erp.ListAccountReq_ListOptUserId, func(val uint64) error {
+				scope.Eq(dbUserId, val)
+				return nil
+			}).
 			Process()
 		if err != nil {
 			log.Error(err.Error())

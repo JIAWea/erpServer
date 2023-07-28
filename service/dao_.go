@@ -13,6 +13,7 @@ func init() {
 		&erp.ModelUserRole{},
 		&erp.ModelRoleMenu{},
 		&erp.ModelAccount{},
+		&erp.ModelUserAccount{},
 		&erp.ModelExpense{},
 		&erp.ModelIncome{},
 	)

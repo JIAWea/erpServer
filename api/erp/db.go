@@ -19,6 +19,9 @@ func (m *ModelRoleMenu) TableName() string {
 func (m *ModelAccount) TableName() string {
 	return "erp_account"
 }
+func (m *ModelUserAccount) TableName() string {
+	return "erp_user_account"
+}
 func (m *ModelExpense) TableName() string {
 	return "erp_expense"
 }

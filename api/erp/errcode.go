@@ -24,6 +24,7 @@ const (
         ErrNotFoundExpense int32	=	10009
         ErrNotFoundIncome int32	=	10010
         ErrExpenseCategoryInvalid int32	=	10011
+        ErrNotFoundUserAccount int32	=	10012
 )
 
 
@@ -50,6 +51,7 @@ var ErrCodeMap = map[int32]string{
         ErrNotFoundExpense: "记录不存在",
         ErrNotFoundIncome: "记录不存在",
         ErrExpenseCategoryInvalid: "支出类目错误",
+        ErrNotFoundUserAccount: "记录不存在",
 }
 
 var ErrCode4StatusCodeMap = map[int32]int32{
@@ -74,4 +76,5 @@ var ErrCode4StatusCodeMap = map[int32]int32{
         ErrNotFoundExpense: 404,
         ErrNotFoundIncome: 404,
         ErrExpenseCategoryInvalid: 400,
+        ErrNotFoundUserAccount: 404,
 }

@@ -36,6 +36,8 @@ service erp {
   rpc DeleteAccount (DeleteAccountReq) returns (DeleteAccountRsp);
   rpc GetAccount (GetAccountReq) returns (GetAccountRsp);
   rpc ListAccount (ListAccountReq) returns (ListAccountRsp);
+  rpc ListUserAccount (ListUserAccountReq) returns (ListUserAccountRsp);
+  rpc UpdateUserAccount (UpdateUserAccountReq) returns (UpdateUserAccountRsp);
 
   rpc ImportExpense (ImportExpenseReq) returns (ImportExpenseRsp);
   rpc CreateExpense (CreateExpenseReq) returns (CreateExpenseRsp);
@@ -90,6 +92,8 @@ enum ErrCode {
   ErrNotFoundIncome = 10010;  // 记录不存在
   //@status_code: 400
   ErrExpenseCategoryInvalid = 10011;  // 支出类目错误
+  //@status_code: 404
+  ErrNotFoundUserAccount = 10012;  // 记录不存在
 }
 
 enum ExpenseCategory {
@@ -169,6 +173,8 @@ message ModelUser {
   repeated ModelRole role_list = 9;
   // @gorm: type:tinyint(1);default:0
   bool is_creator = 10;
+  // @gorm: many2many:erp_user_account;joinForeignKey:user_id;joinReferences:account_id;
+  repeated ModelAccount account_list = 11;
 }
 
 message ModelRole {
@@ -282,6 +288,19 @@ message ModelAccount {
   string name = 5;
   // @gorm: type:int(11);comment:'初期余额'
   uint32 initial_money = 6;
+}
+
+message ModelUserAccount {
+  // @gorm: primarykey
+  uint64 id = 1;
+  // @gorm: comment:'创建时间'
+  uint32 created_at = 2;
+  // @gorm: comment:'更新时间'
+  uint32 updated_at = 3;
+  // @gorm: type:bigint;uniqueIndex:uniq_user_account
+  uint64 user_id = 5;
+  // @gorm: type:bigint;uniqueIndex:uniq_user_account
+  uint64 account_id = 6;
 }
 
 message ModelExpense {
@@ -564,6 +583,8 @@ message ListAccountReq {
     ListOptName = 1;
     // @valueType: uint32Range
     ListOptStatTimeRange = 2;
+    // @valueType: uint64
+    ListOptUserId = 3;
   }
   listoption.ListOption list_option = 1;
 }
@@ -577,6 +598,19 @@ message ListAccountRsp {
   repeated ModelAccount list = 2;
   map<uint64, AccountStat> account_stat = 3;
 }
+
+message ListUserAccountReq {
+  uint64 user_id = 1;
+}
+message ListUserAccountRsp {
+  repeated ModelAccount list = 1;
+}
+
+message UpdateUserAccountReq {
+  uint64 id = 1 [(validate.rules).uint64.gt = 0];
+  repeated uint64 account_id_list = 2 [(validate.rules).repeated.min_items = 1];
+}
+message UpdateUserAccountRsp {}
 
 message ImportExpenseReq {}
 message ImportExpenseRsp {}
