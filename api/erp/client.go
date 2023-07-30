@@ -176,6 +176,13 @@ func ListAccount(ctx context.Context, req *ListAccountReq) (*ListAccountRsp, err
     return cliMgr.cli.ListAccount(ctx, req)
 }
 
+func ListAccountOpt(ctx context.Context, req *ListAccountOptReq) (*ListAccountOptRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.ListAccountOpt(ctx, req)
+}
+
 func ListUserAccount(ctx context.Context, req *ListUserAccountReq) (*ListUserAccountRsp, error) {
 	if cliMgr.conn == nil {
 		return nil, cliMgr.initErr

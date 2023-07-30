@@ -6,12 +6,14 @@ require (
 	github.com/envoyproxy/protoc-gen-validate v1.0.2
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.8.0
-	github.com/ml444/gkit v0.0.0-20230717142134-f97e5b092c11
+	github.com/ml444/gkit v0.0.0-20230723082646-237c8f826ab5
 	github.com/ml444/glog v0.2.12
 	github.com/redis/go-redis/v9 v9.0.5
+	github.com/xuri/excelize/v2 v2.7.1
 	golang.org/x/crypto v0.10.0
 	google.golang.org/grpc v1.56.1
 	google.golang.org/protobuf v1.31.0
+	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/mysql v1.5.1
 	gorm.io/gorm v1.25.2-0.20230530020048-26663ab9bf55
 )
@@ -37,7 +39,6 @@ require (
 	github.com/richardlehane/mscfb v1.0.4 // indirect
 	github.com/richardlehane/msoleps v1.0.3 // indirect
 	github.com/xuri/efp v0.0.0-20220603152613-6918739fd470 // indirect
-	github.com/xuri/excelize/v2 v2.7.1 // indirect
 	github.com/xuri/nfp v0.0.0-20220409054826-5e722a1d9e22 // indirect
 	golang.org/x/net v0.11.0 // indirect
 	golang.org/x/oauth2 v0.7.0 // indirect

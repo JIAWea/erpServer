@@ -43,6 +43,7 @@ const (
 	Erp_DeleteAccount_FullMethodName     = "/erp.erp/DeleteAccount"
 	Erp_GetAccount_FullMethodName        = "/erp.erp/GetAccount"
 	Erp_ListAccount_FullMethodName       = "/erp.erp/ListAccount"
+	Erp_ListAccountOpt_FullMethodName    = "/erp.erp/ListAccountOpt"
 	Erp_ListUserAccount_FullMethodName   = "/erp.erp/ListUserAccount"
 	Erp_UpdateUserAccount_FullMethodName = "/erp.erp/UpdateUserAccount"
 	Erp_ImportExpense_FullMethodName     = "/erp.erp/ImportExpense"
@@ -80,6 +81,7 @@ type ErpClient interface {
 	DeleteAccount(ctx context.Context, in *DeleteAccountReq, opts ...grpc.CallOption) (*DeleteAccountRsp, error)
 	GetAccount(ctx context.Context, in *GetAccountReq, opts ...grpc.CallOption) (*GetAccountRsp, error)
 	ListAccount(ctx context.Context, in *ListAccountReq, opts ...grpc.CallOption) (*ListAccountRsp, error)
+	ListAccountOpt(ctx context.Context, in *ListAccountOptReq, opts ...grpc.CallOption) (*ListAccountOptRsp, error)
 	ListUserAccount(ctx context.Context, in *ListUserAccountReq, opts ...grpc.CallOption) (*ListUserAccountRsp, error)
 	UpdateUserAccount(ctx context.Context, in *UpdateUserAccountReq, opts ...grpc.CallOption) (*UpdateUserAccountRsp, error)
 	ImportExpense(ctx context.Context, in *ImportExpenseReq, opts ...grpc.CallOption) (*ImportExpenseRsp, error)
@@ -313,6 +315,15 @@ func (c *erpClient) ListAccount(ctx context.Context, in *ListAccountReq, opts ..
 	return out, nil
 }
 
+func (c *erpClient) ListAccountOpt(ctx context.Context, in *ListAccountOptReq, opts ...grpc.CallOption) (*ListAccountOptRsp, error) {
+	out := new(ListAccountOptRsp)
+	err := c.cc.Invoke(ctx, Erp_ListAccountOpt_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *erpClient) ListUserAccount(ctx context.Context, in *ListUserAccountReq, opts ...grpc.CallOption) (*ListUserAccountRsp, error) {
 	out := new(ListUserAccountRsp)
 	err := c.cc.Invoke(ctx, Erp_ListUserAccount_FullMethodName, in, out, opts...)
@@ -404,6 +415,7 @@ type ErpServer interface {
 	DeleteAccount(context.Context, *DeleteAccountReq) (*DeleteAccountRsp, error)
 	GetAccount(context.Context, *GetAccountReq) (*GetAccountRsp, error)
 	ListAccount(context.Context, *ListAccountReq) (*ListAccountRsp, error)
+	ListAccountOpt(context.Context, *ListAccountOptReq) (*ListAccountOptRsp, error)
 	ListUserAccount(context.Context, *ListUserAccountReq) (*ListUserAccountRsp, error)
 	UpdateUserAccount(context.Context, *UpdateUserAccountReq) (*UpdateUserAccountRsp, error)
 	ImportExpense(context.Context, *ImportExpenseReq) (*ImportExpenseRsp, error)
@@ -489,6 +501,9 @@ func (UnimplementedErpServer) GetAccount(context.Context, *GetAccountReq) (*GetA
 }
 func (UnimplementedErpServer) ListAccount(context.Context, *ListAccountReq) (*ListAccountRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListAccount not implemented")
+}
+func (UnimplementedErpServer) ListAccountOpt(context.Context, *ListAccountOptReq) (*ListAccountOptRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListAccountOpt not implemented")
 }
 func (UnimplementedErpServer) ListUserAccount(context.Context, *ListUserAccountReq) (*ListUserAccountRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListUserAccount not implemented")
@@ -956,6 +971,24 @@ func _Erp_ListAccount_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Erp_ListAccountOpt_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListAccountOptReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).ListAccountOpt(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_ListAccountOpt_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).ListAccountOpt(ctx, req.(*ListAccountOptReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Erp_ListUserAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListUserAccountReq)
 	if err := dec(in); err != nil {
@@ -1184,6 +1217,10 @@ var Erp_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListAccount",
 			Handler:    _Erp_ListAccount_Handler,
+		},
+		{
+			MethodName: "ListAccountOpt",
+			Handler:    _Erp_ListAccountOpt_Handler,
 		},
 		{
 			MethodName: "ListUserAccount",

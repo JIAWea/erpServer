@@ -61,9 +61,14 @@ func (d *TExpense) GetOne(ctx context.Context, pk uint64) (*erp.ModelExpense, er
 	return &m, err
 }
 
-func (d *TExpense) ListWithListOption(ctx context.Context, listOption *listoption.ListOption, whereOpts interface{}) ([]*erp.ModelExpense, *listoption.Paginate, error) {
+func (d *TExpense) ListWithListOption(ctx context.Context, listOption *listoption.ListOption, accIdList []uint64) ([]*erp.ModelExpense, *listoption.Paginate, error) {
 	var err error
 	scope := d.newScope().Order("created_at DESC")
+
+	if len(accIdList) > 0 {
+		scope.In(dbAccountId, accIdList)
+	}
+
 	if listOption != nil {
 		err = listoption.NewProcessor(listOption).
 			AddString(erp.ListExpenseReq_ListOptAccountName, func(val string) error {

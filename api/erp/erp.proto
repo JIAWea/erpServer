@@ -36,6 +36,7 @@ service erp {
   rpc DeleteAccount (DeleteAccountReq) returns (DeleteAccountRsp);
   rpc GetAccount (GetAccountReq) returns (GetAccountRsp);
   rpc ListAccount (ListAccountReq) returns (ListAccountRsp);
+  rpc ListAccountOpt (ListAccountOptReq) returns (ListAccountOptRsp);
   rpc ListUserAccount (ListUserAccountReq) returns (ListUserAccountRsp);
   rpc UpdateUserAccount (UpdateUserAccountReq) returns (UpdateUserAccountRsp);
 
@@ -597,6 +598,11 @@ message ListAccountRsp {
   listoption.Paginate paginate = 1;
   repeated ModelAccount list = 2;
   map<uint64, AccountStat> account_stat = 3;
+}
+
+message ListAccountOptReq {}
+message ListAccountOptRsp {
+  repeated ModelAccount list = 2;
 }
 
 message ListUserAccountReq {

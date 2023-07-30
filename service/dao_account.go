@@ -55,17 +55,18 @@ func (d *TAccount) GetOne(ctx context.Context, pk uint64) (*erp.ModelAccount, er
 	return &m, err
 }
 
-func (d *TAccount) ListWithListOption(ctx context.Context, listOption *listoption.ListOption, whereOpts interface{}) ([]*erp.ModelAccount, *listoption.Paginate, error) {
+func (d *TAccount) ListWithListOption(ctx context.Context, listOption *listoption.ListOption, idList []uint64) ([]*erp.ModelAccount, *listoption.Paginate, error) {
 	var err error
 	scope := d.newScope().Order("created_at DESC")
+	if len(idList) > 0 {
+		scope.In(dbId, idList)
+	}
+
 	if listOption != nil {
 
 		err = listoption.NewProcessor(listOption).
 			AddString(erp.ListUserReq_ListOptName, func(val string) error {
 				scope.Like(dbName, val)
-				return nil
-			}).
-			AddUint32Range(erp.ListAccountReq_ListOptStatTimeRange, func(begin, end uint32) error {
 				return nil
 			}).
 			AddUint64(erp.ListAccountReq_ListOptUserId, func(val uint64) error {

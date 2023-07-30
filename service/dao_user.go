@@ -65,6 +65,19 @@ func (d *TUser) GetOne(ctx context.Context, pk uint64) (*erp.ModelUser, error) {
 	return &m, err
 }
 
+func (d *TUser) IsCreator(ctx context.Context, pk uint64) bool {
+	var m erp.ModelUser
+	err := d.newScope().SetNotFoundErr(erp.ErrNotFoundUser).First(&m, pk)
+	if err != nil {
+		return false
+	}
+	if m.IsCreator {
+		return true
+	}
+
+	return false
+}
+
 func (d *TUser) CheckPassword(ctx context.Context, pk uint64, pwd string) error {
 	var m erp.ModelUser
 	err := d.newScope().SetNotFoundErr(erp.ErrNotFoundUser).First(&m, pk)
@@ -76,10 +89,7 @@ func (d *TUser) CheckPassword(ctx context.Context, pk uint64, pwd string) error 
 
 func (d *TUser) ListWithListOption(ctx context.Context, listOption *listoption.ListOption, whereOpts interface{}) ([]*erp.ModelUser, *listoption.Paginate, error) {
 	var err error
-	scope := d.newScope().Eq(dbIsCreator, uint32(0)).
-		Preload("RoleList").
-		Preload("AccountList").
-		Order("created_at DESC")
+	scope := d.newScope().Eq(dbIsCreator, uint32(0)).Preload("RoleList").Order("created_at DESC")
 	if listOption != nil {
 		err = listoption.NewProcessor(listOption).
 			AddString(erp.ListUserReq_ListOptName, func(val string) error {

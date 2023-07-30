@@ -4,7 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/ml444/gkit/core"
 	"github.com/ml444/gkit/errorx"
+	"github.com/ml444/gkit/listoption"
 	log "github.com/ml444/glog"
 	"strconv"
 	"strings"
@@ -86,8 +88,21 @@ func (s ErpService) ListAccount(ctx context.Context, req *erp.ListAccountReq) (*
 	var err error
 	var rsp erp.ListAccountRsp
 
-	queryOpts := make(map[string]interface{})
-	list, paginate, err := dbAccount.ListWithListOption(ctx, req.ListOption, queryOpts)
+	uid := core.GetUserId(ctx)
+
+	var idList []uint64
+	if !dbUser.IsCreator(ctx, uid) {
+		idList, err = dbUserAccount.GetIdListByUserId(ctx, uid)
+		if err != nil {
+			log.Errorf("err: %v", err)
+			return nil, err
+		}
+		if len(idList) == 0 {
+			return &rsp, nil
+		}
+	}
+
+	list, paginate, err := dbAccount.ListWithListOption(ctx, req.ListOption, idList)
 	if err != nil {
 		log.Errorf("err: %v", err)
 		return nil, err
@@ -157,6 +172,21 @@ func (s ErpService) ListAccount(ctx context.Context, req *erp.ListAccountReq) (*
 	}
 
 	rsp.Paginate = paginate
+	rsp.List = list
+
+	return &rsp, nil
+}
+
+func (s ErpService) ListAccountOpt(ctx context.Context, req *erp.ListAccountOptReq) (*erp.ListAccountOptRsp, error) {
+	var err error
+	var rsp erp.ListAccountOptRsp
+
+	list, _, err := dbAccount.ListWithListOption(ctx, &listoption.ListOption{SkipCount: true}, nil)
+	if err != nil {
+		log.Errorf("err: %v", err)
+		return nil, err
+	}
+
 	rsp.List = list
 
 	return &rsp, nil

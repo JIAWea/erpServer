@@ -10,7 +10,6 @@ import (
 	logconf "github.com/ml444/glog/config"
 	level "github.com/ml444/glog/level"
 	"github.com/redis/go-redis/v9"
-	"os"
 )
 
 func Init(cfg *config.Config) error {
@@ -32,7 +31,7 @@ func Init(cfg *config.Config) error {
 
 	// TODO redis
 	auth.InitRedis(&redis.Options{
-		Addr: os.Getenv("REDIS_ADDR"),
+		Addr: cfg.RedisDSN,
 	})
 
 	return nil

@@ -8,14 +8,14 @@ import (
 	"net/http/pprof"
 
 	"github.com/JIAWea/erpServer/api/erp"
-	"github.com/JIAWea/erpServer/service"
 	"github.com/JIAWea/erpServer/config"
 	"github.com/JIAWea/erpServer/internal"
 	"github.com/JIAWea/erpServer/internal/middleware"
+	"github.com/JIAWea/erpServer/service"
 	"github.com/ml444/gkit/errorx"
 	log "github.com/ml444/glog"
 	"google.golang.org/grpc"
-    "google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/credentials/insecure"
 	xdscreds "google.golang.org/grpc/credentials/xds"
 	"google.golang.org/grpc/health"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
@@ -34,7 +34,7 @@ func Run(cfg *config.Config) {
 	go internal.InterruptHandler(errCh)
 
 	// Debug pprof listener.
-    if cfg.Debug {
+	if cfg.Debug {
 		go func() {
 			log.Info("transport pprof addr", cfg.PprofAddr)
 
@@ -115,10 +115,11 @@ func Run(cfg *config.Config) {
 
 func main() {
 	flag.Parse()
+	config.Init()
 	cfg := config.GetConfig()
 	errorx.RegisterError(erp.ErrCodeMap, erp.ErrCode4StatusCodeMap)
 
-    // init
+	// init
 	err := Init(cfg)
 	if err != nil {
 		println(err)
@@ -126,6 +127,8 @@ func main() {
 	}
 	// defer something. example: rpc connection\ db connection\ file...
 	defer Defer()
+
+	app.Init()
 
 	Run(cfg)
 }

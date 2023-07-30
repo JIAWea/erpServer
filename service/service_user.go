@@ -18,6 +18,11 @@ func (s ErpService) UserLogin(ctx context.Context, req *erp.UserLoginReq) (*erp.
 	var err error
 	var rsp erp.UserLoginRsp
 
+	req.Password, err = trans.DecryptToString(req.Password)
+	if err != nil {
+		return nil, err
+	}
+
 	if ok, _ := regexp.MatchString(utils.DefaultPasswordRegex, req.Password); !ok {
 		return nil, errorx.New(erp.ErrPassword)
 	}
@@ -265,27 +270,20 @@ func (s ErpService) ListUserAccount(ctx context.Context, req *erp.ListUserAccoun
 	var err error
 	var rsp erp.ListUserAccountRsp
 
-	var list []*erp.ModelUserAccount
-	err = dbUserAccount.newScope().Eq(dbUserId, req.UserId).Find(&list)
+	accIdList, err := dbUserAccount.GetIdListByUserId(ctx, req.UserId)
 	if err != nil {
 		log.Errorf("err: %v", err)
 		return nil, err
 	}
 
-	if len(list) > 0 {
-		var accIdList []uint64
-		for _, v := range list {
-			accIdList = append(accIdList, v.AccountId)
+	if len(accIdList) > 0 {
+		var accList []*erp.ModelAccount
+		err = dbAccount.newScope().In(dbId, accIdList).Find(&accList)
+		if err != nil {
+			log.Errorf("err: %v", err)
+			return nil, err
 		}
-		if len(accIdList) > 0 {
-			var accList []*erp.ModelAccount
-			err = dbAccount.newScope().In(dbId, accIdList).Find(&accList)
-			if err != nil {
-				log.Errorf("err: %v", err)
-				return nil, err
-			}
-			rsp.List = accList
-		}
+		rsp.List = accList
 	}
 
 	return &rsp, nil

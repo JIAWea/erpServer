@@ -81,3 +81,18 @@ func (d *TUserAccount) ListWithListOption(ctx context.Context, listOption *listo
 
 	return userAccountList, paginate, nil
 }
+
+func (d *TUserAccount) GetIdListByUserId(ctx context.Context, userId uint64) ([]uint64, error) {
+	var list []*erp.ModelUserAccount
+	err := d.newScope().Eq(dbUserId, userId).Find(&list)
+	if err != nil {
+		log.Errorf("err: %v", err)
+		return nil, err
+	}
+
+	var accIdList []uint64
+	for _, v := range list {
+		accIdList = append(accIdList, v.AccountId)
+	}
+	return accIdList, nil
+}

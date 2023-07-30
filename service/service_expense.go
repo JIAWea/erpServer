@@ -86,9 +86,21 @@ func (s ErpService) DeleteExpense(ctx context.Context, req *erp.DeleteExpenseReq
 func (s ErpService) ListExpense(ctx context.Context, req *erp.ListExpenseReq) (*erp.ListExpenseRsp, error) {
 	var err error
 	var rsp erp.ListExpenseRsp
+	var accViewIdList []uint64
 
-	queryOpts := make(map[string]interface{})
-	list, paginate, err := dbExpense.ListWithListOption(ctx, req.ListOption, queryOpts)
+	uid := core.GetUserId(ctx)
+	if !dbUser.IsCreator(ctx, uid) {
+		accViewIdList, err = dbUserAccount.GetIdListByUserId(ctx, uid)
+		if err != nil {
+			log.Errorf("err: %v", err)
+			return nil, err
+		}
+		if len(accViewIdList) == 0 {
+			return &rsp, nil
+		}
+	}
+
+	list, paginate, err := dbExpense.ListWithListOption(ctx, req.ListOption, accViewIdList)
 	if err != nil {
 		log.Errorf("err: %v", err)
 		return nil, err
