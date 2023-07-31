@@ -40,11 +40,15 @@ service erp {
   rpc ListUserAccount (ListUserAccountReq) returns (ListUserAccountRsp);
   rpc UpdateUserAccount (UpdateUserAccountReq) returns (UpdateUserAccountRsp);
 
-  rpc ImportExpense (ImportExpenseReq) returns (ImportExpenseRsp);
   rpc CreateExpense (CreateExpenseReq) returns (CreateExpenseRsp);
   rpc UpdateExpense (UpdateExpenseReq) returns (UpdateExpenseRsp);
   rpc DeleteExpense (DeleteExpenseReq) returns (DeleteExpenseRsp);
   rpc ListExpense (ListExpenseReq) returns (ListExpenseRsp);
+
+  rpc CreateIncome (CreateIncomeReq) returns (CreateIncomeRsp);
+  rpc UpdateIncome (UpdateIncomeReq) returns (UpdateIncomeRsp);
+  rpc DeleteIncome (DeleteIncomeReq) returns (DeleteIncomeRsp);
+  rpc ListIncome (ListIncomeReq) returns (ListIncomeRsp);
 }
 
 // range of error codes: [1, 2147483648]
@@ -70,11 +74,11 @@ enum ErrCode {
   //@status_code: 401
   ErrTokenExpired = 4003; // 认证过期
   //@status_code: 404
-  ErrNotFoundUser = 10000;       // 未找到相关记录
+  ErrNotFoundUser = 10000;       // 用户不存在
   //@status_code: 404
-  ErrNotFoundRole = 10001;       // 未找到相关记录
+  ErrNotFoundRole = 10001;       // 角色不存在
   //@status_code: 404
-  ErrNotFoundMenu = 10002;       // 未找到相关记录
+  ErrNotFoundMenu = 10002;       // 菜单不存在
   //@status_code: 404
   ErrNotFoundUserRole = 10003;       // 未找到相关记录
   //@status_code: 404
@@ -84,17 +88,21 @@ enum ErrCode {
   //@status_code: 400
   ErrPassword = 10006;       // 密码错误
   //@status_code: 404
-  ErrNotFoundAccount = 10007;       // 未找到相关记录
+  ErrNotFoundAccount = 10007;       // 账户不存在
   //@status_code: 400
   ErrUserExist = 10008;   // 用户名已存在
   //@status_code: 404
-  ErrNotFoundExpense = 10009; // 记录不存在
+  ErrNotFoundExpense = 10009; // 支出不存在
   //@status_code: 404
-  ErrNotFoundIncome = 10010;  // 记录不存在
+  ErrNotFoundIncome = 10010;  // 收入不存在
   //@status_code: 400
   ErrExpenseCategoryInvalid = 10011;  // 支出类目错误
+  //@status_code: 400
+  ErrIncomeCategoryInvalid = 10012;  // 收入类目错误
   //@status_code: 404
-  ErrNotFoundUserAccount = 10012;  // 记录不存在
+  ErrNotFoundUserAccount = 10013;  // 记录不存在
+  //@status_code: 403
+  ErrNotPermissionForAccount = 10014;  // 没有该账户的操作权限
 }
 
 enum ExpenseCategory {
@@ -367,6 +375,7 @@ message ModelIncome {
   // @gorm: type:varchar(128);not null;comment:'附件名'
   string att_name = 15;
   // TODO 收入来源
+  string from = 16;
 }
 
 message UserLoginReq {
@@ -650,4 +659,38 @@ message ListExpenseRsp {
   listoption.Paginate paginate = 1;
   repeated ModelExpense list = 2;
   map<uint64, ModelAccount> accountMap = 3;
+}
+
+message ImportIncomeReq {}
+message ImportIncomeRsp {}
+
+message CreateIncomeReq {
+  ModelIncome data = 1 [(validate.rules).message.required = true];
+}
+message CreateIncomeRsp {}
+
+message UpdateIncomeReq {
+  ModelIncome data = 1 [(validate.rules).message.required = true];
+}
+message UpdateIncomeRsp {
+  ModelIncome data = 1;
+}
+
+message DeleteIncomeReq {
+  repeated uint64 id_list = 1 [(validate.rules).repeated.min_items = 1];
+}
+message DeleteIncomeRsp {}
+
+message ListIncomeReq {
+  enum ListOpt {
+    ListOptNil = 0;
+    // @valueType: string
+    ListOptAccountName = 1;
+  }
+  listoption.ListOption list_option = 1;
+}
+message ListIncomeRsp {
+  listoption.Paginate paginate = 1;
+  map<uint64, ModelAccount> accountMap = 3;
+  repeated ModelIncome list = 2;
 }

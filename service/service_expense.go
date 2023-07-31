@@ -11,12 +11,6 @@ import (
 	"github.com/JIAWea/erpServer/api/erp"
 )
 
-func (s ErpService) ImportExpense(ctx context.Context, req *erp.ImportExpenseReq) (*erp.ImportExpenseRsp, error) {
-	var rsp erp.ImportExpenseRsp
-
-	return &rsp, nil
-}
-
 func (s ErpService) CreateExpense(ctx context.Context, req *erp.CreateExpenseReq) (*erp.CreateExpenseRsp, error) {
 	var err error
 	var rsp erp.CreateExpenseRsp

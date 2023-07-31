@@ -26,11 +26,15 @@ func MakeHTTPHandler() http.Handler {
 	router.Methods(http.MethodGet).
 		Path(fmt.Sprintf("/%s/DownloadFile", erp.ClientName)).
 		HandlerFunc(File.DownloadFile)
+	router.Methods(http.MethodPost).
+		Path(fmt.Sprintf("/%s/ImportIncome", erp.ClientName)).
+		HandlerFunc(File.ImportIncome)
 
 	err := httpx.ParseService2HTTP(
 		NewErpService(),
 		router,
 		httpx.SetTimeoutMap(nil),
+		httpx.AddBeforeHandler(CheckPerm),
 	)
 	if err != nil {
 		log.Errorf("err: %v", err)

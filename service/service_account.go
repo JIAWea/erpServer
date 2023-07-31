@@ -149,7 +149,7 @@ func (s ErpService) ListAccount(ctx context.Context, req *erp.ListAccountReq) (*
 			SetNotFoundErr(erp.ErrNotFoundIncome).
 			Eq(dbAccountId, v.Id)
 		if statStartAt > 0 && statEndAt > 0 {
-			expScope.Where(fmt.Sprintf("%s >= ? AND %s <= ?", dbIncomeAt, dbIncomeAt), statStartAt, statEndAt)
+			incScope.Where(fmt.Sprintf("%s >= ? AND %s <= ?", dbIncomeAt, dbIncomeAt), statStartAt, statEndAt)
 		}
 		err = incScope.First(&inc)
 		if err != nil {

@@ -36,12 +36,19 @@ func (d *TIncome) Create(ctx context.Context, m *erp.ModelIncome) error {
 	return d.newScope().Create(ctx, &m)
 }
 
-func (d *TIncome) Update(ctx context.Context, m *erp.ModelIncome, whereMap map[string]interface{}) error {
-	return d.newScope().Where(whereMap).Update(&m)
+func (d *TIncome) Update(ctx context.Context, id uint64, data map[string]interface{}) error {
+	return d.newScope().Where(dbId, id).Update(data)
 }
 
 func (d *TIncome) DeleteById(ctx context.Context, pk uint64) error {
 	return d.newScope().Delete(&erp.ModelIncome{}, pk)
+}
+
+func (d *TIncome) DeleteByIdList(ctx context.Context, idList []uint64) error {
+	if len(idList) == 0 {
+		return nil
+	}
+	return d.newScope().In(dbId, idList).Delete(&erp.ModelExpense{})
 }
 
 func (d *TIncome) DeleteByWhere(ctx context.Context, whereMap map[string]interface{}) error {
@@ -54,11 +61,12 @@ func (d *TIncome) GetOne(ctx context.Context, pk uint64) (*erp.ModelIncome, erro
 	return &m, err
 }
 
-func (d *TIncome) ListWithListOption(ctx context.Context, listOption *listoption.ListOption, whereOpts interface{}) ([]*erp.ModelIncome, *listoption.Paginate, error) {
+func (d *TIncome) ListWithListOption(ctx context.Context, listOption *listoption.ListOption, accIdList []uint64) ([]*erp.ModelIncome, *listoption.Paginate, error) {
 	var err error
-	scope := d.newScope().Where(whereOpts)
-	if listOption != nil {
+	scope := d.newScope().Order("created_at DESC")
 
+	if len(accIdList) > 0 {
+		scope.In(dbAccountId, accIdList)
 	}
 
 	var incomeList []*erp.ModelIncome

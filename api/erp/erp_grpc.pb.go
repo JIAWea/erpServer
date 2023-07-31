@@ -46,11 +46,14 @@ const (
 	Erp_ListAccountOpt_FullMethodName    = "/erp.erp/ListAccountOpt"
 	Erp_ListUserAccount_FullMethodName   = "/erp.erp/ListUserAccount"
 	Erp_UpdateUserAccount_FullMethodName = "/erp.erp/UpdateUserAccount"
-	Erp_ImportExpense_FullMethodName     = "/erp.erp/ImportExpense"
 	Erp_CreateExpense_FullMethodName     = "/erp.erp/CreateExpense"
 	Erp_UpdateExpense_FullMethodName     = "/erp.erp/UpdateExpense"
 	Erp_DeleteExpense_FullMethodName     = "/erp.erp/DeleteExpense"
 	Erp_ListExpense_FullMethodName       = "/erp.erp/ListExpense"
+	Erp_CreateIncome_FullMethodName      = "/erp.erp/CreateIncome"
+	Erp_UpdateIncome_FullMethodName      = "/erp.erp/UpdateIncome"
+	Erp_DeleteIncome_FullMethodName      = "/erp.erp/DeleteIncome"
+	Erp_ListIncome_FullMethodName        = "/erp.erp/ListIncome"
 )
 
 // ErpClient is the client API for Erp service.
@@ -84,11 +87,14 @@ type ErpClient interface {
 	ListAccountOpt(ctx context.Context, in *ListAccountOptReq, opts ...grpc.CallOption) (*ListAccountOptRsp, error)
 	ListUserAccount(ctx context.Context, in *ListUserAccountReq, opts ...grpc.CallOption) (*ListUserAccountRsp, error)
 	UpdateUserAccount(ctx context.Context, in *UpdateUserAccountReq, opts ...grpc.CallOption) (*UpdateUserAccountRsp, error)
-	ImportExpense(ctx context.Context, in *ImportExpenseReq, opts ...grpc.CallOption) (*ImportExpenseRsp, error)
 	CreateExpense(ctx context.Context, in *CreateExpenseReq, opts ...grpc.CallOption) (*CreateExpenseRsp, error)
 	UpdateExpense(ctx context.Context, in *UpdateExpenseReq, opts ...grpc.CallOption) (*UpdateExpenseRsp, error)
 	DeleteExpense(ctx context.Context, in *DeleteExpenseReq, opts ...grpc.CallOption) (*DeleteExpenseRsp, error)
 	ListExpense(ctx context.Context, in *ListExpenseReq, opts ...grpc.CallOption) (*ListExpenseRsp, error)
+	CreateIncome(ctx context.Context, in *CreateIncomeReq, opts ...grpc.CallOption) (*CreateIncomeRsp, error)
+	UpdateIncome(ctx context.Context, in *UpdateIncomeReq, opts ...grpc.CallOption) (*UpdateIncomeRsp, error)
+	DeleteIncome(ctx context.Context, in *DeleteIncomeReq, opts ...grpc.CallOption) (*DeleteIncomeRsp, error)
+	ListIncome(ctx context.Context, in *ListIncomeReq, opts ...grpc.CallOption) (*ListIncomeRsp, error)
 }
 
 type erpClient struct {
@@ -342,15 +348,6 @@ func (c *erpClient) UpdateUserAccount(ctx context.Context, in *UpdateUserAccount
 	return out, nil
 }
 
-func (c *erpClient) ImportExpense(ctx context.Context, in *ImportExpenseReq, opts ...grpc.CallOption) (*ImportExpenseRsp, error) {
-	out := new(ImportExpenseRsp)
-	err := c.cc.Invoke(ctx, Erp_ImportExpense_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *erpClient) CreateExpense(ctx context.Context, in *CreateExpenseReq, opts ...grpc.CallOption) (*CreateExpenseRsp, error) {
 	out := new(CreateExpenseRsp)
 	err := c.cc.Invoke(ctx, Erp_CreateExpense_FullMethodName, in, out, opts...)
@@ -381,6 +378,42 @@ func (c *erpClient) DeleteExpense(ctx context.Context, in *DeleteExpenseReq, opt
 func (c *erpClient) ListExpense(ctx context.Context, in *ListExpenseReq, opts ...grpc.CallOption) (*ListExpenseRsp, error) {
 	out := new(ListExpenseRsp)
 	err := c.cc.Invoke(ctx, Erp_ListExpense_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *erpClient) CreateIncome(ctx context.Context, in *CreateIncomeReq, opts ...grpc.CallOption) (*CreateIncomeRsp, error) {
+	out := new(CreateIncomeRsp)
+	err := c.cc.Invoke(ctx, Erp_CreateIncome_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *erpClient) UpdateIncome(ctx context.Context, in *UpdateIncomeReq, opts ...grpc.CallOption) (*UpdateIncomeRsp, error) {
+	out := new(UpdateIncomeRsp)
+	err := c.cc.Invoke(ctx, Erp_UpdateIncome_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *erpClient) DeleteIncome(ctx context.Context, in *DeleteIncomeReq, opts ...grpc.CallOption) (*DeleteIncomeRsp, error) {
+	out := new(DeleteIncomeRsp)
+	err := c.cc.Invoke(ctx, Erp_DeleteIncome_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *erpClient) ListIncome(ctx context.Context, in *ListIncomeReq, opts ...grpc.CallOption) (*ListIncomeRsp, error) {
+	out := new(ListIncomeRsp)
+	err := c.cc.Invoke(ctx, Erp_ListIncome_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -418,11 +451,14 @@ type ErpServer interface {
 	ListAccountOpt(context.Context, *ListAccountOptReq) (*ListAccountOptRsp, error)
 	ListUserAccount(context.Context, *ListUserAccountReq) (*ListUserAccountRsp, error)
 	UpdateUserAccount(context.Context, *UpdateUserAccountReq) (*UpdateUserAccountRsp, error)
-	ImportExpense(context.Context, *ImportExpenseReq) (*ImportExpenseRsp, error)
 	CreateExpense(context.Context, *CreateExpenseReq) (*CreateExpenseRsp, error)
 	UpdateExpense(context.Context, *UpdateExpenseReq) (*UpdateExpenseRsp, error)
 	DeleteExpense(context.Context, *DeleteExpenseReq) (*DeleteExpenseRsp, error)
 	ListExpense(context.Context, *ListExpenseReq) (*ListExpenseRsp, error)
+	CreateIncome(context.Context, *CreateIncomeReq) (*CreateIncomeRsp, error)
+	UpdateIncome(context.Context, *UpdateIncomeReq) (*UpdateIncomeRsp, error)
+	DeleteIncome(context.Context, *DeleteIncomeReq) (*DeleteIncomeRsp, error)
+	ListIncome(context.Context, *ListIncomeReq) (*ListIncomeRsp, error)
 	mustEmbedUnimplementedErpServer()
 }
 
@@ -511,9 +547,6 @@ func (UnimplementedErpServer) ListUserAccount(context.Context, *ListUserAccountR
 func (UnimplementedErpServer) UpdateUserAccount(context.Context, *UpdateUserAccountReq) (*UpdateUserAccountRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserAccount not implemented")
 }
-func (UnimplementedErpServer) ImportExpense(context.Context, *ImportExpenseReq) (*ImportExpenseRsp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ImportExpense not implemented")
-}
 func (UnimplementedErpServer) CreateExpense(context.Context, *CreateExpenseReq) (*CreateExpenseRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateExpense not implemented")
 }
@@ -525,6 +558,18 @@ func (UnimplementedErpServer) DeleteExpense(context.Context, *DeleteExpenseReq) 
 }
 func (UnimplementedErpServer) ListExpense(context.Context, *ListExpenseReq) (*ListExpenseRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListExpense not implemented")
+}
+func (UnimplementedErpServer) CreateIncome(context.Context, *CreateIncomeReq) (*CreateIncomeRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateIncome not implemented")
+}
+func (UnimplementedErpServer) UpdateIncome(context.Context, *UpdateIncomeReq) (*UpdateIncomeRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateIncome not implemented")
+}
+func (UnimplementedErpServer) DeleteIncome(context.Context, *DeleteIncomeReq) (*DeleteIncomeRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteIncome not implemented")
+}
+func (UnimplementedErpServer) ListIncome(context.Context, *ListIncomeReq) (*ListIncomeRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListIncome not implemented")
 }
 func (UnimplementedErpServer) mustEmbedUnimplementedErpServer() {}
 
@@ -1025,24 +1070,6 @@ func _Erp_UpdateUserAccount_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Erp_ImportExpense_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ImportExpenseReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ErpServer).ImportExpense(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Erp_ImportExpense_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ErpServer).ImportExpense(ctx, req.(*ImportExpenseReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Erp_CreateExpense_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateExpenseReq)
 	if err := dec(in); err != nil {
@@ -1111,6 +1138,78 @@ func _Erp_ListExpense_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ErpServer).ListExpense(ctx, req.(*ListExpenseReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Erp_CreateIncome_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateIncomeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).CreateIncome(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_CreateIncome_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).CreateIncome(ctx, req.(*CreateIncomeReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Erp_UpdateIncome_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateIncomeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).UpdateIncome(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_UpdateIncome_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).UpdateIncome(ctx, req.(*UpdateIncomeReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Erp_DeleteIncome_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteIncomeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).DeleteIncome(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_DeleteIncome_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).DeleteIncome(ctx, req.(*DeleteIncomeReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Erp_ListIncome_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListIncomeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).ListIncome(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_ListIncome_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).ListIncome(ctx, req.(*ListIncomeReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1231,10 +1330,6 @@ var Erp_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Erp_UpdateUserAccount_Handler,
 		},
 		{
-			MethodName: "ImportExpense",
-			Handler:    _Erp_ImportExpense_Handler,
-		},
-		{
 			MethodName: "CreateExpense",
 			Handler:    _Erp_CreateExpense_Handler,
 		},
@@ -1249,6 +1344,22 @@ var Erp_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListExpense",
 			Handler:    _Erp_ListExpense_Handler,
+		},
+		{
+			MethodName: "CreateIncome",
+			Handler:    _Erp_CreateIncome_Handler,
+		},
+		{
+			MethodName: "UpdateIncome",
+			Handler:    _Erp_UpdateIncome_Handler,
+		},
+		{
+			MethodName: "DeleteIncome",
+			Handler:    _Erp_DeleteIncome_Handler,
+		},
+		{
+			MethodName: "ListIncome",
+			Handler:    _Erp_ListIncome_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

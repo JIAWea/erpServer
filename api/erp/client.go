@@ -197,13 +197,6 @@ func UpdateUserAccount(ctx context.Context, req *UpdateUserAccountReq) (*UpdateU
     return cliMgr.cli.UpdateUserAccount(ctx, req)
 }
 
-func ImportExpense(ctx context.Context, req *ImportExpenseReq) (*ImportExpenseRsp, error) {
-	if cliMgr.conn == nil {
-		return nil, cliMgr.initErr
-	}
-    return cliMgr.cli.ImportExpense(ctx, req)
-}
-
 func CreateExpense(ctx context.Context, req *CreateExpenseReq) (*CreateExpenseRsp, error) {
 	if cliMgr.conn == nil {
 		return nil, cliMgr.initErr
@@ -230,6 +223,34 @@ func ListExpense(ctx context.Context, req *ListExpenseReq) (*ListExpenseRsp, err
 		return nil, cliMgr.initErr
 	}
     return cliMgr.cli.ListExpense(ctx, req)
+}
+
+func CreateIncome(ctx context.Context, req *CreateIncomeReq) (*CreateIncomeRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.CreateIncome(ctx, req)
+}
+
+func UpdateIncome(ctx context.Context, req *UpdateIncomeReq) (*UpdateIncomeRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.UpdateIncome(ctx, req)
+}
+
+func DeleteIncome(ctx context.Context, req *DeleteIncomeReq) (*DeleteIncomeRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.DeleteIncome(ctx, req)
+}
+
+func ListIncome(ctx context.Context, req *ListIncomeReq) (*ListIncomeRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.ListIncome(ctx, req)
 }
 
 

@@ -24,7 +24,9 @@ const (
         ErrNotFoundExpense int32	=	10009
         ErrNotFoundIncome int32	=	10010
         ErrExpenseCategoryInvalid int32	=	10011
-        ErrNotFoundUserAccount int32	=	10012
+        ErrIncomeCategoryInvalid int32	=	10012
+        ErrNotFoundUserAccount int32	=	10013
+        ErrNotPermissionForAccount int32	=	10014
 )
 
 
@@ -39,19 +41,21 @@ var ErrCodeMap = map[int32]string{
         ErrTokenUnverifiable: "认证异常",
         ErrInvalidToken: "认证错误",
         ErrTokenExpired: "认证过期",
-        ErrNotFoundUser: "未找到相关记录",
-        ErrNotFoundRole: "未找到相关记录",
-        ErrNotFoundMenu: "未找到相关记录",
+        ErrNotFoundUser: "用户不存在",
+        ErrNotFoundRole: "角色不存在",
+        ErrNotFoundMenu: "菜单不存在",
         ErrNotFoundUserRole: "未找到相关记录",
         ErrNotFoundRoleMenu: "未找到相关记录",
         ErrPasswordFormatInvalid: "密码不合法",
         ErrPassword: "密码错误",
-        ErrNotFoundAccount: "未找到相关记录",
+        ErrNotFoundAccount: "账户不存在",
         ErrUserExist: "用户名已存在",
-        ErrNotFoundExpense: "记录不存在",
-        ErrNotFoundIncome: "记录不存在",
+        ErrNotFoundExpense: "支出不存在",
+        ErrNotFoundIncome: "收入不存在",
         ErrExpenseCategoryInvalid: "支出类目错误",
+        ErrIncomeCategoryInvalid: "收入类目错误",
         ErrNotFoundUserAccount: "记录不存在",
+        ErrNotPermissionForAccount: "没有该账户的操作权限",
 }
 
 var ErrCode4StatusCodeMap = map[int32]int32{
@@ -76,5 +80,7 @@ var ErrCode4StatusCodeMap = map[int32]int32{
         ErrNotFoundExpense: 404,
         ErrNotFoundIncome: 404,
         ErrExpenseCategoryInvalid: 400,
+        ErrIncomeCategoryInvalid: 400,
         ErrNotFoundUserAccount: 404,
+        ErrNotPermissionForAccount: 403,
 }
