@@ -11,7 +11,7 @@ services:
       - "5060:3306"
     volumes:
       - /var/lib/mysql/data:/var/lib/mysql
-      - /var/lib/mysql/config/my.cnf:/etc/mysql/my.cnf
+      - /var/lib/mysql/config/conf.d:/etc/mysql/conf.d
 
   redis:
     image: redis:6.2

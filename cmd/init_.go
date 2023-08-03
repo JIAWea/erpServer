@@ -31,7 +31,9 @@ func Init(cfg *config.Config) error {
 
 	// TODO redis
 	auth.InitRedis(&redis.Options{
-		Addr: cfg.RedisDSN,
+		Addr:     cfg.Redis.Addr,
+		Username: cfg.Redis.User,
+		Password: cfg.Redis.Passwd,
 	})
 
 	return nil

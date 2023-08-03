@@ -34,8 +34,12 @@ type Config struct {
 		PriKey string `yaml:"private_key"`
 	} `yaml:"transfer_encrypt"`
 
-	DbDSN    string `yaml:"db_dsn"`
-	RedisDSN string `yaml:"redis_dsn"`
+	DbDSN string `yaml:"db_dsn"`
+	Redis struct {
+		Addr   string `yaml:"addr"`
+		User   string `yaml:"user"`
+		Passwd string `yaml:"passwd"`
+	} `yaml:"redis"`
 	AssetDir string `yaml:"asset_dir"`
 }
 
