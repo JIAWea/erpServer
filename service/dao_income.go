@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/JIAWea/erpServer/api/erp"
 	"github.com/JIAWea/erpServer/internal/db"
@@ -67,6 +68,44 @@ func (d *TIncome) ListWithListOption(ctx context.Context, listOption *listoption
 
 	if len(accIdList) > 0 {
 		scope.In(dbAccountId, accIdList)
+	}
+
+	if listOption != nil {
+		err = listoption.NewProcessor(listOption).
+			AddString(erp.ListIncomeReq_ListOptAccountName, func(val string) error {
+				var accList []*erp.ModelAccount
+				err = dbAccount.newScope().Like(dbName, val).Find(&accList)
+				if err != nil {
+					return err
+				}
+				if len(accList) == 0 {
+					scope.Eq("1", 0)
+					return nil
+				}
+				var idList []uint64
+				for _, v := range accList {
+					idList = append(idList, v.Id)
+				}
+				scope.In(dbAccountId, idList)
+				return nil
+			}).
+			AddString(erp.ListIncomeReq_ListOptMark, func(val string) error {
+				scope.Like(dbMark, val)
+				return nil
+			}).
+			AddUint32(erp.ListIncomeReq_ListOptPayMoney, func(val uint32) error {
+				scope.Eq(dbIncomeMoney, val)
+				return nil
+			}).
+			AddUint32Range(erp.ListIncomeReq_ListOptStatTimeRange, func(begin, end uint32) error {
+				scope.Where(fmt.Sprintf("%s >= ? AND %s <= ?", dbIncomeAt, dbIncomeAt), begin, end)
+				return nil
+			}).
+			Process()
+		if err != nil {
+			log.Error(err.Error())
+			return nil, nil, err
+		}
 	}
 
 	var incomeList []*erp.ModelIncome

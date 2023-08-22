@@ -1,6 +1,7 @@
 package app
 
 import (
+	"context"
 	"fmt"
 	"github.com/JIAWea/erpServer/api/erp"
 	"github.com/gorilla/mux"
@@ -9,6 +10,7 @@ import (
 	"github.com/ml444/gkit/pkg/env"
 	"github.com/ml444/gkit/transport/httpx"
 	log "github.com/ml444/glog"
+	"github.com/ml444/gutil/netx"
 	"google.golang.org/grpc/xds"
 	"net/http"
 	"strings"
@@ -29,6 +31,12 @@ func MakeHTTPHandler() http.Handler {
 	router.Methods(http.MethodPost).
 		Path(fmt.Sprintf("/%s/ImportIncome", erp.ClientName)).
 		HandlerFunc(File.ImportIncome)
+	router.Methods(http.MethodPost).
+		Path(fmt.Sprintf("/%s/ExportExpense", erp.ClientName)).
+		HandlerFunc(File.ExportExpense)
+	router.Methods(http.MethodPost).
+		Path(fmt.Sprintf("/%s/ExportIncome", erp.ClientName)).
+		HandlerFunc(File.ExportIncome)
 
 	err := httpx.ParseService2HTTP(
 		NewErpService(),
@@ -82,4 +90,16 @@ func GetUserId(r *http.Request) uint64 {
 	}
 
 	return claims.UserId
+}
+
+func ParseCtx(r *http.Request) context.Context {
+	userId := GetUserId(r)
+
+	header := core.Header{
+		core.ClientTypeKey: core.GetHeader4HTTP(r.Header, core.HttpHeaderClientType),
+		core.RemoteIp:      netx.GetRemoteIp(r),
+		core.UserIdKey:     userId,
+	}
+
+	return context.WithValue(r.Context(), core.HeadersKey, header)
 }

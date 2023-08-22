@@ -18,8 +18,32 @@ var ExpenseCategoryMap = map[string]uint32{
 	"运费-国内运费":   uint32(ExpenseCategory_ExpenseCategoryDeliveryCN),
 }
 
+var ExpenseCategoryMapName = map[uint32]string{
+	uint32(ExpenseCategory_ExpenseCategoryOther):           "其他支出",
+	uint32(ExpenseCategory_ExpenseCategoryPurchase):        "采购支出",
+	uint32(ExpenseCategory_ExpenseCategoryHR):              "人力支出",
+	uint32(ExpenseCategory_ExpenseCategoryOfficeOther):     "办公杂费",
+	uint32(ExpenseCategory_ExpenseCategoryBorrow):          "借款支出",
+	uint32(ExpenseCategory_ExpenseCategoryProcess):         "外发加工",
+	uint32(ExpenseCategory_ExpenseCategoryOffice):          "采购_办公用品",
+	uint32(ExpenseCategory_ExpenseCategoryCanteen):         "采购_食堂伙食",
+	uint32(ExpenseCategory_ExpenseCategorySalary):          "人力支出_员工工资",
+	uint32(ExpenseCategory_ExpenseCategoryPartTime):        "人力支出_临时工",
+	uint32(ExpenseCategory_ExpenseCategoryStandby):         "其他支出_备用金",
+	uint32(ExpenseCategory_ExpenseCategoryHead):            "头程支出",
+	uint32(ExpenseCategory_ExpenseCategoryEvaluation):      "推广_测评",
+	uint32(ExpenseCategory_ExpenseCategoryProductPurchase): "采购_产品采购",
+	uint32(ExpenseCategory_ExpenseCategoryDeliveryCN):      "运费-国内运费",
+}
+
 var IncomeCategoryMap = map[string]uint32{
 	"其他收入":     uint32(IncomeCategory_IncomeCategoryOther),
 	"其他收入_备用金": uint32(IncomeCategory_IncomeCategoryStandby),
 	"销售收入":     uint32(IncomeCategory_IncomeCategorySale),
+}
+
+var IncomeCategoryMapName = map[uint32]string{
+	uint32(IncomeCategory_IncomeCategoryOther):   "其他收入",
+	uint32(IncomeCategory_IncomeCategoryStandby): "其他收入_备用金",
+	uint32(IncomeCategory_IncomeCategorySale):    "销售收入",
 }

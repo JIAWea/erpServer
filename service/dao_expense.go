@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"fmt"
 	"github.com/ml444/gkit/dbx"
 	"github.com/ml444/gkit/listoption"
 	log "github.com/ml444/glog"
@@ -86,6 +87,18 @@ func (d *TExpense) ListWithListOption(ctx context.Context, listOption *listoptio
 					idList = append(idList, v.Id)
 				}
 				scope.In(dbAccountId, idList)
+				return nil
+			}).
+			AddString(erp.ListExpenseReq_ListOptMark, func(val string) error {
+				scope.Like(dbMark, val)
+				return nil
+			}).
+			AddUint32(erp.ListExpenseReq_ListOptPayMoney, func(val uint32) error {
+				scope.Eq(dbPayMoney, val)
+				return nil
+			}).
+			AddUint32Range(erp.ListExpenseReq_ListOptStatTimeRange, func(begin, end uint32) error {
+				scope.Where(fmt.Sprintf("%s >= ? AND %s <= ?", dbPayAt, dbPayAt), begin, end)
 				return nil
 			}).
 			Process()

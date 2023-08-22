@@ -102,10 +102,14 @@ func (s ErpService) ListIncome(ctx context.Context, req *erp.ListIncomeReq) (*er
 	rsp.Paginate = paginate
 	rsp.List = list
 
-	var accIdList []uint64
+	var (
+		accIdList     []uint64
+		accIdExistMap = make(map[uint64]struct{})
+	)
 	for _, v := range list {
-		if v.AccountId != 0 {
+		if _, ok := accIdExistMap[v.AccountId]; !ok {
 			accIdList = append(accIdList, v.AccountId)
+			accIdExistMap[v.AccountId] = struct{}{}
 		}
 	}
 	if len(accIdList) > 0 {

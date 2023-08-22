@@ -2,13 +2,11 @@ package app
 
 import (
 	"context"
-	"github.com/ml444/gkit/core"
-
+	"github.com/JIAWea/erpServer/api/erp"
 	"github.com/JIAWea/erpServer/pkg/utils"
+	"github.com/ml444/gkit/core"
 	"github.com/ml444/gkit/errorx"
 	log "github.com/ml444/glog"
-
-	"github.com/JIAWea/erpServer/api/erp"
 )
 
 func (s ErpService) CreateExpense(ctx context.Context, req *erp.CreateExpenseReq) (*erp.CreateExpenseRsp, error) {
@@ -102,10 +100,14 @@ func (s ErpService) ListExpense(ctx context.Context, req *erp.ListExpenseReq) (*
 	rsp.Paginate = paginate
 	rsp.List = list
 
-	var accIdList []uint64
+	var (
+		accIdList     []uint64
+		accIdExistMap = make(map[uint64]struct{})
+	)
 	for _, v := range list {
-		if v.AccountId != 0 {
+		if _, ok := accIdExistMap[v.AccountId]; !ok {
 			accIdList = append(accIdList, v.AccountId)
+			accIdExistMap[v.AccountId] = struct{}{}
 		}
 	}
 	if len(accIdList) > 0 {

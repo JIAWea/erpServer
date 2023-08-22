@@ -183,6 +183,7 @@ func (d *TMenu) GetUserMenuList(ctx context.Context, userId uint64) ([]*erp.Menu
 		Where("erp_menu.type = ?", uint32(erp.ModelMenu_TypeMenu)).
 		Where("erp_menu.status = ?", uint32(erp.ModelMenu_StatusEnable)).
 		Where("r.role_id IN (SELECT role_id FROM erp_user_role WHERE user_id = ?)", userId).
+		Order("erp_menu.sort").
 		Find(&menuList)
 	if err != nil {
 		return nil, err

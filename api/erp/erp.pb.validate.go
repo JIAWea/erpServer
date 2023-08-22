@@ -9011,6 +9011,8 @@ func (m *ListExpenseReq) validate(all bool) error {
 		}
 	}
 
+	// no validation rules for IsExport
+
 	if len(errors) > 0 {
 		return ListExpenseReqMultiError(errors)
 	}
@@ -10268,6 +10270,8 @@ func (m *ListIncomeReq) validate(all bool) error {
 			}
 		}
 	}
+
+	// no validation rules for IsExport
 
 	if len(errors) > 0 {
 		return ListIncomeReqMultiError(errors)

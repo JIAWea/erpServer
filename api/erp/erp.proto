@@ -652,8 +652,15 @@ message ListExpenseReq {
     ListOptNil = 0;
     // @valueType: string
     ListOptAccountName = 1;
+    // @valueType: string
+    ListOptMark = 2;
+    // @valueType: uint32
+    ListOptPayMoney = 3;
+    // @valueType: uint32Range
+    ListOptStatTimeRange = 4;
   }
   listoption.ListOption list_option = 1;
+  bool is_export = 2;
 }
 message ListExpenseRsp {
   listoption.Paginate paginate = 1;
@@ -686,8 +693,15 @@ message ListIncomeReq {
     ListOptNil = 0;
     // @valueType: string
     ListOptAccountName = 1;
+    // @valueType: string
+    ListOptMark = 2;
+    // @valueType: uint32
+    ListOptPayMoney = 3;
+    // @valueType: uint32Range
+    ListOptStatTimeRange = 4;
   }
   listoption.ListOption list_option = 1;
+  bool is_export = 2;
 }
 message ListIncomeRsp {
   listoption.Paginate paginate = 1;

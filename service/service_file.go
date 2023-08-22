@@ -2,10 +2,9 @@ package app
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/JIAWea/erpServer/api/erp"
-	"github.com/ml444/gkit/errorx"
 	"io"
 	"net/http"
 	"net/url"
@@ -15,11 +14,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/xuri/excelize/v2"
-
+	"github.com/JIAWea/erpServer/api/erp"
 	"github.com/JIAWea/erpServer/config"
 	"github.com/JIAWea/erpServer/pkg/utils"
+	"github.com/ml444/gkit/errorx"
 	log "github.com/ml444/glog"
+
+	"github.com/xuri/excelize/v2"
 )
 
 const maxUploadSize = 1024 * 1024 * 10 // 10M
@@ -274,29 +275,14 @@ func (f *fileService) DownloadFile(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(msg))
 		return
 	}
+	fileStat, _ := file.Stat()
 
-	data, err := io.ReadAll(file)
-	if err != nil {
-		log.Error("读取文件失败", err)
-		msg := fmt.Sprintf("读取文件失败，错误：%v", err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(msg))
-		return
-	}
-
-	if !strings.HasSuffix(fileName, ".xlsx") {
-		fileName += ".xlsx"
-	}
 	w.Header().Add("Content-Type", "application/octet-stream")
 	w.Header().Add("Content-Disposition", "attachment; filename=\""+url.QueryEscape(fileName)+"\"")
-	_, err = w.Write(data)
-	if err != nil {
-		log.Error("下载文件失败", err)
-		msg := fmt.Sprintf("文件打开失败，错误：%v", err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(msg))
-		return
-	}
+	w.Header().Set("Content-Length", strconv.FormatInt(fileStat.Size(), 10))
+
+	file.Seek(0, 0)
+	io.Copy(w, file)
 
 	return
 }
@@ -487,4 +473,204 @@ func isInSliceUint64(i uint64, s []uint64) bool {
 		}
 	}
 	return false
+}
+
+func (f *fileService) ExportExpense(w http.ResponseWriter, r *http.Request) {
+	var req erp.ListExpenseReq
+
+	ctx := ParseCtx(r)
+
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil && err != io.EOF {
+		log.Error("err:", err)
+		utils.RspBadError(w, "请求参数错误")
+		return
+	}
+
+	if !req.IsExport {
+		utils.RspBadError(w, "请求参数错误")
+		return
+	}
+
+	listRsp, err := NewErpService().ListExpense(ctx, &req)
+	if err != nil {
+		log.Error("err:", err)
+		utils.RspError(w, "导出失败")
+		return
+	}
+
+	if listRsp.Paginate.Total > 200000 {
+		log.Error("err:", err)
+		utils.RspError(w, "超出导出上限20万")
+		return
+	}
+
+	excel := excelize.NewFile()
+	defer excel.Close()
+	index, err := excel.NewSheet("支出列表")
+	if err != nil {
+		log.Error("err:", err)
+		utils.RspError(w, "导出失败")
+		return
+	}
+	excel.SetActiveSheet(index)
+
+	excelWriter, err := excel.NewStreamWriter("支出列表")
+	if err != nil {
+		log.Error("err:", err)
+		utils.RspError(w, "导出失败")
+		return
+	}
+	// 第一行写表头
+	err = excelWriter.SetRow("A1", []interface{}{"日期", "支出ID", "科目", "摘要", "支出", "账户", "凭证", "经手人"})
+	if err != nil {
+		log.Error("err:", err)
+		utils.RspError(w, "导出失败")
+		return
+	}
+
+	if len(listRsp.List) > 0 {
+		// 第二行开始写数据
+		rowNum := 2
+		for _, v := range listRsp.List {
+			payAt := time.Unix(int64(v.PayAt), 0).Format("2006-01-02 15:04:05")
+			cateName := erp.ExpenseCategoryMapName[v.Category]
+
+			var accName string
+			if acc, ok := listRsp.AccountMap[v.AccountId]; ok {
+				accName = acc.Name
+			}
+
+			money := float64(v.PayMoney) / 100
+
+			record := []interface{}{payAt, v.Uuid, cateName, v.Mark, money, accName, v.Ticket, v.HandleBy}
+
+			cell, _ := excelize.CoordinatesToCellName(1, rowNum)
+			if err = excelWriter.SetRow(cell, record); err != nil {
+				log.Error("err:", err)
+				utils.RspError(w, "导出失败")
+				return
+			}
+			rowNum++
+		}
+
+	}
+	if err = excelWriter.Flush(); err != nil {
+		log.Error("err:", err)
+		utils.RspError(w, "导出失败")
+		return
+	}
+
+	fileName := "支出列表.xlsx"
+	w.Header().Add("Content-Type", "application/octet-stream")
+	w.Header().Add("Content-Disposition", "attachment; filename=\""+url.QueryEscape(fileName)+"\"")
+
+	err = excel.Write(w)
+	if err != nil {
+		log.Error("err:", err)
+		utils.RspError(w, "导出失败")
+		return
+	}
+
+	return
+}
+
+func (f *fileService) ExportIncome(w http.ResponseWriter, r *http.Request) {
+	var req erp.ListIncomeReq
+
+	ctx := ParseCtx(r)
+
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil && err != io.EOF {
+		log.Error("err:", err)
+		utils.RspBadError(w, "请求参数错误")
+		return
+	}
+
+	if !req.IsExport {
+		utils.RspBadError(w, "请求参数错误")
+		return
+	}
+
+	listRsp, err := NewErpService().ListIncome(ctx, &req)
+	if err != nil {
+		log.Error("err:", err)
+		utils.RspError(w, "导出失败")
+		return
+	}
+
+	if listRsp.Paginate.Total > 200000 {
+		log.Error("err:", err)
+		utils.RspError(w, "超出导出上限20万")
+		return
+	}
+
+	excel := excelize.NewFile()
+	defer excel.Close()
+	index, err := excel.NewSheet("收入列表")
+	if err != nil {
+		log.Error("err:", err)
+		utils.RspError(w, "导出失败")
+		return
+	}
+	excel.SetActiveSheet(index)
+
+	excelWriter, err := excel.NewStreamWriter("收入列表")
+	if err != nil {
+		log.Error("err:", err)
+		utils.RspError(w, "导出失败")
+		return
+	}
+	// 第一行写表头
+	err = excelWriter.SetRow("A1", []interface{}{"日期", "收款ID", "科目", "收入来源", "摘要", "收入", "账户", "经手人"})
+	if err != nil {
+		log.Error("err:", err)
+		utils.RspError(w, "导出失败")
+		return
+	}
+
+	if len(listRsp.List) > 0 {
+		// 第二行开始写数据
+		rowNum := 2
+		for _, v := range listRsp.List {
+			incomeAt := time.Unix(int64(v.IncomeAt), 0).Format("2006-01-02 15:04:05")
+			cateName := erp.IncomeCategoryMapName[v.Category]
+
+			var accName string
+			if acc, ok := listRsp.AccountMap[v.AccountId]; ok {
+				accName = acc.Name
+			}
+
+			money := float64(v.IncomeMoney) / 100
+
+			record := []interface{}{incomeAt, v.Uuid, cateName, v.From, v.Mark, money, accName, v.HandleBy}
+
+			cell, _ := excelize.CoordinatesToCellName(1, rowNum)
+			if err = excelWriter.SetRow(cell, record); err != nil {
+				log.Error("err:", err)
+				utils.RspError(w, "导出失败")
+				return
+			}
+			rowNum++
+		}
+
+	}
+	if err = excelWriter.Flush(); err != nil {
+		log.Error("err:", err)
+		utils.RspError(w, "导出失败")
+		return
+	}
+
+	fileName := "收入列表.xlsx"
+	w.Header().Add("Content-Type", "application/octet-stream")
+	w.Header().Add("Content-Disposition", "attachment; filename=\""+url.QueryEscape(fileName)+"\"")
+
+	err = excel.Write(w)
+	if err != nil {
+		log.Error("err:", err)
+		utils.RspError(w, "导出失败")
+		return
+	}
+
+	return
 }
