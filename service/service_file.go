@@ -876,7 +876,7 @@ func (f *fileService) ExportPlan(w http.ResponseWriter, r *http.Request) {
 
 	excel := excelize.NewFile()
 	defer excel.Close()
-	index, err := excel.NewSheet("应付列表")
+	index, err := excel.NewSheet("Sheet1")
 	if err != nil {
 		log.Error("err:", err)
 		utils.RspError(w, "导出失败")
@@ -884,7 +884,7 @@ func (f *fileService) ExportPlan(w http.ResponseWriter, r *http.Request) {
 	}
 	excel.SetActiveSheet(index)
 
-	excelWriter, err := excel.NewStreamWriter("应付列表")
+	excelWriter, err := excel.NewStreamWriter("Sheet1")
 	if err != nil {
 		log.Error("err:", err)
 		utils.RspError(w, "导出失败")
@@ -932,6 +932,13 @@ func (f *fileService) ExportPlan(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fileName := "应付列表.xlsx"
+	for _, option := range req.ListOption.Options {
+		if option.Type == 1 {
+			if option.Value == "2" {
+				fileName = "应收列表.xlsx"
+			}
+		}
+	}
 	w.Header().Add("Content-Type", "application/octet-stream")
 	w.Header().Add("Content-Disposition", "attachment; filename=\""+url.QueryEscape(fileName)+"\"")
 
