@@ -27,6 +27,7 @@ const (
         ErrIncomeCategoryInvalid int32	=	10012
         ErrNotFoundUserAccount int32	=	10013
         ErrNotPermissionForAccount int32	=	10014
+        ErrMoneyBalance int32	=	10015
 )
 
 
@@ -56,6 +57,7 @@ var ErrCodeMap = map[int32]string{
         ErrIncomeCategoryInvalid: "收入类目错误",
         ErrNotFoundUserAccount: "记录不存在",
         ErrNotPermissionForAccount: "没有该账户的操作权限",
+        ErrMoneyBalance: "金额计算错误",
 }
 
 var ErrCode4StatusCodeMap = map[int32]int32{
@@ -83,4 +85,5 @@ var ErrCode4StatusCodeMap = map[int32]int32{
         ErrIncomeCategoryInvalid: 400,
         ErrNotFoundUserAccount: 404,
         ErrNotPermissionForAccount: 403,
+        ErrMoneyBalance: 400,
 }

@@ -16,5 +16,6 @@ func init() {
 		&erp.ModelUserAccount{},
 		&erp.ModelExpense{},
 		&erp.ModelIncome{},
+		&erp.ModelPlan{},
 	)
 }

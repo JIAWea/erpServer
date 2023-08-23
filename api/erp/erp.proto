@@ -49,6 +49,11 @@ service erp {
   rpc UpdateIncome (UpdateIncomeReq) returns (UpdateIncomeRsp);
   rpc DeleteIncome (DeleteIncomeReq) returns (DeleteIncomeRsp);
   rpc ListIncome (ListIncomeReq) returns (ListIncomeRsp);
+
+  rpc CreatePlan (CreatePlanReq) returns (CreatePlanRsp);
+  rpc UpdatePlan (UpdatePlanReq) returns (UpdatePlanRsp);
+  rpc DeletePlan (DeletePlanReq) returns (DeletePlanRsp);
+  rpc ListPlan (ListPlanReq) returns (ListPlanRsp);
 }
 
 // range of error codes: [1, 2147483648]
@@ -103,6 +108,8 @@ enum ErrCode {
   ErrNotFoundUserAccount = 10013;  // 记录不存在
   //@status_code: 403
   ErrNotPermissionForAccount = 10014;  // 没有该账户的操作权限
+  //@status_code: 400
+  ErrMoneyBalance = 10015;  // 金额计算错误
 }
 
 enum ExpenseCategory {
@@ -376,6 +383,59 @@ message ModelIncome {
   string att_name = 15;
   // TODO 收入来源
   string from = 16;
+}
+
+message ModelPlan {
+  enum Type {
+    TypeNil = 0;
+    // 应付
+    TypePay = 1;
+    // 应收
+    TypeReceive = 2;
+  }
+  enum Status {
+    StatusNil = 0;
+    // 待确认
+    StatusWaitConfirm = 1;
+    // 已确认
+    StatusHasConfirm = 2;
+  }
+
+  // @gorm: primarykey
+  uint64 id = 1;
+  // @gorm: comment:'创建时间'
+  uint32 created_at = 2;
+  // @gorm: comment:'更新时间'
+  uint32 updated_at = 3;
+  // @gorm: comment:'删除时间'
+  uint32 deleted_at = 4;
+  // Type
+  uint32 type = 5;
+  // @gorm: comment:'日期'
+  uint32 plan_at = 6;
+  // @gorm: uniqueIndex:uniq_uuid;type:varchar(32);comment:'唯一ID'
+  string uuid = 7;
+  // @gorm: comment:客户名称
+  string customer = 8;
+  // @gorm: type:varchar(64);not null;comment:'摘要'
+  string mark = 9;
+  // @gorm: comment:'总金额，单位分'
+  uint32 total_money = 10;
+  // @gorm: comment:'已付/已收金额，单位分'
+  uint32 trade_money = 11;
+  // @gorm: comment:'剩余金额，单位分'
+  uint32 balance_money = 12;
+  // @gorm: type:varchar(64);not null;comment:'备注'
+  string comment = 13;
+  // @gorm: comment:'创建用户'
+  uint64 user_id = 14;
+  // @gorm: type:varchar(128);not null;comment:'附件'
+  string attachment = 15;
+  // @gorm: type:varchar(128);not null;comment:'附件名'
+  string att_name = 16;
+  // Status
+  // @gorm: comment:状态
+  uint32 status = 17;
 }
 
 message UserLoginReq {
@@ -707,4 +767,41 @@ message ListIncomeRsp {
   listoption.Paginate paginate = 1;
   map<uint64, ModelAccount> accountMap = 3;
   repeated ModelIncome list = 2;
+}
+
+message CreatePlanReq {
+  ModelPlan data = 1 [(validate.rules).message.required = true];
+}
+message CreatePlanRsp {}
+
+message UpdatePlanReq {
+  ModelPlan data = 1 [(validate.rules).message.required = true];
+}
+message UpdatePlanRsp {
+  ModelPlan data = 1;
+}
+
+message DeletePlanReq {
+  repeated uint64 id_list = 1 [(validate.rules).repeated.min_items = 1];
+}
+message DeletePlanRsp {}
+
+message ListPlanReq {
+  enum ListOpt {
+    ListOptNil = 0;
+    // @valueType: uint32
+    ListOptType = 1;
+    // @valueType: string
+    ListOptCustomer = 2;
+    // @valueType: string
+    ListOptMark = 3;
+    // @valueType: uint32Range
+    ListOptStatTimeRange = 4;
+  }
+  listoption.ListOption list_option = 1;
+  bool is_export = 2;
+}
+message ListPlanRsp {
+  listoption.Paginate paginate = 1;
+  repeated ModelPlan list = 2;
 }

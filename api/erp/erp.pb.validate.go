@@ -1191,6 +1191,139 @@ var _ interface {
 	ErrorName() string
 } = ModelIncomeValidationError{}
 
+// Validate checks the field values on ModelPlan with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *ModelPlan) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ModelPlan with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ModelPlanMultiError, or nil
+// if none found.
+func (m *ModelPlan) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ModelPlan) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for CreatedAt
+
+	// no validation rules for UpdatedAt
+
+	// no validation rules for DeletedAt
+
+	// no validation rules for Type
+
+	// no validation rules for PlanAt
+
+	// no validation rules for Uuid
+
+	// no validation rules for Customer
+
+	// no validation rules for Mark
+
+	// no validation rules for TotalMoney
+
+	// no validation rules for TradeMoney
+
+	// no validation rules for BalanceMoney
+
+	// no validation rules for Comment
+
+	// no validation rules for UserId
+
+	// no validation rules for Attachment
+
+	// no validation rules for AttName
+
+	// no validation rules for Status
+
+	if len(errors) > 0 {
+		return ModelPlanMultiError(errors)
+	}
+
+	return nil
+}
+
+// ModelPlanMultiError is an error wrapping multiple validation errors returned
+// by ModelPlan.ValidateAll() if the designated constraints aren't met.
+type ModelPlanMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ModelPlanMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ModelPlanMultiError) AllErrors() []error { return m }
+
+// ModelPlanValidationError is the validation error returned by
+// ModelPlan.Validate if the designated constraints aren't met.
+type ModelPlanValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ModelPlanValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ModelPlanValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ModelPlanValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ModelPlanValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ModelPlanValidationError) ErrorName() string { return "ModelPlanValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ModelPlanValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sModelPlan.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ModelPlanValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ModelPlanValidationError{}
+
 // Validate checks the field values on UserLoginReq with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -10559,6 +10692,1018 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ListIncomeRspValidationError{}
+
+// Validate checks the field values on CreatePlanReq with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *CreatePlanReq) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CreatePlanReq with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in CreatePlanReqMultiError, or
+// nil if none found.
+func (m *CreatePlanReq) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreatePlanReq) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.GetData() == nil {
+		err := CreatePlanReqValidationError{
+			field:  "Data",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreatePlanReqValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreatePlanReqValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreatePlanReqValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return CreatePlanReqMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreatePlanReqMultiError is an error wrapping multiple validation errors
+// returned by CreatePlanReq.ValidateAll() if the designated constraints
+// aren't met.
+type CreatePlanReqMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreatePlanReqMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreatePlanReqMultiError) AllErrors() []error { return m }
+
+// CreatePlanReqValidationError is the validation error returned by
+// CreatePlanReq.Validate if the designated constraints aren't met.
+type CreatePlanReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreatePlanReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreatePlanReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreatePlanReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreatePlanReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreatePlanReqValidationError) ErrorName() string { return "CreatePlanReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e CreatePlanReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreatePlanReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreatePlanReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreatePlanReqValidationError{}
+
+// Validate checks the field values on CreatePlanRsp with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *CreatePlanRsp) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CreatePlanRsp with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in CreatePlanRspMultiError, or
+// nil if none found.
+func (m *CreatePlanRsp) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreatePlanRsp) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return CreatePlanRspMultiError(errors)
+	}
+
+	return nil
+}
+
+// CreatePlanRspMultiError is an error wrapping multiple validation errors
+// returned by CreatePlanRsp.ValidateAll() if the designated constraints
+// aren't met.
+type CreatePlanRspMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreatePlanRspMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreatePlanRspMultiError) AllErrors() []error { return m }
+
+// CreatePlanRspValidationError is the validation error returned by
+// CreatePlanRsp.Validate if the designated constraints aren't met.
+type CreatePlanRspValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreatePlanRspValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreatePlanRspValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreatePlanRspValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreatePlanRspValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreatePlanRspValidationError) ErrorName() string { return "CreatePlanRspValidationError" }
+
+// Error satisfies the builtin error interface
+func (e CreatePlanRspValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreatePlanRsp.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreatePlanRspValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreatePlanRspValidationError{}
+
+// Validate checks the field values on UpdatePlanReq with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *UpdatePlanReq) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on UpdatePlanReq with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in UpdatePlanReqMultiError, or
+// nil if none found.
+func (m *UpdatePlanReq) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UpdatePlanReq) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.GetData() == nil {
+		err := UpdatePlanReqValidationError{
+			field:  "Data",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdatePlanReqValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdatePlanReqValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdatePlanReqValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return UpdatePlanReqMultiError(errors)
+	}
+
+	return nil
+}
+
+// UpdatePlanReqMultiError is an error wrapping multiple validation errors
+// returned by UpdatePlanReq.ValidateAll() if the designated constraints
+// aren't met.
+type UpdatePlanReqMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdatePlanReqMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdatePlanReqMultiError) AllErrors() []error { return m }
+
+// UpdatePlanReqValidationError is the validation error returned by
+// UpdatePlanReq.Validate if the designated constraints aren't met.
+type UpdatePlanReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdatePlanReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdatePlanReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdatePlanReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdatePlanReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdatePlanReqValidationError) ErrorName() string { return "UpdatePlanReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e UpdatePlanReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdatePlanReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdatePlanReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdatePlanReqValidationError{}
+
+// Validate checks the field values on UpdatePlanRsp with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *UpdatePlanRsp) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on UpdatePlanRsp with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in UpdatePlanRspMultiError, or
+// nil if none found.
+func (m *UpdatePlanRsp) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UpdatePlanRsp) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdatePlanRspValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdatePlanRspValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdatePlanRspValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return UpdatePlanRspMultiError(errors)
+	}
+
+	return nil
+}
+
+// UpdatePlanRspMultiError is an error wrapping multiple validation errors
+// returned by UpdatePlanRsp.ValidateAll() if the designated constraints
+// aren't met.
+type UpdatePlanRspMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdatePlanRspMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdatePlanRspMultiError) AllErrors() []error { return m }
+
+// UpdatePlanRspValidationError is the validation error returned by
+// UpdatePlanRsp.Validate if the designated constraints aren't met.
+type UpdatePlanRspValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdatePlanRspValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdatePlanRspValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdatePlanRspValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdatePlanRspValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdatePlanRspValidationError) ErrorName() string { return "UpdatePlanRspValidationError" }
+
+// Error satisfies the builtin error interface
+func (e UpdatePlanRspValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdatePlanRsp.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdatePlanRspValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdatePlanRspValidationError{}
+
+// Validate checks the field values on DeletePlanReq with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *DeletePlanReq) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DeletePlanReq with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in DeletePlanReqMultiError, or
+// nil if none found.
+func (m *DeletePlanReq) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DeletePlanReq) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(m.GetIdList()) < 1 {
+		err := DeletePlanReqValidationError{
+			field:  "IdList",
+			reason: "value must contain at least 1 item(s)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return DeletePlanReqMultiError(errors)
+	}
+
+	return nil
+}
+
+// DeletePlanReqMultiError is an error wrapping multiple validation errors
+// returned by DeletePlanReq.ValidateAll() if the designated constraints
+// aren't met.
+type DeletePlanReqMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeletePlanReqMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeletePlanReqMultiError) AllErrors() []error { return m }
+
+// DeletePlanReqValidationError is the validation error returned by
+// DeletePlanReq.Validate if the designated constraints aren't met.
+type DeletePlanReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeletePlanReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeletePlanReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeletePlanReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeletePlanReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeletePlanReqValidationError) ErrorName() string { return "DeletePlanReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e DeletePlanReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeletePlanReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeletePlanReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeletePlanReqValidationError{}
+
+// Validate checks the field values on DeletePlanRsp with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *DeletePlanRsp) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DeletePlanRsp with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in DeletePlanRspMultiError, or
+// nil if none found.
+func (m *DeletePlanRsp) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DeletePlanRsp) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return DeletePlanRspMultiError(errors)
+	}
+
+	return nil
+}
+
+// DeletePlanRspMultiError is an error wrapping multiple validation errors
+// returned by DeletePlanRsp.ValidateAll() if the designated constraints
+// aren't met.
+type DeletePlanRspMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeletePlanRspMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeletePlanRspMultiError) AllErrors() []error { return m }
+
+// DeletePlanRspValidationError is the validation error returned by
+// DeletePlanRsp.Validate if the designated constraints aren't met.
+type DeletePlanRspValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeletePlanRspValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeletePlanRspValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeletePlanRspValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeletePlanRspValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeletePlanRspValidationError) ErrorName() string { return "DeletePlanRspValidationError" }
+
+// Error satisfies the builtin error interface
+func (e DeletePlanRspValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeletePlanRsp.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeletePlanRspValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeletePlanRspValidationError{}
+
+// Validate checks the field values on ListPlanReq with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *ListPlanReq) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ListPlanReq with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ListPlanReqMultiError, or
+// nil if none found.
+func (m *ListPlanReq) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ListPlanReq) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetListOption()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ListPlanReqValidationError{
+					field:  "ListOption",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ListPlanReqValidationError{
+					field:  "ListOption",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetListOption()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ListPlanReqValidationError{
+				field:  "ListOption",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for IsExport
+
+	if len(errors) > 0 {
+		return ListPlanReqMultiError(errors)
+	}
+
+	return nil
+}
+
+// ListPlanReqMultiError is an error wrapping multiple validation errors
+// returned by ListPlanReq.ValidateAll() if the designated constraints aren't met.
+type ListPlanReqMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListPlanReqMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListPlanReqMultiError) AllErrors() []error { return m }
+
+// ListPlanReqValidationError is the validation error returned by
+// ListPlanReq.Validate if the designated constraints aren't met.
+type ListPlanReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListPlanReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListPlanReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListPlanReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListPlanReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListPlanReqValidationError) ErrorName() string { return "ListPlanReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ListPlanReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListPlanReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListPlanReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListPlanReqValidationError{}
+
+// Validate checks the field values on ListPlanRsp with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *ListPlanRsp) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ListPlanRsp with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ListPlanRspMultiError, or
+// nil if none found.
+func (m *ListPlanRsp) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ListPlanRsp) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetPaginate()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ListPlanRspValidationError{
+					field:  "Paginate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ListPlanRspValidationError{
+					field:  "Paginate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPaginate()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ListPlanRspValidationError{
+				field:  "Paginate",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	for idx, item := range m.GetList() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ListPlanRspValidationError{
+						field:  fmt.Sprintf("List[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ListPlanRspValidationError{
+						field:  fmt.Sprintf("List[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ListPlanRspValidationError{
+					field:  fmt.Sprintf("List[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return ListPlanRspMultiError(errors)
+	}
+
+	return nil
+}
+
+// ListPlanRspMultiError is an error wrapping multiple validation errors
+// returned by ListPlanRsp.ValidateAll() if the designated constraints aren't met.
+type ListPlanRspMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListPlanRspMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListPlanRspMultiError) AllErrors() []error { return m }
+
+// ListPlanRspValidationError is the validation error returned by
+// ListPlanRsp.Validate if the designated constraints aren't met.
+type ListPlanRspValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListPlanRspValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListPlanRspValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListPlanRspValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListPlanRspValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListPlanRspValidationError) ErrorName() string { return "ListPlanRspValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ListPlanRspValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListPlanRsp.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListPlanRspValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListPlanRspValidationError{}
 
 // Validate checks the field values on UpdatePasswordReq_Data with the rules
 // defined in the proto definition for this message. If any rules are

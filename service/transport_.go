@@ -37,6 +37,12 @@ func MakeHTTPHandler() http.Handler {
 	router.Methods(http.MethodPost).
 		Path(fmt.Sprintf("/%s/ExportIncome", erp.ClientName)).
 		HandlerFunc(File.ExportIncome)
+	router.Methods(http.MethodPost).
+		Path(fmt.Sprintf("/%s/ImportPlan", erp.ClientName)).
+		HandlerFunc(File.ImportPlan)
+	router.Methods(http.MethodPost).
+		Path(fmt.Sprintf("/%s/ExportPlan", erp.ClientName)).
+		HandlerFunc(File.ExportPlan)
 
 	err := httpx.ParseService2HTTP(
 		NewErpService(),

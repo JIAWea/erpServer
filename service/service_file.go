@@ -674,3 +674,273 @@ func (f *fileService) ExportIncome(w http.ResponseWriter, r *http.Request) {
 
 	return
 }
+
+func (f *fileService) ImportPlan(w http.ResponseWriter, r *http.Request) {
+	userId := GetUserId(r)
+	file, header, err := r.FormFile("file")
+	if err != nil {
+		utils.RspBadError(w, "file required")
+		return
+	}
+	defer func() { _ = file.Close() }()
+
+	typ := r.FormValue("type")
+	planTyp, err := strconv.Atoi(typ)
+	if err != nil {
+		utils.RspBadError(w, "type invalid")
+		return
+	}
+
+	if header.Size > maxUploadSize {
+		utils.RspBadError(w, "file size limit 10M")
+		return
+	}
+
+	pathDir := filepath.Join(config.DefaultConfig.AssetDir, "import", time.Now().Format("20060102"))
+	exist, _ := utils.IsPathExist(pathDir)
+	if !exist {
+		_ = os.MkdirAll(pathDir, 0777)
+	}
+	path := filepath.Join(pathDir, fmt.Sprintf("plan_%s_%s_%s", typ, utils.GenUUID(), header.Filename))
+	err = utils.SaveFile(file, path)
+	if err != nil {
+		log.Error("err:", err)
+		utils.RspError(w, "save error")
+		return
+	}
+
+	excel, err := excelize.OpenFile(path)
+	if err != nil {
+		log.Error("err:", err)
+		utils.RspError(w, "open excel error")
+		return
+	}
+	defer func() { _ = excel.Close() }()
+
+	rows, err := excel.GetRows("Sheet1")
+	if err != nil {
+		log.Error("err:", err)
+		utils.RspError(w, "get excel rows error")
+		return
+	}
+
+	// 第一行为表头
+	if len(rows) < 2 {
+		log.Error("err:", err)
+		utils.RspError(w, "数据不能为空")
+		return
+	}
+
+	var (
+		errMsg      string
+		batchRecord []*erp.ModelPlan
+	)
+
+	writeRecord := func(row []string) error {
+		date := strings.TrimSpace(row[0])
+		uuid := strings.TrimSpace(row[1])
+		customer := strings.TrimSpace(row[2])
+		mark := strings.TrimSpace(row[3])
+		totalMoney := strings.TrimSpace(row[4])
+		tradeMoney := strings.TrimSpace(row[5])
+		balanceMoney := strings.TrimSpace(row[6])
+		comment := strings.TrimSpace(row[7])
+
+		if uuid == "" {
+			uuid = utils.GenUUID()
+		}
+
+		planAt, err := utils.StrToTime(date)
+		if err != nil {
+			errMsg = fmt.Sprintf("【%v】该日期格式错误", date)
+			log.Error("err:", err)
+			return err
+		}
+
+		totalMon, err := strconv.ParseFloat(totalMoney, 64)
+		if err != nil {
+			errMsg = fmt.Sprintf("【%v】该金额格式错误", totalMoney)
+			log.Error("err:", err)
+			return err
+		}
+		totalMonFen := uint32(totalMon * 100)
+
+		tradeMon, err := strconv.ParseFloat(tradeMoney, 64)
+		if err != nil {
+			errMsg = fmt.Sprintf("【%v】该金额格式错误", tradeMoney)
+			log.Error("err:", err)
+			return err
+		}
+		tradeMonFen := uint32(tradeMon * 100)
+
+		balanceMon, err := strconv.ParseFloat(balanceMoney, 64)
+		if err != nil {
+			errMsg = fmt.Sprintf("【%v】该金额格式错误", balanceMoney)
+			log.Error("err:", err)
+			return err
+		}
+		balanceMonFen := uint32(balanceMon * 100)
+
+		if tradeMonFen+balanceMonFen != totalMonFen {
+			errMsg = "金额计算错误"
+			return errorx.New(erp.ErrMoneyBalance)
+		}
+
+		batchRecord = append(batchRecord, &erp.ModelPlan{
+			Type:         uint32(planTyp),
+			PlanAt:       uint32(planAt.Unix()),
+			Uuid:         uuid,
+			Customer:     customer,
+			Mark:         mark,
+			TotalMoney:   totalMonFen,
+			TradeMoney:   tradeMonFen,
+			BalanceMoney: balanceMonFen,
+			Comment:      comment,
+			UserId:       userId,
+			Status:       uint32(erp.ModelPlan_StatusWaitConfirm),
+		})
+
+		return nil
+	}
+
+	isHeader := true
+	for _, row := range rows {
+		if isHeader {
+			isHeader = false
+			continue
+		}
+		if len(row) != 8 {
+			utils.RspError(w, "请检查表格列数")
+			return
+		}
+
+		err = writeRecord(row)
+		if err != nil {
+			log.Error("err:", err)
+			msg := "写入失败"
+			if errors.Is(err, errorx.New(erp.ErrExpenseCategoryInvalid)) {
+				msg = erp.ErrCodeMap[erp.ErrExpenseCategoryInvalid]
+			} else if errors.Is(err, errorx.New(erp.ErrNotPermissionForAccount)) {
+				msg = erp.ErrCodeMap[erp.ErrNotPermissionForAccount]
+			}
+			if errMsg != "" {
+				msg = errMsg
+			}
+			utils.RspError(w, msg)
+			return
+		}
+	}
+
+	if len(batchRecord) > 0 {
+		err = dbPlan.newScope().CreateInBatches(batchRecord, 100)
+		if err != nil {
+			log.Error("err:", err)
+			utils.RspError(w, "write record error")
+			return
+		}
+	}
+
+	utils.RspOK(w)
+	return
+}
+
+func (f *fileService) ExportPlan(w http.ResponseWriter, r *http.Request) {
+	var req erp.ListPlanReq
+
+	ctx := ParseCtx(r)
+
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil && err != io.EOF {
+		log.Error("err:", err)
+		utils.RspBadError(w, "请求参数错误")
+		return
+	}
+
+	if !req.IsExport {
+		utils.RspBadError(w, "请求参数错误")
+		return
+	}
+
+	listRsp, err := NewErpService().ListPlan(ctx, &req)
+	if err != nil {
+		log.Error("err:", err)
+		utils.RspError(w, "导出失败")
+		return
+	}
+
+	if listRsp.Paginate.Total > 200000 {
+		log.Error("err:", err)
+		utils.RspError(w, "超出导出上限20万")
+		return
+	}
+
+	excel := excelize.NewFile()
+	defer excel.Close()
+	index, err := excel.NewSheet("应付列表")
+	if err != nil {
+		log.Error("err:", err)
+		utils.RspError(w, "导出失败")
+		return
+	}
+	excel.SetActiveSheet(index)
+
+	excelWriter, err := excel.NewStreamWriter("应付列表")
+	if err != nil {
+		log.Error("err:", err)
+		utils.RspError(w, "导出失败")
+		return
+	}
+	// 第一行写表头
+	err = excelWriter.SetRow("A1", []interface{}{"日期", "付款ID", "客户名称", "摘要", "金额", "已付金额", "剩余应付", "备注", "状态"})
+	if err != nil {
+		log.Error("err:", err)
+		utils.RspError(w, "导出失败")
+		return
+	}
+
+	if len(listRsp.List) > 0 {
+		// 第二行开始写数据
+		rowNum := 2
+		for _, v := range listRsp.List {
+			planAt := time.Unix(int64(v.PlanAt), 0).Format("2006-01-02 15:04:05")
+
+			total := float64(v.TotalMoney) / 100
+			trade := float64(v.TradeMoney) / 100
+			balance := float64(v.BalanceMoney) / 100
+
+			status := "待确认"
+			if v.Status == 2 {
+				status = "已确认"
+			}
+
+			record := []interface{}{planAt, v.Uuid, v.Customer, v.Mark, total, trade, balance, v.Comment, status}
+
+			cell, _ := excelize.CoordinatesToCellName(1, rowNum)
+			if err = excelWriter.SetRow(cell, record); err != nil {
+				log.Error("err:", err)
+				utils.RspError(w, "导出失败")
+				return
+			}
+			rowNum++
+		}
+
+	}
+	if err = excelWriter.Flush(); err != nil {
+		log.Error("err:", err)
+		utils.RspError(w, "导出失败")
+		return
+	}
+
+	fileName := "应付列表.xlsx"
+	w.Header().Add("Content-Type", "application/octet-stream")
+	w.Header().Add("Content-Disposition", "attachment; filename=\""+url.QueryEscape(fileName)+"\"")
+
+	err = excel.Write(w)
+	if err != nil {
+		log.Error("err:", err)
+		utils.RspError(w, "导出失败")
+		return
+	}
+
+	return
+}

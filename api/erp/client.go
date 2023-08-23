@@ -253,4 +253,32 @@ func ListIncome(ctx context.Context, req *ListIncomeReq) (*ListIncomeRsp, error)
     return cliMgr.cli.ListIncome(ctx, req)
 }
 
+func CreatePlan(ctx context.Context, req *CreatePlanReq) (*CreatePlanRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.CreatePlan(ctx, req)
+}
+
+func UpdatePlan(ctx context.Context, req *UpdatePlanReq) (*UpdatePlanRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.UpdatePlan(ctx, req)
+}
+
+func DeletePlan(ctx context.Context, req *DeletePlanReq) (*DeletePlanRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.DeletePlan(ctx, req)
+}
+
+func ListPlan(ctx context.Context, req *ListPlanReq) (*ListPlanRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.ListPlan(ctx, req)
+}
+
 

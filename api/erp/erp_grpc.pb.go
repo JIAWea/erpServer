@@ -54,6 +54,10 @@ const (
 	Erp_UpdateIncome_FullMethodName      = "/erp.erp/UpdateIncome"
 	Erp_DeleteIncome_FullMethodName      = "/erp.erp/DeleteIncome"
 	Erp_ListIncome_FullMethodName        = "/erp.erp/ListIncome"
+	Erp_CreatePlan_FullMethodName        = "/erp.erp/CreatePlan"
+	Erp_UpdatePlan_FullMethodName        = "/erp.erp/UpdatePlan"
+	Erp_DeletePlan_FullMethodName        = "/erp.erp/DeletePlan"
+	Erp_ListPlan_FullMethodName          = "/erp.erp/ListPlan"
 )
 
 // ErpClient is the client API for Erp service.
@@ -95,6 +99,10 @@ type ErpClient interface {
 	UpdateIncome(ctx context.Context, in *UpdateIncomeReq, opts ...grpc.CallOption) (*UpdateIncomeRsp, error)
 	DeleteIncome(ctx context.Context, in *DeleteIncomeReq, opts ...grpc.CallOption) (*DeleteIncomeRsp, error)
 	ListIncome(ctx context.Context, in *ListIncomeReq, opts ...grpc.CallOption) (*ListIncomeRsp, error)
+	CreatePlan(ctx context.Context, in *CreatePlanReq, opts ...grpc.CallOption) (*CreatePlanRsp, error)
+	UpdatePlan(ctx context.Context, in *UpdatePlanReq, opts ...grpc.CallOption) (*UpdatePlanRsp, error)
+	DeletePlan(ctx context.Context, in *DeletePlanReq, opts ...grpc.CallOption) (*DeletePlanRsp, error)
+	ListPlan(ctx context.Context, in *ListPlanReq, opts ...grpc.CallOption) (*ListPlanRsp, error)
 }
 
 type erpClient struct {
@@ -420,6 +428,42 @@ func (c *erpClient) ListIncome(ctx context.Context, in *ListIncomeReq, opts ...g
 	return out, nil
 }
 
+func (c *erpClient) CreatePlan(ctx context.Context, in *CreatePlanReq, opts ...grpc.CallOption) (*CreatePlanRsp, error) {
+	out := new(CreatePlanRsp)
+	err := c.cc.Invoke(ctx, Erp_CreatePlan_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *erpClient) UpdatePlan(ctx context.Context, in *UpdatePlanReq, opts ...grpc.CallOption) (*UpdatePlanRsp, error) {
+	out := new(UpdatePlanRsp)
+	err := c.cc.Invoke(ctx, Erp_UpdatePlan_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *erpClient) DeletePlan(ctx context.Context, in *DeletePlanReq, opts ...grpc.CallOption) (*DeletePlanRsp, error) {
+	out := new(DeletePlanRsp)
+	err := c.cc.Invoke(ctx, Erp_DeletePlan_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *erpClient) ListPlan(ctx context.Context, in *ListPlanReq, opts ...grpc.CallOption) (*ListPlanRsp, error) {
+	out := new(ListPlanRsp)
+	err := c.cc.Invoke(ctx, Erp_ListPlan_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ErpServer is the server API for Erp service.
 // All implementations must embed UnimplementedErpServer
 // for forward compatibility
@@ -459,6 +503,10 @@ type ErpServer interface {
 	UpdateIncome(context.Context, *UpdateIncomeReq) (*UpdateIncomeRsp, error)
 	DeleteIncome(context.Context, *DeleteIncomeReq) (*DeleteIncomeRsp, error)
 	ListIncome(context.Context, *ListIncomeReq) (*ListIncomeRsp, error)
+	CreatePlan(context.Context, *CreatePlanReq) (*CreatePlanRsp, error)
+	UpdatePlan(context.Context, *UpdatePlanReq) (*UpdatePlanRsp, error)
+	DeletePlan(context.Context, *DeletePlanReq) (*DeletePlanRsp, error)
+	ListPlan(context.Context, *ListPlanReq) (*ListPlanRsp, error)
 	mustEmbedUnimplementedErpServer()
 }
 
@@ -570,6 +618,18 @@ func (UnimplementedErpServer) DeleteIncome(context.Context, *DeleteIncomeReq) (*
 }
 func (UnimplementedErpServer) ListIncome(context.Context, *ListIncomeReq) (*ListIncomeRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListIncome not implemented")
+}
+func (UnimplementedErpServer) CreatePlan(context.Context, *CreatePlanReq) (*CreatePlanRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreatePlan not implemented")
+}
+func (UnimplementedErpServer) UpdatePlan(context.Context, *UpdatePlanReq) (*UpdatePlanRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdatePlan not implemented")
+}
+func (UnimplementedErpServer) DeletePlan(context.Context, *DeletePlanReq) (*DeletePlanRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeletePlan not implemented")
+}
+func (UnimplementedErpServer) ListPlan(context.Context, *ListPlanReq) (*ListPlanRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListPlan not implemented")
 }
 func (UnimplementedErpServer) mustEmbedUnimplementedErpServer() {}
 
@@ -1214,6 +1274,78 @@ func _Erp_ListIncome_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Erp_CreatePlan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreatePlanReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).CreatePlan(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_CreatePlan_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).CreatePlan(ctx, req.(*CreatePlanReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Erp_UpdatePlan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdatePlanReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).UpdatePlan(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_UpdatePlan_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).UpdatePlan(ctx, req.(*UpdatePlanReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Erp_DeletePlan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeletePlanReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).DeletePlan(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_DeletePlan_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).DeletePlan(ctx, req.(*DeletePlanReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Erp_ListPlan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListPlanReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ErpServer).ListPlan(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Erp_ListPlan_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ErpServer).ListPlan(ctx, req.(*ListPlanReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Erp_ServiceDesc is the grpc.ServiceDesc for Erp service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1360,6 +1492,22 @@ var Erp_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListIncome",
 			Handler:    _Erp_ListIncome_Handler,
+		},
+		{
+			MethodName: "CreatePlan",
+			Handler:    _Erp_CreatePlan_Handler,
+		},
+		{
+			MethodName: "UpdatePlan",
+			Handler:    _Erp_UpdatePlan_Handler,
+		},
+		{
+			MethodName: "DeletePlan",
+			Handler:    _Erp_DeletePlan_Handler,
+		},
+		{
+			MethodName: "ListPlan",
+			Handler:    _Erp_ListPlan_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

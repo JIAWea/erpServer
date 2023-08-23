@@ -51,6 +51,10 @@ const (
 	dbComponent    = "component"
 	dbUserId       = "user_id"
 	dbIncomeMoney  = "income_money"
+	dbTotalMoney   = "total_money"
+	dbTradeMoney   = "trade_money"
+	dbBalanceMoney = "balance_money"
+	dbComment      = "comment"
 	dbPassword     = "password"
 	dbPath         = "path"
 	dbRoleId       = "role_id"
@@ -78,4 +82,6 @@ const (
 	dbDeletedAt    = "deleted_at"
 	dbPayAt        = "pay_at"
 	dbFrom         = "from"
+	dbCustomer     = "customer"
+	dbPlanAt       = "plan_at"
 )

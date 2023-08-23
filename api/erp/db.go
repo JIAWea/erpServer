@@ -28,3 +28,6 @@ func (m *ModelExpense) TableName() string {
 func (m *ModelIncome) TableName() string {
 	return "erp_income"
 }
+func (m *ModelPlan) TableName() string {
+	return "erp_plan"
+}
