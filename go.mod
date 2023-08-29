@@ -6,8 +6,9 @@ require (
 	github.com/envoyproxy/protoc-gen-validate v1.0.2
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.8.0
-	github.com/ml444/gkit v0.0.0-20230723082646-237c8f826ab5
+	github.com/ml444/gkit v0.0.0-20230829170807-e2c0e8bc1555
 	github.com/ml444/glog v0.2.12
+	github.com/ml444/gutil v0.0.0-20230718170656-0104a65d6d8e
 	github.com/redis/go-redis/v9 v9.0.5
 	github.com/xuri/excelize/v2 v2.7.1
 	golang.org/x/crypto v0.10.0
@@ -32,7 +33,6 @@ require (
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
-	github.com/ml444/gutil v0.0.0-20230626092149-ac531df0e53f // indirect
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
 	github.com/petermattis/goid v0.0.0-20230518223814-80aa455d8761 // indirect
 	github.com/pkg/errors v0.9.1 // indirect

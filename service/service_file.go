@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/ml444/gkit/core"
 	"io"
 	"net/http"
 	"net/url"
@@ -83,7 +84,12 @@ func (f *fileService) UploadFile(w http.ResponseWriter, r *http.Request) {
 }
 
 func (f *fileService) ImportExpense(w http.ResponseWriter, r *http.Request) {
-	userId := GetUserId(r)
+	ctx := ParseCtx(r)
+	userId := core.GetUserId(ctx)
+	if userId == 0 {
+		utils.Rsp401Error(w, "unauthorized")
+		return
+	}
 
 	accIdList, err := dbUserAccount.GetIdListByUserId(r.Context(), userId)
 	if err != nil {
@@ -288,7 +294,12 @@ func (f *fileService) DownloadFile(w http.ResponseWriter, r *http.Request) {
 }
 
 func (f *fileService) ImportIncome(w http.ResponseWriter, r *http.Request) {
-	userId := GetUserId(r)
+	ctx := ParseCtx(r)
+	userId := core.GetUserId(ctx)
+	if userId == 0 {
+		utils.Rsp401Error(w, "unauthorized")
+		return
+	}
 
 	accIdList, err := dbUserAccount.GetIdListByUserId(r.Context(), userId)
 	if err != nil {
@@ -479,6 +490,11 @@ func (f *fileService) ExportExpense(w http.ResponseWriter, r *http.Request) {
 	var req erp.ListExpenseReq
 
 	ctx := ParseCtx(r)
+	userId := core.GetUserId(ctx)
+	if userId == 0 {
+		utils.Rsp401Error(w, "unauthorized")
+		return
+	}
 
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil && err != io.EOF {
@@ -579,6 +595,11 @@ func (f *fileService) ExportIncome(w http.ResponseWriter, r *http.Request) {
 	var req erp.ListIncomeReq
 
 	ctx := ParseCtx(r)
+	userId := core.GetUserId(ctx)
+	if userId == 0 {
+		utils.Rsp401Error(w, "unauthorized")
+		return
+	}
 
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil && err != io.EOF {
@@ -676,7 +697,13 @@ func (f *fileService) ExportIncome(w http.ResponseWriter, r *http.Request) {
 }
 
 func (f *fileService) ImportPlan(w http.ResponseWriter, r *http.Request) {
-	userId := GetUserId(r)
+	ctx := ParseCtx(r)
+	userId := core.GetUserId(ctx)
+	if userId == 0 {
+		utils.Rsp401Error(w, "unauthorized")
+		return
+	}
+
 	file, header, err := r.FormFile("file")
 	if err != nil {
 		utils.RspBadError(w, "file required")
@@ -848,6 +875,11 @@ func (f *fileService) ExportPlan(w http.ResponseWriter, r *http.Request) {
 	var req erp.ListPlanReq
 
 	ctx := ParseCtx(r)
+	userId := core.GetUserId(ctx)
+	if userId == 0 {
+		utils.Rsp401Error(w, "unauthorized")
+		return
+	}
 
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil && err != io.EOF {

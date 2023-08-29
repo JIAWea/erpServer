@@ -19,3 +19,8 @@ func RspBadError(w http.ResponseWriter, msg string) {
 	w.WriteHeader(http.StatusBadRequest)
 	w.Write([]byte(fmt.Sprintf(`{"message":"%s"}`, msg)))
 }
+
+func Rsp401Error(w http.ResponseWriter, msg string) {
+	w.WriteHeader(http.StatusUnauthorized)
+	w.Write([]byte(fmt.Sprintf(`{"message":"%s"}`, msg)))
+}

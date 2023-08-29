@@ -19,6 +19,12 @@ import (
 func MakeHTTPHandler() http.Handler {
 	router := mux.NewRouter()
 
+	router.Methods(http.MethodGet).
+		Path(fmt.Sprintf("/%s/hello", erp.ClientName)).
+		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte("ok"))
+		})
 	router.Methods(http.MethodPost).
 		Path(fmt.Sprintf("/%s/UploadFile", erp.ClientName)).
 		HandlerFunc(File.UploadFile)
