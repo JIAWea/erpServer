@@ -6,6 +6,7 @@ const (
         ErrInternal int32	=	99999
         ErrInvalidParam int32	=	1
         ErrParamRequired int32	=	2
+        Err403 int32	=	3
         ErrUserNotExist int32	=	3998
         ErrUserDisable int32	=	3999
         ErrAuthContext int32	=	4000
@@ -36,6 +37,7 @@ var ErrCodeMap = map[int32]string{
         ErrInternal: "系统错误",
         ErrInvalidParam: "非法参数",
         ErrParamRequired: "缺失参数",
+        Err403: "无权限",
         ErrUserNotExist: "该用户不存在",
         ErrUserDisable: "账号已禁用",
         ErrAuthContext: "认证失败",
@@ -64,6 +66,7 @@ var ErrCode4StatusCodeMap = map[int32]int32{
         ErrInternal: 500,
         ErrInvalidParam: 400,
         ErrParamRequired: 400,
+        Err403: 403,
         ErrUserNotExist: 401,
         ErrUserDisable: 401,
         ErrAuthContext: 401,

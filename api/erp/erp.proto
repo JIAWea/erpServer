@@ -66,6 +66,8 @@ enum ErrCode {
   ErrInvalidParam = 1;   // 非法参数
   //@status_code: 400
   ErrParamRequired = 2;      // 缺失参数
+  //@status_code: 403
+  Err403 = 3;      // 无权限
   //@status_code: 401
   ErrUserNotExist = 3998;   // 该用户不存在
   //@status_code: 401

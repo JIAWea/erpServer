@@ -3,6 +3,9 @@ package app
 import (
 	"context"
 	"fmt"
+	"net/http"
+	"strings"
+
 	"github.com/JIAWea/erpServer/api/erp"
 	"github.com/gorilla/mux"
 	"github.com/ml444/gkit/auth/jwt"
@@ -12,8 +15,6 @@ import (
 	log "github.com/ml444/glog"
 	"github.com/ml444/gutil/netx"
 	"google.golang.org/grpc/xds"
-	"net/http"
-	"strings"
 )
 
 func MakeHTTPHandler() http.Handler {
@@ -54,7 +55,7 @@ func MakeHTTPHandler() http.Handler {
 		NewErpService(),
 		router,
 		httpx.SetTimeoutMap(nil),
-		httpx.AddBeforeHandler(CheckPerm),
+		// httpx.AddBeforeHandler(CheckPerm),
 	)
 	if err != nil {
 		log.Errorf("err: %v", err)
