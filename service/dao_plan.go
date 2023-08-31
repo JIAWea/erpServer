@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"fmt"
+
 	"github.com/JIAWea/erpServer/api/erp"
 	"github.com/JIAWea/erpServer/internal/db"
 	"github.com/ml444/gkit/dbx"
@@ -48,7 +49,7 @@ func (d *TPlan) DeleteByIdList(ctx context.Context, idList []uint64) error {
 	if len(idList) == 0 {
 		return nil
 	}
-	return d.newScope().In(dbId, idList).Delete(&erp.ModelExpense{})
+	return d.newScope().In(dbId, idList).Delete(&erp.ModelPlan{})
 }
 
 func (d *TPlan) DeleteByWhere(ctx context.Context, whereMap map[string]interface{}) error {
@@ -99,4 +100,82 @@ func (d *TPlan) ListWithListOption(ctx context.Context, listOption *listoption.L
 	}
 
 	return incomeList, paginate, nil
+}
+
+var dbPlanDetail = NewTPlanDetail(db.Db())
+
+type TPlanDetail struct {
+	db    *gorm.DB
+	model *erp.ModelPlanDetail
+}
+
+func NewTPlanDetail(db *gorm.DB) *TPlanDetail {
+	return &TPlanDetail{
+		db:    db,
+		model: &erp.ModelPlanDetail{},
+	}
+}
+
+func (d *TPlanDetail) newScope() *dbx.Scope {
+	if d.db == nil {
+		d.db = db.Db()
+	}
+	return dbx.NewScope(d.db, &erp.ModelPlanDetail{})
+}
+
+func (d *TPlanDetail) Create(ctx context.Context, m *erp.ModelPlanDetail) error {
+	return d.newScope().Create(ctx, &m)
+}
+
+func (d *TPlanDetail) Update(ctx context.Context, m *erp.ModelPlanDetail, whereMap map[string]interface{}) error {
+	return d.newScope().Where(whereMap).Update(&m)
+}
+
+func (d *TPlanDetail) DeleteById(ctx context.Context, pk uint64) error {
+	return d.newScope().Delete(&erp.ModelPlanDetail{}, pk)
+}
+
+func (d *TPlanDetail) DeleteByWhere(ctx context.Context, whereMap map[string]interface{}) error {
+	return d.newScope().Delete(&erp.ModelPlanDetail{}, whereMap)
+}
+
+func (d *TPlanDetail) DeleteByIdList(ctx context.Context, idList []uint64) error {
+	if len(idList) == 0 {
+		return nil
+	}
+	return d.newScope().In(dbId, idList).Delete(&erp.ModelPlanDetail{})
+}
+
+func (d *TPlanDetail) GetOne(ctx context.Context, pk uint64) (*erp.ModelPlanDetail, error) {
+	var m erp.ModelPlanDetail
+	err := d.newScope().SetNotFoundErr(erp.ErrNotFoundPlanDetail).First(&m, pk)
+	return &m, err
+}
+
+func (d *TPlanDetail) ListWithListOption(ctx context.Context, listOption *listoption.ListOption, whereOpts interface{}) ([]*erp.ModelPlanDetail, *listoption.Paginate, error) {
+	var err error
+	scope := d.newScope().Where(whereOpts)
+	if listOption != nil {
+
+		err = listoption.NewProcessor(listOption).
+			AddUint32(erp.ListPlanDetailReq_ListOptType, func(val uint32) error {
+				return nil
+			}).
+			Process()
+		if err != nil {
+			log.Error(err.Error())
+			return nil, nil, err
+		}
+
+	}
+
+	var planDetailList []*erp.ModelPlanDetail
+	var paginate *listoption.Paginate
+	paginate, err = scope.PaginateQuery(listOption, &planDetailList)
+	if err != nil {
+		log.Errorf("err: %v", err)
+		return nil, nil, err
+	}
+
+	return planDetailList, paginate, nil
 }

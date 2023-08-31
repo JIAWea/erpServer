@@ -49,7 +49,7 @@ func (d *TIncome) DeleteByIdList(ctx context.Context, idList []uint64) error {
 	if len(idList) == 0 {
 		return nil
 	}
-	return d.newScope().In(dbId, idList).Delete(&erp.ModelExpense{})
+	return d.newScope().In(dbId, idList).Delete(&erp.ModelIncome{})
 }
 
 func (d *TIncome) DeleteByWhere(ctx context.Context, whereMap map[string]interface{}) error {
