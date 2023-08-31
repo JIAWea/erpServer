@@ -281,4 +281,32 @@ func ListPlan(ctx context.Context, req *ListPlanReq) (*ListPlanRsp, error) {
     return cliMgr.cli.ListPlan(ctx, req)
 }
 
+func CreatePlanDetail(ctx context.Context, req *CreatePlanDetailReq) (*CreatePlanDetailRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.CreatePlanDetail(ctx, req)
+}
+
+func UpdatePlanDetail(ctx context.Context, req *UpdatePlanDetailReq) (*UpdatePlanDetailRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.UpdatePlanDetail(ctx, req)
+}
+
+func DeletePlanDetail(ctx context.Context, req *DeletePlanDetailReq) (*DeletePlanDetailRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.DeletePlanDetail(ctx, req)
+}
+
+func ListPlanDetail(ctx context.Context, req *ListPlanDetailReq) (*ListPlanDetailRsp, error) {
+	if cliMgr.conn == nil {
+		return nil, cliMgr.initErr
+	}
+    return cliMgr.cli.ListPlanDetail(ctx, req)
+}
+
 
