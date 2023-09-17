@@ -92,6 +92,15 @@ func (s ErpService) DeletePlan(ctx context.Context, req *erp.DeletePlanReq) (*er
 	return &rsp, nil
 }
 
+// ListPlan      应收应付列表
+// @Summary      应收应付列表
+// @Description  应收应付列表
+// @Tags         应收应付
+// @Accept       json
+// @Produce      json
+// @Param        request body   erp.ListPlanReq true "options:[{type:1,value:'1'(1应付，2应收))},{type:2,value:'客户名称'},{type:3,value:'摘要'},{type:4,value:'1694957121,1694957127'}]"
+// @Success      200  {object}  erp.ListPlanRsp
+// @Router       /erp/ListPlan [post]
 func (s ErpService) ListPlan(ctx context.Context, req *erp.ListPlanReq) (*erp.ListPlanRsp, error) {
 	var err error
 	var rsp erp.ListPlanRsp
@@ -258,7 +267,7 @@ func (s ErpService) DeletePlanDetail(ctx context.Context, req *erp.DeletePlanDet
 // @Tags         应收应付
 // @Accept       json
 // @Produce      json
-// @Param        request body   erp.ListPlanDetailReq true "options: [{type:1,value:plan_id)}]"
+// @Param        request body   erp.ListPlanDetailReq true "options: [{type:1,value:'plan_id')}]"
 // @Success      200  {object}  erp.ListPlanDetailRsp
 // @Router       /erp/ListPlanDetail [post]
 func (s ErpService) ListPlanDetail(ctx context.Context, req *erp.ListPlanDetailReq) (*erp.ListPlanDetailRsp, error) {

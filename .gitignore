@@ -19,5 +19,6 @@ vendor/
 .idea/
 go.sum
 
+erp
 *.db
 *.log

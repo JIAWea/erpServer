@@ -426,7 +426,7 @@ message ModelPlan {
   uint32 updated_at = 3;
   // @gorm: comment:'删除时间'
   uint32 deleted_at = 4;
-  // Type
+  // Type 1:应付,2:应收
   uint32 type = 5;
   // @gorm: comment:'日期'
   uint32 plan_at = 6;
@@ -450,7 +450,7 @@ message ModelPlan {
   string attachment = 15;
   // @gorm: type:varchar(128);not null;comment:'附件名'
   string att_name = 16;
-  // Status
+  // Status 1:待确认,2:已确认
   // @gorm: type:tinyint(1);default:0;comment:状态
   uint32 status = 17;
   // @gorm: type:int(10);default:0;comment:版本号
@@ -458,14 +458,6 @@ message ModelPlan {
 }
 
 message ModelPlanDetail {
-  enum Status {
-    StatusNil = 0;
-    // 待确认
-    StatusWaitConfirm = 1;
-    // 已确认
-    StatusHasConfirm = 2;
-  }
-
   // @gorm: primarykey
   uint64 id = 1;
   // @gorm: comment:创建时间

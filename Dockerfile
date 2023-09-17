@@ -8,7 +8,9 @@ WORKDIR /src
 # Build image as a truly static Go binary
 RUN CGO_ENABLED=0 GOOS=linux GOPROXY=https://goproxy.cn make build
 
+
 FROM scratch
+COPY --from=builder /src/config.yaml /app/config.yaml
 COPY --from=builder /src/bin /app
 WORKDIR /app
 

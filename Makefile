@@ -19,6 +19,7 @@ endif
 .PHONY: build
 # build
 build:
+	go mod tidy
 	mkdir -p bin/ && go build -ldflags "-s -w -X main.Version=$(VERSION)" -o ./bin  ./...
 	mv bin/cmd bin/erp
 

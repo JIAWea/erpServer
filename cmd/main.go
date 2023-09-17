@@ -113,6 +113,7 @@ func Run(cfg *config.Config) {
 	println("exit", err.Error())
 }
 
+//go:generate swag init --parseDependency --parseInternal
 // @title Swagger Example API
 // @version 1.0
 // @description ErpServer API

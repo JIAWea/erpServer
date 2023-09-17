@@ -43,6 +43,40 @@
                 }
             }
         },
+        "/erp/ListPlan": {
+            "post": {
+                "description": "应收应付列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "应收应付"
+                ],
+                "summary": "应收应付列表",
+                "parameters": [
+                    {
+                        "description": "options:[{type:1,value:'1'(1应付，2应收))},{type:2,value:'客户名称'},{type:3,value:'摘要'},{type:4,value:'1694957121,1694957127'}]",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/erp.ListPlanReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/erp.ListPlanRsp"
+                        }
+                    }
+                }
+            }
+        },
         "/erp/ListPlanDetail": {
             "post": {
                 "description": "明细列表",
@@ -58,7 +92,7 @@
                 "summary": "明细列表",
                 "parameters": [
                     {
-                        "description": "options: [{type:1,value:plan_id)}]",
+                        "description": "options: [{type:1,value:'plan_id')}]",
                         "name": "request",
                         "in": "body",
                         "required": true,
@@ -118,6 +152,31 @@
                 }
             }
         },
+        "erp.ListPlanReq": {
+            "type": "object",
+            "properties": {
+                "is_export": {
+                    "type": "boolean"
+                },
+                "list_option": {
+                    "$ref": "#/definitions/listoption.ListOption"
+                }
+            }
+        },
+        "erp.ListPlanRsp": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/erp.ModelPlan"
+                    }
+                },
+                "paginate": {
+                    "$ref": "#/definitions/listoption.Paginate"
+                }
+            }
+        },
         "erp.ModelAccount": {
             "type": "object",
             "properties": {
@@ -143,6 +202,83 @@
                 },
                 "updated_at": {
                     "description": "@gorm: comment:'更新时间'",
+                    "type": "integer"
+                }
+            }
+        },
+        "erp.ModelPlan": {
+            "type": "object",
+            "properties": {
+                "att_name": {
+                    "description": "@gorm: type:varchar(128);not null;comment:'附件名'",
+                    "type": "string"
+                },
+                "attachment": {
+                    "description": "@gorm: type:varchar(128);not null;comment:'附件'",
+                    "type": "string"
+                },
+                "balance_money": {
+                    "description": "@gorm: comment:'剩余金额，单位分'",
+                    "type": "integer"
+                },
+                "comment": {
+                    "description": "@gorm: type:varchar(64);not null;comment:'备注'",
+                    "type": "string"
+                },
+                "created_at": {
+                    "description": "@gorm: comment:'创建时间'",
+                    "type": "integer"
+                },
+                "customer": {
+                    "description": "@gorm: comment:客户名称",
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "description": "@gorm: comment:'删除时间'",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "@gorm: primarykey",
+                    "type": "integer"
+                },
+                "mark": {
+                    "description": "@gorm: type:varchar(64);not null;comment:'摘要'",
+                    "type": "string"
+                },
+                "plan_at": {
+                    "description": "@gorm: comment:'日期'",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "Status\n@gorm: type:tinyint(1);default:0;comment:状态",
+                    "type": "integer"
+                },
+                "total_money": {
+                    "description": "@gorm: comment:'总金额，单位分'",
+                    "type": "integer"
+                },
+                "trade_money": {
+                    "description": "@gorm: comment:'已付/已收金额，单位分'",
+                    "type": "integer"
+                },
+                "type": {
+                    "description": "Type",
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "description": "@gorm: comment:'更新时间'",
+                    "type": "integer"
+                },
+                "user_id": {
+                    "description": "@gorm: comment:'创建用户'",
+                    "type": "integer"
+                },
+                "uuid": {
+                    "description": "@gorm: uniqueIndex:uniq_uuid;type:varchar(32);comment:'唯一ID'",
+                    "type": "string"
+                },
+                "version": {
+                    "description": "@gorm: type:int(10);default:0;comment:版本号",
                     "type": "integer"
                 }
             }
