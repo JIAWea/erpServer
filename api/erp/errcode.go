@@ -30,6 +30,10 @@ const (
         ErrNotPermissionForAccount int32	=	10014
         ErrMoneyBalance int32	=	10015
         ErrNotFoundPlanDetail int32	=	10016
+        ErrNotFoundPlan int32	=	10017
+        ErrTradeMoneyRequired int32	=	10018
+        ErrUpdate int32	=	10019
+        ErrModelPlanType int32	=	10020
 )
 
 
@@ -62,6 +66,10 @@ var ErrCodeMap = map[int32]string{
         ErrNotPermissionForAccount: "没有该账户的操作权限",
         ErrMoneyBalance: "金额计算错误",
         ErrNotFoundPlanDetail: "记录不存在",
+        ErrNotFoundPlan: "记录不存在",
+        ErrTradeMoneyRequired: "交易金额不能为空",
+        ErrUpdate: "更新失败，请重试",
+        ErrModelPlanType: "类型错误",
 }
 
 var ErrCode4StatusCodeMap = map[int32]int32{
@@ -92,4 +100,8 @@ var ErrCode4StatusCodeMap = map[int32]int32{
         ErrNotPermissionForAccount: 403,
         ErrMoneyBalance: 400,
         ErrNotFoundPlanDetail: 404,
+        ErrNotFoundPlan: 404,
+        ErrTradeMoneyRequired: 400,
+        ErrUpdate: 500,
+        ErrModelPlanType: 400,
 }

@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"fmt"
 	"github.com/JIAWea/erpServer/api/erp"
 	"github.com/JIAWea/erpServer/pkg/utils"
 	"github.com/ml444/gkit/core"
@@ -21,7 +22,7 @@ func (s ErpService) CreateExpense(ctx context.Context, req *erp.CreateExpenseReq
 
 	m.UserId = core.GetUserId(ctx)
 	if m.Uuid == "" {
-		m.Uuid = utils.GenUUID()
+		m.Uuid = fmt.Sprintf("ZC-%s", utils.RandomUUID(6))
 	}
 
 	err = dbExpense.Create(ctx, m)

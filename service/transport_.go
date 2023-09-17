@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/JIAWea/erpServer/api/erp"
+	_ "github.com/JIAWea/erpServer/cmd/docs"
 	"github.com/gorilla/mux"
 	"github.com/ml444/gkit/auth/jwt"
 	"github.com/ml444/gkit/core"
@@ -14,11 +15,20 @@ import (
 	"github.com/ml444/gkit/transport/httpx"
 	log "github.com/ml444/glog"
 	"github.com/ml444/gutil/netx"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"google.golang.org/grpc/xds"
 )
 
 func MakeHTTPHandler() http.Handler {
 	router := mux.NewRouter()
+
+	router.Methods(http.MethodGet).
+		PathPrefix("/swagger/").
+		Handler(httpSwagger.Handler(
+			httpSwagger.DeepLinking(true),
+			httpSwagger.DocExpansion("none"),
+			httpSwagger.DomID("swagger-ui"),
+		))
 
 	router.Methods(http.MethodGet).
 		Path(fmt.Sprintf("/%s/hello", erp.ClientName)).

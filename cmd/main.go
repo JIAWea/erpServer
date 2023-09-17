@@ -113,6 +113,12 @@ func Run(cfg *config.Config) {
 	println("exit", err.Error())
 }
 
+// @title Swagger Example API
+// @version 1.0
+// @description ErpServer API
+
+// @host      localhost:5050
+// @BasePath  /erp
 func main() {
 	flag.Parse()
 	config.Init()

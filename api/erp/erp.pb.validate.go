@@ -1247,6 +1247,8 @@ func (m *ModelPlan) validate(all bool) error {
 
 	// no validation rules for Status
 
+	// no validation rules for Version
+
 	if len(errors) > 0 {
 		return ModelPlanMultiError(errors)
 	}
@@ -1370,7 +1372,11 @@ func (m *ModelPlanDetail) validate(all bool) error {
 
 	// no validation rules for AttName
 
-	// no validation rules for Status
+	// no validation rules for AccountId
+
+	// no validation rules for Mark
+
+	// no validation rules for HandleBy
 
 	if len(errors) > 0 {
 		return ModelPlanDetailMultiError(errors)
@@ -12614,8 +12620,6 @@ func (m *ListPlanDetailReq) validate(all bool) error {
 		}
 	}
 
-	// no validation rules for IsExport
-
 	if len(errors) > 0 {
 		return ListPlanDetailReqMultiError(errors)
 	}
@@ -12779,6 +12783,52 @@ func (m *ListPlanDetailRsp) validate(all bool) error {
 			}
 		}
 
+	}
+
+	{
+		sorted_keys := make([]uint64, len(m.GetAccountMap()))
+		i := 0
+		for key := range m.GetAccountMap() {
+			sorted_keys[i] = key
+			i++
+		}
+		sort.Slice(sorted_keys, func(i, j int) bool { return sorted_keys[i] < sorted_keys[j] })
+		for _, key := range sorted_keys {
+			val := m.GetAccountMap()[key]
+			_ = val
+
+			// no validation rules for AccountMap[key]
+
+			if all {
+				switch v := interface{}(val).(type) {
+				case interface{ ValidateAll() error }:
+					if err := v.ValidateAll(); err != nil {
+						errors = append(errors, ListPlanDetailRspValidationError{
+							field:  fmt.Sprintf("AccountMap[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				case interface{ Validate() error }:
+					if err := v.Validate(); err != nil {
+						errors = append(errors, ListPlanDetailRspValidationError{
+							field:  fmt.Sprintf("AccountMap[%v]", key),
+							reason: "embedded message failed validation",
+							cause:  err,
+						})
+					}
+				}
+			} else if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+				if err := v.Validate(); err != nil {
+					return ListPlanDetailRspValidationError{
+						field:  fmt.Sprintf("AccountMap[%v]", key),
+						reason: "embedded message failed validation",
+						cause:  err,
+					}
+				}
+			}
+
+		}
 	}
 
 	if len(errors) > 0 {

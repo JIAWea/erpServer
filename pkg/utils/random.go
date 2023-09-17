@@ -19,9 +19,9 @@ func RandomString(n int) string {
 	return string(b)
 }
 
-func RandomUUID(ts uint32) string {
-	day := time.Unix(int64(ts), 0).Format("20060102")
-	return fmt.Sprintf("%s%s", day, RandomString(16))
+func RandomUUID(num uint32) string {
+	day := time.Now().Format("20060102")
+	return fmt.Sprintf("%s%s", day, RandomString(int(num)))
 }
 
 func GenUUID() string {

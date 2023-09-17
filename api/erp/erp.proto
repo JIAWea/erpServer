@@ -119,6 +119,14 @@ enum ErrCode {
   ErrMoneyBalance = 10015;  // 金额计算错误
   //@status_code: 404
   ErrNotFoundPlanDetail = 10016;  // 记录不存在
+  //@status_code: 404
+  ErrNotFoundPlan = 10017;  // 记录不存在
+  //@status_code: 400
+  ErrTradeMoneyRequired = 10018;  // 交易金额不能为空
+  //@status_code: 500
+  ErrUpdate = 10019;  // 更新失败，请重试
+  //@status_code: 400
+  ErrModelPlanType = 10020; // 类型错误
 }
 
 enum ExpenseCategory {
@@ -443,8 +451,10 @@ message ModelPlan {
   // @gorm: type:varchar(128);not null;comment:'附件名'
   string att_name = 16;
   // Status
-  // @gorm: comment:状态
+  // @gorm: type:tinyint(1);default:0;comment:状态
   uint32 status = 17;
+  // @gorm: type:int(10);default:0;comment:版本号
+  uint32 version = 18;
 }
 
 message ModelPlanDetail {
@@ -479,9 +489,12 @@ message ModelPlanDetail {
   string attachment = 15;
   // @gorm: type:varchar(128);not null;comment:'附件名'
   string att_name = 16;
-  // Status
-  // @gorm: comment:状态
-  uint32 status = 17;
+  // @gorm: comment:'账户'
+  uint64 account_id = 18;
+  // @gorm: type:varchar(64);not null;comment:'摘要'
+  string mark = 19;
+  // @gorm: type:varchar(64);not null;comment:'经手人'
+  string handle_by = 20;
 }
 
 message UserLoginReq {
@@ -872,13 +885,13 @@ message DeletePlanDetailRsp {}
 message ListPlanDetailReq {
   enum ListOpt {
     ListOptNil = 0;
-    // @valueType: uint32
-    ListOptType = 1;
+    // @valueType: uint64
+    ListOptPlanId = 1;
   }
   listoption.ListOption list_option = 1;
-  bool is_export = 2;
 }
 message ListPlanDetailRsp {
   listoption.Paginate paginate = 1;
   repeated ModelPlanDetail list = 2;
+  map<uint64, ModelAccount> accountMap = 3;
 }

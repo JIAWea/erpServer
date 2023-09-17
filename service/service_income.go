@@ -2,6 +2,8 @@ package app
 
 import (
 	"context"
+	"fmt"
+
 	"github.com/ml444/gkit/core"
 
 	"github.com/JIAWea/erpServer/pkg/utils"
@@ -23,7 +25,7 @@ func (s ErpService) CreateIncome(ctx context.Context, req *erp.CreateIncomeReq) 
 
 	m.UserId = core.GetUserId(ctx)
 	if m.Uuid == "" {
-		m.Uuid = utils.GenUUID()
+		m.Uuid = fmt.Sprintf("SR-%s", utils.RandomUUID(6))
 	}
 
 	err = dbIncome.Create(ctx, m)

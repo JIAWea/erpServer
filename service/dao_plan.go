@@ -152,13 +152,19 @@ func (d *TPlanDetail) GetOne(ctx context.Context, pk uint64) (*erp.ModelPlanDeta
 	return &m, err
 }
 
-func (d *TPlanDetail) ListWithListOption(ctx context.Context, listOption *listoption.ListOption, whereOpts interface{}) ([]*erp.ModelPlanDetail, *listoption.Paginate, error) {
+func (d *TPlanDetail) ListWithListOption(ctx context.Context, listOption *listoption.ListOption, accIdList []uint64) ([]*erp.ModelPlanDetail, *listoption.Paginate, error) {
 	var err error
-	scope := d.newScope().Where(whereOpts)
+	scope := d.newScope().Order("created_at DESC")
+
+	if len(accIdList) > 0 {
+		scope.In(dbAccountId, accIdList)
+	}
+
 	if listOption != nil {
 
 		err = listoption.NewProcessor(listOption).
-			AddUint32(erp.ListPlanDetailReq_ListOptType, func(val uint32) error {
+			AddUint64(erp.ListPlanDetailReq_ListOptPlanId, func(val uint64) error {
+				scope.Where(dbPlanId, val)
 				return nil
 			}).
 			Process()
