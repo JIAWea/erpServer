@@ -2,7 +2,9 @@ package app
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 
@@ -60,6 +62,24 @@ func MakeHTTPHandler() http.Handler {
 	router.Methods(http.MethodPost).
 		Path(fmt.Sprintf("/%s/ExportPlan", erp.ClientName)).
 		HandlerFunc(File.ExportPlan)
+
+	// 第三方
+	router.Methods(http.MethodPost).
+		Path("/third/Import").
+		HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+			var data map[string]interface{}
+			err := json.NewDecoder(request.Body).Decode(&data)
+			if err != nil && err != io.EOF {
+				log.Error("err:", err)
+				return
+			}
+			log.Infof("====> data: %+v", data)
+		})
+	router.Methods(http.MethodGet).
+		Path("/third/Import").
+		HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+			log.Infof("====> url: %+v", request.URL)
+		})
 
 	err := httpx.ParseService2HTTP(
 		NewErpService(),
