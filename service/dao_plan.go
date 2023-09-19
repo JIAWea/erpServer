@@ -84,6 +84,18 @@ func (d *TPlan) ListWithListOption(ctx context.Context, listOption *listoption.L
 				scope.Where(fmt.Sprintf("%s >= ? AND %s <= ?", dbPlanAt, dbPlanAt), begin, end)
 				return nil
 			}).
+			AddUint32(erp.ListPlanReq_ListOptTotalMoney, func(val uint32) error {
+				scope.Eq(dbTotalMoney, val)
+				return nil
+			}).
+			AddString(erp.ListPlanReq_ListOptComment, func(val string) error {
+				scope.Like(dbComment, val)
+				return nil
+			}).
+			AddUint32(erp.ListPlanReq_ListOptStatus, func(val uint32) error {
+				scope.Eq(dbStatus, val)
+				return nil
+			}).
 			Process()
 		if err != nil {
 			log.Error(err.Error())

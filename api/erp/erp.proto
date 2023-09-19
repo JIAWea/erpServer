@@ -848,6 +848,12 @@ message ListPlanReq {
     ListOptMark = 3;
     // @valueType: uint32Range
     ListOptStatTimeRange = 4;
+    // @valueType: uint32
+    ListOptTotalMoney = 5;
+    // @valueType: string
+    ListOptComment = 6;
+    // @valueType: uint32
+    ListOptStatus = 7;
   }
   listoption.ListOption list_option = 1;
   bool is_export = 2;

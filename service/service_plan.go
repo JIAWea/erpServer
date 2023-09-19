@@ -98,7 +98,7 @@ func (s ErpService) DeletePlan(ctx context.Context, req *erp.DeletePlanReq) (*er
 // @Tags         应收应付
 // @Accept       json
 // @Produce      json
-// @Param        request body   erp.ListPlanReq true "options:[{type:1,value:'1'(1应付，2应收))},{type:2,value:'客户名称'},{type:3,value:'摘要'},{type:4,value:'1694957121,1694957127'}]"
+// @Param        request body   erp.ListPlanReq true "options:[{type:1,value:'1'(1应付，2应收))},{type:2,value:'客户名称'},{type:3,value:'摘要'},{type:4,value:'1694957121,1694957127'},{type:5,value:'金额'},{type:6,value:'备注'},{type:7,value:'状态'}]"
 // @Success      200  {object}  erp.ListPlanRsp
 // @Router       /erp/ListPlan [post]
 func (s ErpService) ListPlan(ctx context.Context, req *erp.ListPlanReq) (*erp.ListPlanRsp, error) {
