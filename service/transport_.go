@@ -2,7 +2,6 @@ package app
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -67,13 +66,12 @@ func MakeHTTPHandler() http.Handler {
 	router.Methods(http.MethodPost).
 		Path("/third/Import").
 		HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-			var data map[string]interface{}
-			err := json.NewDecoder(request.Body).Decode(&data)
-			if err != nil && err != io.EOF {
+			body, err := io.ReadAll(request.Body)
+			if err != nil {
 				log.Error("err:", err)
 				return
 			}
-			log.Infof("====> data: %+v", data)
+			log.Infof("====> data: %+v", string(body))
 		})
 	router.Methods(http.MethodGet).
 		Path("/third/Import").
