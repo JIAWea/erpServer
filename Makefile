@@ -23,6 +23,12 @@ build:
 	mkdir -p bin/ && go build -ldflags "-s -w -X main.Version=$(VERSION)" -o ./bin  ./...
 	mv bin/cmd bin/erp
 
+image:
+	docker build -t erp-${VERSION} .
+
+container:
+	docker run --name erpServer-${VERSION} -d --net host --restart always erp-${VERSION}
+
 # show help
 help:
 	@echo ''
